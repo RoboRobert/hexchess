@@ -1,0 +1,799 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" width="176.44mm" height="193.27mm" viewBox="0 0 17644 19327" preserveAspectRatio="xMidYMid" fill-rule="evenodd" clip-path="url(#presentation_clip_path)" stroke-width="28.222" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" xmlns:ooo="http://xml.openoffice.org/svg/export" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
+ <defs class="ClipPathGroup">
+  <clipPath id="presentation_clip_path" clipPathUnits="userSpaceOnUse">
+   <rect x="0" y="0" width="17644" height="19327"/>
+  </clipPath>
+ </defs>
+ <defs class="TextShapeIndex">
+  
+ </defs>
+ <defs class="EmbeddedBulletChars">
+  <g id="bullet-char-template57356" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="M 580,1141 L 1163,571 580,0 -4,571 580,1141 Z"/>
+  </g>
+  <g id="bullet-char-template57354" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="M 8,1128 L 1137,1128 1137,0 8,0 8,1128 Z"/>
+  </g>
+  <g id="bullet-char-template10146" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="M 174,0 L 602,739 174,1481 1456,739 174,0 Z M 1358,739 L 309,1346 659,739 1358,739 Z"/>
+  </g>
+  <g id="bullet-char-template10132" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="M 2015,739 L 1276,0 717,0 1260,543 174,543 174,936 1260,936 717,1481 1274,1481 2015,739 Z"/>
+  </g>
+  <g id="bullet-char-template10007" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="M 0,-2 C -7,14 -16,27 -25,37 L 356,567 C 262,823 215,952 215,954 215,979 228,992 255,992 264,992 276,990 289,987 310,991 331,999 354,1012 L 381,999 492,748 772,1049 836,1024 860,1049 C 881,1039 901,1025 922,1006 886,937 835,863 770,784 769,783 710,716 594,584 L 774,223 C 774,196 753,168 711,139 L 727,119 C 717,90 699,76 672,76 641,76 570,178 457,381 L 164,-76 C 142,-110 111,-127 72,-127 30,-127 9,-110 8,-76 1,-67 -2,-52 -2,-32 -2,-23 -1,-13 0,-2 Z"/>
+  </g>
+  <g id="bullet-char-template10004" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="M 285,-33 C 182,-33 111,30 74,156 52,228 41,333 41,471 41,549 55,616 82,672 116,743 169,778 240,778 293,778 328,747 346,684 L 369,508 C 377,444 397,411 428,410 L 1163,1116 C 1174,1127 1196,1133 1229,1133 1271,1133 1292,1118 1292,1087 L 1292,965 C 1292,929 1282,901 1262,881 L 442,47 C 390,-6 338,-33 285,-33 Z"/>
+  </g>
+  <g id="bullet-char-template9679" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="M 813,0 C 632,0 489,54 383,161 276,268 223,411 223,592 223,773 276,916 383,1023 489,1130 632,1184 813,1184 992,1184 1136,1130 1245,1023 1353,916 1407,772 1407,592 1407,412 1353,268 1245,161 1136,54 992,0 813,0 Z"/>
+  </g>
+  <g id="bullet-char-template8226" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="M 346,457 C 273,457 209,483 155,535 101,586 74,649 74,723 74,796 101,859 155,911 209,963 273,989 346,989 419,989 480,963 531,910 582,859 608,796 608,723 608,648 583,586 532,535 482,483 420,457 346,457 Z"/>
+  </g>
+  <g id="bullet-char-template8211" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="M -4,459 L 1135,459 1135,606 -4,606 -4,459 Z"/>
+  </g>
+ </defs>
+ <defs class="TextEmbeddedBitmaps"/>
+ <g>
+  <g id="id2" class="Master_Slide">
+   <g id="bg-id2" class="Background"/>
+   <g id="bo-id2" class="BackgroundObjects"/>
+  </g>
+ </g>
+ <g class="SlideGroup">
+  <g>
+   <g id="id1" class="Slide" clip-path="url(#presentation_clip_path)">
+    <g class="Page">
+     <g class="Group">
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id3">
+        <path fill="none" stroke="rgb(0,0,0)" stroke-width="141" d="M 1767,13861 L 1326,13097 1767,12333 1326,11570 1767,10806 1326,10042 1767,9278 1326,8515 1767,7751 1326,6987 1767,6223 1326,5460 1767,4696 2649,4696 3090,3932 3972,3932 4413,3168 5295,3168 5736,2405 6618,2405 7059,1641 7941,1641 8382,877 9264,877 9704,1641 10586,1641 11027,2405 11909,2405 12350,3168 13232,3168 13673,3932 14555,3932 14996,4696 15878,4696 16319,5460 15878,6223 16319,6987 15878,7751 16319,8515 15878,9278 16319,10042 15878,10806 16319,11570 15878,12333 16319,13097 15878,13861 14996,13861 14555,14625 13673,14625 13232,15389 12350,15389 11909,16152 11027,16152 10586,16916 9704,16916 9264,17680 8382,17680 7941,16916 7059,16916 6618,16152 5736,16152 5295,15389 4413,15389 3972,14625 3090,14625 2649,13861 1767,13861 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id4">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 1767,13861 L 1326,13097 1767,12333 1326,11570 1767,10806 1326,10042 1767,9278 1326,8515 1767,7751 1326,6987 1767,6223 1326,5460 1767,4696 2649,4696 3090,3932 3972,3932 4413,3168 5295,3168 5736,2405 6618,2405 7059,1641 7941,1641 8382,877 9264,877 9704,1641 10586,1641 11027,2405 11909,2405 12350,3168 13232,3168 13673,3932 14555,3932 14996,4696 15878,4696 16319,5460 15878,6223 16319,6987 15878,7751 16319,8515 15878,9278 16319,10042 15878,10806 16319,11570 15878,12333 16319,13097 15878,13861 14996,13861 14555,14625 13673,14625 13232,15389 12350,15389 11909,16152 11027,16152 10586,16916 9704,16916 9264,17680 8382,17680 7941,16916 7059,16916 6618,16152 5736,16152 5295,15389 4413,15389 3972,14625 3090,14625 2649,13861 1767,13861 Z"/>
+        <path fill="none" stroke="rgb(0,0,0)" d="M 1767,13861 L 1326,13097 1767,12333 1326,11570 1767,10806 1326,10042 1767,9278 1326,8515 1767,7751 1326,6987 1767,6223 1326,5460 1767,4696 2649,4696 3090,3932 3972,3932 4413,3168 5295,3168 5736,2405 6618,2405 7059,1641 7941,1641 8382,877 9264,877 9704,1641 10586,1641 11027,2405 11909,2405 12350,3168 13232,3168 13673,3932 14555,3932 14996,4696 15878,4696 16319,5460 15878,6223 16319,6987 15878,7751 16319,8515 15878,9278 16319,10042 15878,10806 16319,11570 15878,12333 16319,13097 15878,13861 14996,13861 14555,14625 13673,14625 13232,15389 12350,15389 11909,16152 11027,16152 10586,16916 9704,16916 9264,17680 8382,17680 7941,16916 7059,16916 6618,16152 5736,16152 5295,15389 4413,15389 3972,14625 3090,14625 2649,13861 1767,13861 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id5"/>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id6"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id7">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="1963" y="15043"><tspan fill="rgb(0,0,0)" stroke="none">a</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id8"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id9">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="3286" y="15809"><tspan fill="rgb(0,0,0)" stroke="none">b</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id10"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id11">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="4634" y="16571"><tspan fill="rgb(0,0,0)" stroke="none">c</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id12"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id13">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="5931" y="17334"><tspan fill="rgb(0,0,0)" stroke="none">d</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id14"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id15">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="7253" y="18098"><tspan fill="rgb(0,0,0)" stroke="none">e</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id16"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id17">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="8697" y="18864"><tspan fill="rgb(0,0,0)" stroke="none">f</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id18"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id19">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="9898" y="18098"><tspan fill="rgb(0,0,0)" stroke="none">g</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id20"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id21">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="11221" y="17334"><tspan fill="rgb(0,0,0)" stroke="none">h</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id22"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id23">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="12693" y="16571"><tspan fill="rgb(0,0,0)" stroke="none">i</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id24"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id25">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="13894" y="15809"><tspan fill="rgb(0,0,0)" stroke="none">k</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id26"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id27">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="15338" y="15043"><tspan fill="rgb(0,0,0)" stroke="none">l</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id28"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id29">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="16635" y="14279"><tspan fill="rgb(0,0,0)" stroke="none"> </tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id30"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id31">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="640" y="12754"><tspan fill="rgb(0,0,0)" stroke="none">1</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id32">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 3090,13097 L 2649,12333 1767,12333 1326,13097 1767,13861 2649,13861 3090,13097 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id33">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 4413,13861 L 3972,13097 3090,13097 2649,13861 3090,14625 3972,14625 4413,13861 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id34">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 5735,14625 L 5294,13861 4412,13861 3971,14625 4412,15389 5294,15389 5735,14625 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id35">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 7060,15389 L 6619,14625 5737,14625 5296,15389 5737,16153 6619,16153 7060,15389 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id36">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 8383,16152 L 7942,15388 7060,15388 6619,16152 7060,16916 7942,16916 8383,16152 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id37">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 9265,16152 L 8383,16152 7942,16916 8383,17680 9265,17680 9706,16916 9265,16152 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id38">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 10588,15388 L 9706,15388 9265,16152 9706,16916 10588,16916 11029,16152 10588,15388 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id39">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 11911,14625 L 11029,14625 10588,15389 11029,16153 11911,16153 12352,15389 11911,14625 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id40">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 13234,13861 L 12352,13861 11911,14625 12352,15389 13234,15389 13675,14625 13234,13861 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id41">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 14557,13097 L 13675,13097 13234,13861 13675,14625 14557,14625 14998,13861 14557,13097 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id42">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 15880,12333 L 14998,12333 14557,13097 14998,13861 15880,13861 16321,13097 15880,12333 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id43"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id44">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="16517" y="12754"><tspan fill="rgb(0,0,0)" stroke="none">1</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id45"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id46">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="642" y="11224"><tspan fill="rgb(0,0,0)" stroke="none">2</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id47">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 3091,11570 L 2650,10806 1768,10806 1327,11570 1768,12334 2650,12334 3091,11570 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id48">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 4414,12334 L 3973,11570 3091,11570 2650,12334 3091,13098 3973,13098 4414,12334 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id49">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 5737,13097 L 5296,12333 4414,12333 3973,13097 4414,13861 5296,13861 5737,13097 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id50">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 7060,13861 L 6619,13097 5737,13097 5296,13861 5737,14625 6619,14625 7060,13861 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id51">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 8383,14625 L 7942,13861 7060,13861 6619,14625 7060,15389 7942,15389 8383,14625 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id52">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 9265,14625 L 8383,14625 7942,15389 8383,16153 9265,16153 9706,15389 9265,14625 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id53">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 10588,13863 L 9706,13863 9265,14627 9706,15391 10588,15391 11029,14627 10588,13863 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id54">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 11911,13101 L 11029,13101 10588,13865 11029,14629 11911,14629 12352,13865 11911,13101 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id55">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 13234,12337 L 12352,12337 11911,13101 12352,13865 13234,13865 13675,13101 13234,12337 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id56">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 14557,11573 L 13675,11573 13234,12337 13675,13101 14557,13101 14998,12337 14557,11573 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id57">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 15880,10809 L 14998,10809 14557,11573 14998,12337 15880,12337 16321,11573 15880,10809 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id58"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id59">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="16517" y="11230"><tspan fill="rgb(0,0,0)" stroke="none">2</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id60"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id61">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="642" y="9700"><tspan fill="rgb(0,0,0)" stroke="none">3</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id62">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 3091,10046 L 2650,9282 1768,9282 1327,10046 1768,10810 2650,10810 3091,10046 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id63">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 4414,10810 L 3973,10046 3091,10046 2650,10810 3091,11574 3973,11574 4414,10810 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id64">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 5737,11573 L 5296,10809 4414,10809 3973,11573 4414,12337 5296,12337 5737,11573 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id65">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 7060,12337 L 6619,11573 5737,11573 5296,12337 5737,13101 6619,13101 7060,12337 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id66">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 8383,13101 L 7942,12337 7060,12337 6619,13101 7060,13865 7942,13865 8383,13101 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id67">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 9265,13101 L 8383,13101 7942,13865 8383,14629 9265,14629 9706,13865 9265,13101 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id68">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 10588,12339 L 9706,12339 9265,13103 9706,13867 10588,13867 11029,13103 10588,12339 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id69">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 11911,11575 L 11029,11575 10588,12339 11029,13103 11911,13103 12352,12339 11911,11575 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id70">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 13234,10811 L 12352,10811 11911,11575 12352,12339 13234,12339 13675,11575 13234,10811 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id71">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 14557,10047 L 13675,10047 13234,10811 13675,11575 14557,11575 14998,10811 14557,10047 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id72">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 15880,9284 L 14998,9284 14557,10048 14998,10812 15880,10812 16321,10048 15880,9284 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id73"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id74">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="16517" y="9704"><tspan fill="rgb(0,0,0)" stroke="none">3</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id75"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id76">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="642" y="8175"><tspan fill="rgb(0,0,0)" stroke="none">4</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id77">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 3091,8520 L 2650,7756 1768,7756 1327,8520 1768,9284 2650,9284 3091,8520 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id78">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 4414,9284 L 3973,8520 3091,8520 2650,9284 3091,10048 3973,10048 4414,9284 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id79">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 5737,10048 L 5296,9284 4414,9284 3973,10048 4414,10812 5296,10812 5737,10048 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id80">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 7060,10811 L 6619,10047 5737,10047 5296,10811 5737,11575 6619,11575 7060,10811 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id81">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 8383,11575 L 7942,10811 7060,10811 6619,11575 7060,12339 7942,12339 8383,11575 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id82">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 9265,11575 L 8383,11575 7942,12339 8383,13103 9265,13103 9706,12339 9265,11575 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id83">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 10588,10811 L 9706,10811 9265,11575 9706,12339 10588,12339 11029,11575 10588,10811 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id84">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 11911,10047 L 11029,10047 10588,10811 11029,11575 11911,11575 12352,10811 11911,10047 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id85">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 13234,9284 L 12352,9284 11911,10048 12352,10812 13234,10812 13675,10048 13234,9284 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id86">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 14557,8520 L 13675,8520 13234,9284 13675,10048 14557,10048 14998,9284 14557,8520 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id87">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 15880,7756 L 14998,7756 14557,8520 14998,9284 15880,9284 16321,8520 15880,7756 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id88"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id89">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="16517" y="8175"><tspan fill="rgb(0,0,0)" stroke="none">4</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id90"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id91">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="642" y="6649"><tspan fill="rgb(0,0,0)" stroke="none">5</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id92">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 3091,6993 L 2650,6229 1768,6229 1327,6993 1768,7757 2650,7757 3091,6993 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id93">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 4414,7756 L 3973,6992 3091,6992 2650,7756 3091,8520 3973,8520 4414,7756 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id94">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 5737,8518 L 5296,7754 4414,7754 3973,8518 4414,9282 5296,9282 5737,8518 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id95">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 7060,9282 L 6619,8518 5737,8518 5296,9282 5737,10046 6619,10046 7060,9282 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id96">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 8383,10046 L 7942,9282 7060,9282 6619,10046 7060,10810 7942,10810 8383,10046 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id97">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 9265,10046 L 8383,10046 7942,10810 8383,11574 9265,11574 9706,10810 9265,10046 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id98">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 10588,9282 L 9706,9282 9265,10046 9706,10810 10588,10810 11029,10046 10588,9282 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id99">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 11911,8518 L 11029,8518 10588,9282 11029,10046 11911,10046 12352,9282 11911,8518 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id100">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 13234,7754 L 12352,7754 11911,8518 12352,9282 13234,9282 13675,8518 13234,7754 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id101">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 14557,6991 L 13675,6991 13234,7755 13675,8519 14557,8519 14998,7755 14557,6991 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id102">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 15880,6227 L 14998,6227 14557,6991 14998,7755 15880,7755 16321,6991 15880,6227 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id103"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id104">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="16517" y="6645"><tspan fill="rgb(0,0,0)" stroke="none">5</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id105"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id106">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="642" y="5120"><tspan fill="rgb(0,0,0)" stroke="none">6</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id107">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 3091,5463 L 2650,4699 1768,4699 1327,5463 1768,6227 2650,6227 3091,5463 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id108">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 4414,6227 L 3973,5463 3091,5463 2650,6227 3091,6991 3973,6991 4414,6227 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id109">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 5737,6991 L 5296,6227 4414,6227 3973,6991 4414,7755 5296,7755 5737,6991 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id110">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 7060,7755 L 6619,6991 5737,6991 5296,7755 5737,8519 6619,8519 7060,7755 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id111">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 8383,8518 L 7942,7754 7060,7754 6619,8518 7060,9282 7942,9282 8383,8518 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id112">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 9265,8518 L 8383,8518 7942,9282 8383,10046 9265,10046 9706,9282 9265,8518 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id113">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 10588,7754 L 9706,7754 9265,8518 9706,9282 10588,9282 11029,8518 10588,7754 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id114">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 11911,6991 L 11029,6991 10588,7755 11029,8519 11911,8519 12352,7755 11911,6991 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id115">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 13234,6227 L 12352,6227 11911,6991 12352,7755 13234,7755 13675,6991 13234,6227 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id116">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 14557,5463 L 13675,5463 13234,6227 13675,6991 14557,6991 14998,6227 14557,5463 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id117">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 15880,4699 L 14998,4699 14557,5463 14998,6227 15880,6227 16321,5463 15880,4699 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id118"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id119">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="16517" y="5120"><tspan fill="rgb(0,0,0)" stroke="none">6</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id120"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id121">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="1964" y="4356"><tspan fill="rgb(0,0,0)" stroke="none">7</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id122">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 4414,4700 L 3973,3936 3091,3936 2650,4700 3091,5464 3973,5464 4414,4700 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id123">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 5737,5463 L 5296,4699 4414,4699 3973,5463 4414,6227 5296,6227 5737,5463 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id124">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 7060,6227 L 6619,5463 5737,5463 5296,6227 5737,6991 6619,6991 7060,6227 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id125">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 8383,6991 L 7942,6227 7060,6227 6619,6991 7060,7755 7942,7755 8383,6991 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id126">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 9265,6991 L 8383,6991 7942,7755 8383,8519 9265,8519 9706,7755 9265,6991 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id127">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 10588,6227 L 9706,6227 9265,6991 9706,7755 10588,7755 11029,6991 10588,6227 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id128">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 11913,5463 L 11031,5463 10590,6227 11031,6991 11913,6991 12354,6227 11913,5463 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id129">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 13235,4699 L 12353,4699 11912,5463 12353,6227 13235,6227 13676,5463 13235,4699 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id130">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 14558,3936 L 13676,3936 13235,4700 13676,5464 14558,5464 14999,4700 14558,3936 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id131"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id132">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="15195" y="4358"><tspan fill="rgb(0,0,0)" stroke="none">7</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id133"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id134">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="3291" y="3594"><tspan fill="rgb(0,0,0)" stroke="none">8</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id135">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 5741,3938 L 5300,3174 4418,3174 3977,3938 4418,4702 5300,4702 5741,3938 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id136">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 7064,4701 L 6623,3937 5741,3937 5300,4701 5741,5465 6623,5465 7064,4701 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id137">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 8387,5465 L 7946,4701 7064,4701 6623,5465 7064,6229 7946,6229 8387,5465 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id138">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 9269,5465 L 8387,5465 7946,6229 8387,6993 9269,6993 9710,6229 9269,5465 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id139">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 10591,4701 L 9709,4701 9268,5465 9709,6229 10591,6229 11032,5465 10591,4701 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id140">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 11914,3939 L 11032,3939 10591,4703 11032,5467 11914,5467 12355,4703 11914,3939 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id141">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 13237,3175 L 12355,3175 11914,3939 12355,4703 13237,4703 13678,3939 13237,3175 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id142"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id143">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="13872" y="3596"><tspan fill="rgb(0,0,0)" stroke="none">8</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id144"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id145">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="4614" y="2832"><tspan fill="rgb(0,0,0)" stroke="none">9</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id146">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 7064,3176 L 6623,2412 5741,2412 5300,3176 5741,3940 6623,3940 7064,3176 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id147">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 8387,3939 L 7946,3175 7064,3175 6623,3939 7064,4703 7946,4703 8387,3939 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id148">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 9269,3939 L 8387,3939 7946,4703 8387,5467 9269,5467 9710,4703 9269,3939 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id149">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 10591,3175 L 9709,3175 9268,3939 9709,4703 10591,4703 11032,3939 10591,3175 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id150">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 11914,2412 L 11032,2412 10591,3176 11032,3940 11914,3940 12355,3176 11914,2412 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id151"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id152">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="12550" y="2832"><tspan fill="rgb(0,0,0)" stroke="none">9</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id153"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id154">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="5690" y="2066"><tspan fill="rgb(0,0,0)" stroke="none">10</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id155">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 8387,2412 L 7946,1648 7064,1648 6623,2412 7064,3176 7946,3176 8387,2412 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id156">
+        <path fill="rgb(255,206,158)" stroke="none" d="M 9269,2412 L 8387,2412 7946,3176 8387,3940 9269,3940 9710,3176 9269,2412 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id157">
+        <path fill="rgb(232,171,111)" stroke="none" d="M 10591,1648 L 9709,1648 9268,2412 9709,3176 10591,3176 11032,2412 10591,1648 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id158"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id159">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="10981" y="2066"><tspan fill="rgb(0,0,0)" stroke="none">10</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id160"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id161">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="7013" y="1302"><tspan fill="rgb(0,0,0)" stroke="none">11</tspan></tspan></tspan></text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.PolyPolygonShape">
+       <g id="id162">
+        <path fill="rgb(209,139,71)" stroke="none" d="M 9269,884 L 8387,884 7946,1648 8387,2412 9269,2412 9710,1648 9269,884 Z"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.EllipseShape">
+       <g id="id163"/>
+      </g>
+      <g class="com.sun.star.drawing.TextShape">
+       <g id="id164">
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Nimbus Sans L, sans-serif" font-size="882px" font-weight="400"><tspan class="TextPosition" x="9658" y="1302"><tspan fill="rgb(0,0,0)" stroke="none">11</tspan></tspan></tspan></text>
+       </g>
+      </g>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>
