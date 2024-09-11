@@ -12,23 +12,23 @@
     export let q: number;
     export let r: number;
     export let s: number;
+    export let size: number;
 
-    const size: Point = new Point(100, 100);
-    // const origin: Point = new Point(size.x, size.y * Math.sqrt(3)/2);
     const origin: Point = new Point(0,0);
 
-    const layout: Layout = new Layout(Layout.flat, size, origin);
+    const layout: Layout = new Layout(Layout.flat, new Point(size, size), origin);
     const hex: Hex = new Hex(q, r, s);
     const points: Point[] = layout.polygonCorners(hex);
 
     const pointString = svgPoints(points);
-    const heightWidth: Point = new Point(size.x * 2, size.y * Math.sqrt(3));
+    const heightWidth: Point = new Point(size * 2, size * Math.sqrt(3));
     const viewBoxString = `${origin.x-(heightWidth.x/2)} ${origin.y-(heightWidth.y)} ${heightWidth.x} ${heightWidth.y}`
 </script>
 
-<svg overflow="visible" height=0 width=0 xmlns="http://www.w3.org/2000/svg">
+<g>
     <polygon
         points={pointString}
-        style="fill:lime;stroke:red;stroke-width:2"
+        style="fill:white;stroke:black;stroke-width:2"
     />
-</svg>
+</g>
+    
