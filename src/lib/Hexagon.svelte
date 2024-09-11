@@ -26,7 +26,7 @@
     const viewBoxString = `${origin.x-(heightWidth.x/2)} ${origin.y-(heightWidth.y)} ${heightWidth.x} ${heightWidth.y}`
 </script>
 
-<svg viewBox={viewBoxString} width={heightWidth.x} height={heightWidth.y}  xmlns="http://www.w3.org/2000/svg">
+<svg overflow="visible" height=0 width=0 xmlns="http://www.w3.org/2000/svg">
     <polygon
         points={pointString}
         style="fill:lime;stroke:red;stroke-width:2"
