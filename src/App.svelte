@@ -15,11 +15,8 @@
   import blackKnight from './assets/pieces/Chess_ndt45.svg'
   import blackPawn from './assets/pieces/Chess_pdt45.svg'
 
-  // Imports for the board
-  import board from './assets/board/Hexagonal_chess_board.svg'
-
-  // import Hexagon from './lib/Hexagon.svelte';
-  import Board from './lib/Board.svelte'
+  import { Theme } from './board/ColorPicker'
+  import Board from './board/Board.svelte'
 
 </script>
 
@@ -28,7 +25,7 @@
     <h1>Hexagonal Chess</h1>
   </div>
 
-  <Board></Board>
+  <Board radius={5} hexSize={50} theme={Theme.GRAYSCALE}></Board>
 
   <div>
     <img src={whiteKing} class="piece white" alt="White King" />
@@ -51,14 +48,6 @@
 </main>
 
 <style>
-  .boardDiv {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-
-    scale: 135%;
-  }
-
   .piece {
     height: 5em;
     padding: 1.5em;
