@@ -114,86 +114,6 @@ export class Hex {
     }
 }
 
-export class OffsetCoord {
-    constructor(
-        public col: number,
-        public row: number,
-    ) { }
-    public static EVEN: number = 1;
-    public static ODD: number = -1;
-
-    public static qoffsetFromCube(offset: number, h: Hex): OffsetCoord {
-        var col: number = h.q;
-        var row: number = h.r + (h.q + offset * (h.q & 1)) / 2;
-        if (offset !== OffsetCoord.EVEN && offset !== OffsetCoord.ODD) {
-            throw "offset must be EVEN (+1) or ODD (-1)";
-        }
-        return new OffsetCoord(col, row);
-    }
-
-    public static qoffsetToCube(offset: number, h: OffsetCoord): Hex {
-        var q: number = h.col;
-        var r: number = h.row - (h.col + offset * (h.col & 1)) / 2;
-        var s: number = -q - r;
-        if (offset !== OffsetCoord.EVEN && offset !== OffsetCoord.ODD) {
-            throw "offset must be EVEN (+1) or ODD (-1)";
-        }
-        return new Hex(q, r, s);
-    }
-
-    public static roffsetFromCube(offset: number, h: Hex): OffsetCoord {
-        var col: number = h.q + (h.r + offset * (h.r & 1)) / 2;
-        var row: number = h.r;
-        if (offset !== OffsetCoord.EVEN && offset !== OffsetCoord.ODD) {
-            throw "offset must be EVEN (+1) or ODD (-1)";
-        }
-        return new OffsetCoord(col, row);
-    }
-
-    public static roffsetToCube(offset: number, h: OffsetCoord): Hex {
-        var q: number = h.col - (h.row + offset * (h.row & 1)) / 2;
-        var r: number = h.row;
-        var s: number = -q - r;
-        if (offset !== OffsetCoord.EVEN && offset !== OffsetCoord.ODD) {
-            throw "offset must be EVEN (+1) or ODD (-1)";
-        }
-        return new Hex(q, r, s);
-    }
-}
-
-export class DoubledCoord {
-    constructor(
-        public col: number,
-        public row: number,
-    ) { }
-
-    public static qdoubledFromCube(h: Hex): DoubledCoord {
-        var col: number = h.q;
-        var row: number = 2 * h.r + h.q;
-        return new DoubledCoord(col, row);
-    }
-
-    public qdoubledToCube(): Hex {
-        var q: number = this.col;
-        var r: number = (this.row - this.col) / 2;
-        var s: number = -q - r;
-        return new Hex(q, r, s);
-    }
-
-    public static rdoubledFromCube(h: Hex): DoubledCoord {
-        var col: number = 2 * h.q + h.r;
-        var row: number = h.r;
-        return new DoubledCoord(col, row);
-    }
-
-    public rdoubledToCube(): Hex {
-        var q: number = (this.col - this.row) / 2;
-        var r: number = this.row;
-        var s: number = -q - r;
-        return new Hex(q, r, s);
-    }
-}
-
 export class Orientation {
     constructor(
         public f0: number,
@@ -214,7 +134,7 @@ export class Layout {
         public size: Point,
         public origin: Point,
     ) { }
-    public static pointy: Orientation = new Orientation(
+    public static POINTY: Orientation = new Orientation(
         Math.sqrt(3.0),
         Math.sqrt(3.0) / 2.0,
         0.0,
@@ -225,7 +145,7 @@ export class Layout {
         2.0 / 3.0,
         0.5,
     );
-    public static flat: Orientation = new Orientation(
+    public static FLAT: Orientation = new Orientation(
         3.0 / 2.0,
         0.0,
         Math.sqrt(3.0) / 2.0,
