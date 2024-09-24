@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { writable } from 'svelte/store';
     import Hexagon from "./Hexagon.svelte";
     import { Hex, Layout, Point} from "../lib/HexLib";
     import { ColorPicker, Theme} from "./ColorPicker";
@@ -42,12 +43,14 @@
     // Calculates the height and width of the array of hexagons
     const heightWidth: Point = new Point((hexSize*(3/2))*gridLength, hexSize*Math.sqrt(3)*gridLength);
     const viewBoxString = `${heightWidth.x/-2} ${heightWidth.y/-2} ${heightWidth.x} ${heightWidth.y}`
+
+    // Board Store
+    
 </script>
 
 <svg overflow="visible" viewBox={viewBoxString} width={heightWidth.x} height={heightWidth.y}>
     {#each hexArray as {q,r,s,color}}
         <Hexagon layout={layout} q={q} r={r} s={s} color={color}></Hexagon>
-        
     {/each}
 
     <!-- Bishops -->
