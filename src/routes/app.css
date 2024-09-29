@@ -1,6 +1,9 @@
 :root {
     background-color: rgb(48, 48, 48);
     color: white;
+    display: flex;
+    place-items: center;
+    position:relative;
 }
 
 body {
@@ -12,7 +15,7 @@ body {
 }
 
 .canDrop {
-    background-color:yellow;
+    fill: yellow;
 }
 
 .piece {

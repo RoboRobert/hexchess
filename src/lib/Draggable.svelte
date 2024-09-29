@@ -1,13 +1,16 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    // This class is designed to make drag and drop easy.
+    // Meant to be used with a relatively positioned parent div.
 
     let x = 0;
     let y = 0;
 
+    let offsetX = 0;
+    let offsetY = 0;
+
     let width = 0;
     let height = 0;
-
-    let parent: HTMLElement;
+    
     let div: HTMLElement;
 
     let dropList: Element[] = [];
@@ -16,61 +19,69 @@
 
     let dragging = false;
 
-    onMount(() => div = parent.firstElementChild as HTMLElement)
-
-    function handleMouseUp(e:MouseEvent) {
+    function handlePointerUp(e: PointerEvent) {
         dragging = false;
         div.style.cursor = "";
 
         if (dropTarget != undefined) {
             dropTarget.classList.remove("canDrop");
-            let targetRect = (dropTarget as HTMLElement).getBoundingClientRect();
+            let targetRect = (
+                dropTarget as HTMLElement
+            ).getBoundingClientRect();
 
-            div.style.left = `${targetRect.left + targetRect.width/2 - width/2}px`
-            div.style.top = `${targetRect.top + targetRect.height/2 - height/2}px`
+            div.style.left = `${targetRect.left + targetRect.width / 2 - width / 2 - offsetX}px`;
+            div.style.top = `${targetRect.top + targetRect.height / 2 - height / 2 - offsetY}px`;
             dropTarget = undefined;
         }
     }
 
-    function handleMouseDown(e:MouseEvent) {
+    function handlePointerDown(e: PointerEvent) {
         dragging = true;
 
         width = div.getBoundingClientRect().width;
         height = div.getBoundingClientRect().height;
 
-        console.log(width, height);
+        offsetX = div.parentElement?.getBoundingClientRect().left as number;
+        offsetY = div.parentElement?.getBoundingClientRect().top as number;
 
-        x = e.clientX - width/2;
-        y = e.clientY - height/2;
-
-        div.style.left = `${x}px`
-        div.style.top = `${y}px`
+        handleMove(e);
 
         div.style.cursor = "grabbing";
     }
 
-    function handleMouseMove(e:MouseEvent) {
-        if(dragging) {
-            x = e.clientX - width/2;
-            y = e.clientY - height/2;
-            div.style.left = `${x}px`
-            div.style.top = `${y}px`
+    function handlePointerMove(e: PointerEvent) {
+        console.log(e.clientX, e.clientY);
+        console.log(div.getBoundingClientRect().left, div.getBoundingClientRect().top);
+        if (dragging) {
+            handleMove(e);
+        }
+    }
 
-            dropList = document.elementsFromPoint(e.clientX, e.clientY);
-            dropTarget?.classList.remove("canDrop");
-            dropTarget = undefined;
-            if (dropList.length > 2 && dropList[1].classList.contains("droppable")) {
-                dropTarget = dropList[1] as HTMLElement;
-                dropTarget.classList.add("canDrop");
-            }
+    function handleMove(e: PointerEvent) {
+        x = e.clientX - width/2 - offsetX;
+        y = e.clientY - height / 2 - offsetY;
+        div.style.left = `${x}px`;
+        div.style.top = `${y}px`;
+
+        dropList = document.elementsFromPoint(e.clientX, e.clientY);
+        dropTarget?.classList.remove("canDrop");
+        dropTarget = undefined;
+
+        // Finds the first droppable target, or undefined if none
+        dropTarget = dropList.find((e) => e.classList.contains("droppable")) as
+            | HTMLElement
+            | undefined;
+
+        if (dropTarget != undefined) {
+            dropTarget.classList.add("canDrop");
         }
     }
 </script>
 
-<svelte:window on:mousemove={handleMouseMove} on:mouseup={handleMouseUp} />
+<svelte:window on:pointermove={handlePointerMove} on:pointerup={handlePointerUp} />
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="draggable" bind:this={parent} on:mousedown={handleMouseDown}>
+<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown}>
     <slot></slot>
 </div>
 
@@ -78,6 +89,8 @@
     .draggable {
         cursor: grab;
         position: absolute;
+        top: 50%;
+        left: 50%;
         /* width: 50px;
         height: 50px;
         text-align: center;

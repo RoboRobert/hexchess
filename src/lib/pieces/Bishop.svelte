@@ -1,6 +1,5 @@
 <script lang="ts">
     import Draggable from "$lib/Draggable.svelte";
-    import { base } from "$app/paths";
 </script>
 
 <Draggable>
@@ -10,7 +9,7 @@
 
 <style>
     .bishop {
-        width: 100px;
-        height: 100px;
+        width: 50px;
+        height: 50px;
     }
 </style>

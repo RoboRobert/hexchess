@@ -26,10 +26,15 @@
 </script>
 
 <g>
-    <polygon
+    <!-- <polygon
         class="hexagon droppable"
         points={pointString}
         style="fill:{color};stroke:{color};"
+    /> -->
+
+    <polygon
+        class="hexagon droppable"
+        points={pointString}
     />
 
     <!-- Optional rendering of cube coordinates for debugging -->
@@ -37,9 +42,3 @@
     <text x={textOffset.x-5+size/2} y={textOffset.y+size/2} class="small">{r}</text>
     <text x={textOffset.x-size/2} y={textOffset.y+size/2} class="small">{s}</text>
 </g>
-
-<style>
-    .hexagon:hover {
-        filter: drop-shadow(0 0 2em #000000aa);
-    }
-</style>
