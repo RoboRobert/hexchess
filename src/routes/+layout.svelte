@@ -1,10 +1,6 @@
- <slot>
+<script lang="ts">
+    import './app.css'
+</script>
 
- </slot>
-
-<style>
-    :root {
-        background-color: rgb(48, 48, 48);
-        color: white;
-    }
-</style>
+<slot>
+</slot>
