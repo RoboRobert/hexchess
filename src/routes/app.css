@@ -1,0 +1,20 @@
+:root {
+    background-color: rgb(48, 48, 48);
+    color: white;
+    display: flex;
+    place-items: center;
+    position:relative;
+}
+
+body {
+    margin: auto;
+    /* display: flex; */
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+    text-align: center;
+}
+
+.piece {
+    user-select: none;
+}
