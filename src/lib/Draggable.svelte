@@ -1,6 +1,7 @@
 <script lang="ts">
-    // This class is designed to make drag and drop easy.
+    // This component is designed to make drag and drop easy.
     // Meant to be used with a relatively positioned parent div.
+    // Slot in anything you want to make it draggable and droppable.
 
     let x = 0;
     let y = 0;
@@ -10,11 +11,12 @@
 
     let width = 0;
     let height = 0;
-    
+
     let div: HTMLElement;
 
     let dropList: Element[] = [];
 
+    let previousColor: string;
     let dropTarget: HTMLElement | undefined;
 
     let dragging = false;
@@ -24,10 +26,14 @@
         div.style.cursor = "";
 
         if (dropTarget != undefined) {
-            dropTarget.classList.remove("canDrop");
+            dropTarget.style.fill = previousColor;
+            dropTarget.style.stroke = previousColor;
+
             let targetRect = (
                 dropTarget as HTMLElement
             ).getBoundingClientRect();
+
+            console.log(targetRect.width, targetRect.height);
 
             div.style.left = `${targetRect.left + targetRect.width / 2 - width / 2 - offsetX}px`;
             div.style.top = `${targetRect.top + targetRect.height / 2 - height / 2 - offsetY}px`;
@@ -50,22 +56,25 @@
     }
 
     function handlePointerMove(e: PointerEvent) {
-        console.log(e.clientX, e.clientY);
-        console.log(div.getBoundingClientRect().left, div.getBoundingClientRect().top);
         if (dragging) {
             handleMove(e);
         }
     }
 
     function handleMove(e: PointerEvent) {
-        x = e.clientX - width/2 - offsetX;
+        x = e.clientX - width / 2 - offsetX;
         y = e.clientY - height / 2 - offsetY;
         div.style.left = `${x}px`;
         div.style.top = `${y}px`;
 
         dropList = document.elementsFromPoint(e.clientX, e.clientY);
-        dropTarget?.classList.remove("canDrop");
-        dropTarget = undefined;
+
+        if (dropTarget != undefined) {
+            dropTarget.style.fill = previousColor;
+            dropTarget.style.stroke = previousColor;
+
+            dropTarget = undefined;
+        }
 
         // Finds the first droppable target, or undefined if none
         dropTarget = dropList.find((e) => e.classList.contains("droppable")) as
@@ -73,12 +82,17 @@
             | undefined;
 
         if (dropTarget != undefined) {
-            dropTarget.classList.add("canDrop");
+            previousColor = dropTarget.style.fill;
+            dropTarget.style.fill = "yellow";
+            dropTarget.style.stroke = "yellow";
         }
     }
 </script>
 
-<svelte:window on:pointermove={handlePointerMove} on:pointerup={handlePointerUp} />
+<svelte:window
+    on:pointermove={handlePointerMove}
+    on:pointerup={handlePointerUp}
+/>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="draggable" bind:this={div} on:pointerdown={handlePointerDown}>
@@ -93,9 +107,9 @@
         left: 50%;
         /* width: 50px;
         height: 50px;
-        text-align: center;
-        border: 5px solid black;
-        background-color: white;
-        color: black; */
+        text-align: center; */
+        /* border: 5px solid black; */
+        /* background-color: white; */
+        /* color: black; */
     }
 </style>

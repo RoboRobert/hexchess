@@ -26,15 +26,10 @@
 </script>
 
 <g>
-    <!-- <polygon
-        class="hexagon droppable"
-        points={pointString}
-        style="fill:{color};stroke:{color};"
-    /> -->
-
     <polygon
         class="hexagon droppable"
         points={pointString}
+        style="fill:{color};stroke:{color};"
     />
 
     <!-- Optional rendering of cube coordinates for debugging -->

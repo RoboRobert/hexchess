@@ -14,10 +14,6 @@ body {
     min-height: 100vh;
 }
 
-.canDrop {
-    fill: yellow;
-}
-
 .piece {
     user-select: none;
 }

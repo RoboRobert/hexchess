@@ -11,5 +11,7 @@
     .bishop {
         width: 50px;
         height: 50px;
+        left: 0;
+        top: 0;
     }
 </style>
