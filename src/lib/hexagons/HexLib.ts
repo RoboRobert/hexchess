@@ -6,12 +6,19 @@ export class Point {
 }
 
 export class Hex {
+    public q:number;
+    public r:number;
+    private s:number;
+
     constructor(
-        public q: number,
-        public r: number,
-        public s: number,
+        q: number,
+        r: number,
+        s?: number,
     ) {
-        if (Math.round(q + r + s) !== 0) throw "q + r + s must be 0";
+        this.q = q;
+        this.r = r;
+        this.s = -q-r;
+        if (Math.round(q + r + this.s) !== 0) throw "q + r + s must be 0";
     }
 
     public add(b: Hex): Hex {

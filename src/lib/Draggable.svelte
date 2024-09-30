@@ -1,17 +1,18 @@
 <script lang="ts">
-    import type { Point } from "./hexagons/HexLib";
+    import { onMount } from "svelte";
+    import { Point } from "./hexagons/HexLib";
 
     // This component is designed to make drag and drop easy.
     // Use with a relatively positioned parent div.
     // Slot in anything you want to make it draggable and droppable.
 
-    export let offset: Point;
+    export let offset: Point | undefined = undefined;
 
     let x = 0;
     let y = 0;
 
-    let startX:string;
-    let startY:string;
+    let startX: string;
+    let startY: string;
 
     // Offsets from the parent element.
     let pOffsetX = 0;
@@ -31,11 +32,28 @@
     let dragging = false;
     let snapBack = true;
 
+    onMount(() => {
+        width = div.getBoundingClientRect().width;
+        height = div.getBoundingClientRect().height;
+
+        if (offset != undefined) {
+            let pWidth = div.parentElement?.getBoundingClientRect()
+                .width as number;
+            let pHeight = div.parentElement?.getBoundingClientRect()
+                .height as number;
+
+            console.log(pWidth, pHeight)
+            div.setAttribute(
+                "style",
+                `left:${offset.x + pWidth / 2 - width / 2}px; top:${offset.y + pHeight / 2 - height / 2}px;`,
+            );
+        }
+    });
+
     function handlePointerUp(e: PointerEvent) {
         div.style.cursor = "";
 
-        if (!dragging)
-            return;
+        if (!dragging) return;
 
         dragging = false;
 
@@ -53,7 +71,7 @@
             return;
         }
 
-        if(snapBack) {
+        if (snapBack) {
             div.style.left = startX;
             div.style.top = startY;
             return;
@@ -63,14 +81,11 @@
     function handlePointerDown(e: PointerEvent) {
         dragging = true;
 
-        width = div.getBoundingClientRect().width;
-        height = div.getBoundingClientRect().height;
+        startX = div.style.left;
+        startY = div.style.top;
 
         pOffsetX = div.parentElement?.getBoundingClientRect().left as number;
         pOffsetY = div.parentElement?.getBoundingClientRect().top as number;
-
-        startX = div.style.left;
-        startY = div.style.top;
 
         handleMove(e);
 
@@ -84,7 +99,6 @@
     }
 
     function handleMove(e: PointerEvent) {
-        console.log(offset.x, offset.y);
         x = e.clientX - width / 2 - pOffsetX;
         y = e.clientY - height / 2 - pOffsetY;
         div.style.left = `${x}px`;
@@ -122,7 +136,7 @@
 />
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown} style="left:{offset.x}px; top:{offset.y}px;">
+<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown}>
     <slot></slot>
 </div>
 
