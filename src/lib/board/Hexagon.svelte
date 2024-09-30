@@ -16,24 +16,31 @@
     export let s: number;
     export let color: string;
 
-    const hex: Hex = new Hex(q, r, s);
-    const points: Point[] = layout.polygonCorners(hex);
+    const originHex: Hex = new Hex(0,0,0);
+    const points: Point[] = layout.polygonCorners(originHex);
 
-    const textOffset: Point = layout.hexToPixel(hex);
+    const hex: Hex = new Hex(q, r, s);
+    const originOffset: Point = layout.hexToPixel(hex);
     const size = layout.size.x;
 
     const pointString = pointsToString(points);
 </script>
 
-<g>
+<g transform="translate({originOffset.x}, {originOffset.y})">
+    <!-- <polygon
+        class="hexagon droppable"
+        points={pointString}
+        style="fill:{color};stroke:{color};stroke-width:10px"
+    /> -->
+
     <polygon
         class="hexagon droppable"
         points={pointString}
-        style="fill:{color};stroke:{color};"
+        style="fill:{color};stroke:black;stroke-width:2px"
     />
 
     <!-- Optional rendering of cube coordinates for debugging -->
-    <text x={textOffset.x-5} y={textOffset.y-size/2} class="small">{q}</text>
-    <text x={textOffset.x-5+size/2} y={textOffset.y+size/2} class="small">{r}</text>
-    <text x={textOffset.x-size/2} y={textOffset.y+size/2} class="small">{s}</text>
+    <text x={-5} y={-size/2} class="small">{q}</text>
+    <text x={size/2} y={size/2} class="small">{r}</text>
+    <text x={-size/2} y={size/2} class="small">{s}</text>
 </g>

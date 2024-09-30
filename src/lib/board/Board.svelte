@@ -2,14 +2,9 @@
     import Hexagon from "./Hexagon.svelte";
     import { ColorPicker, Theme} from "./ColorPicker";
     import { HexData } from '$lib/hexagons/HexData';
-    import { Layout, Point } from '$lib/hexagons/HexLib';
-    import Bishop from "$lib/pieces/Bishop.svelte";
-    // import Queen from "../pieces/Queen.svelte";
-    // import Rook from "../pieces/Rook.svelte";
-    // import Pawn from "../pieces/Pawn.svelte";
-    // import King from "../pieces/King.svelte";
-    // import Knight from "../pieces/Knight.svelte";
-    // import { Color } from "../pieces/Piece";
+    import { Hex, Layout, Point } from '$lib/hexagons/HexLib';
+    import Piece from "$lib/pieces/Piece.svelte";
+    import { onMount } from "svelte";
 
     export let radius: number;
     export let hexSize: number;
@@ -25,7 +20,7 @@
     var hexArray: HexData[] = [];
 
     let pickerStart: ColorPicker = new ColorPicker(0, theme);
-    // Creates a grid of hexagons with at most maxDistance from the origin, and a specified color pattern
+    // Creates a grid of hexagons with at most radius distance from the origin, and a specified color pattern
     for(let q = radius; q >=(radius*-1); q--) {
         let picker: ColorPicker = new ColorPicker(pickerStart.currentIndex, pickerStart.theme);
         for(let r = radius; r >= (radius*-1); r--) {
@@ -41,13 +36,13 @@
     
     // Calculates the height and width of the array of hexagons
     const heightWidth: Point = new Point((hexSize*(3/2))*gridLength, hexSize*Math.sqrt(3)*gridLength);
-    const viewBoxString = `${heightWidth.x/-2} ${heightWidth.y/-2} ${heightWidth.x} ${heightWidth.y}`
+    const viewBoxString = `${heightWidth.x/-2} ${heightWidth.y/-2} ${heightWidth.x} ${heightWidth.y}`    
 
-    // Board Store
-    
+    let div: HTMLElement;
+
 </script>
 
-<div class="board">
+<div class="board" bind:this={div}>
     <svg overflow="visible" viewBox={viewBoxString} width={heightWidth.x} height={heightWidth.y}>
         {#each hexArray as {q,r,s,color}}
             <Hexagon layout={layout} q={q} r={r} s={s} color={color}></Hexagon>
@@ -84,7 +79,8 @@
         <Pawn offset={layout.hexToPixel(new Hex(4,-5,1))}></Pawn> -->
     </svg>
 
-    <Bishop></Bishop>
+    <!-- <Piece layout={layout}, hex={new Hex(0,-4,4)}></Piece> -->
+    <Piece layout={layout} hex={new Hex(0,0,0)} parent={div}></Piece>
 </div>
 
 <style>

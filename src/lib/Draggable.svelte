@@ -1,13 +1,21 @@
 <script lang="ts">
+    import type { Point } from "./hexagons/HexLib";
+
     // This component is designed to make drag and drop easy.
-    // Meant to be used with a relatively positioned parent div.
+    // Use with a relatively positioned parent div.
     // Slot in anything you want to make it draggable and droppable.
+
+    export let offset: Point;
 
     let x = 0;
     let y = 0;
 
-    let offsetX = 0;
-    let offsetY = 0;
+    let startX:string;
+    let startY:string;
+
+    // Offsets from the parent element.
+    let pOffsetX = 0;
+    let pOffsetY = 0;
 
     let width = 0;
     let height = 0;
@@ -17,27 +25,38 @@
     let dropList: Element[] = [];
 
     let previousColor: string;
+    let previousStroke: string;
     let dropTarget: HTMLElement | undefined;
 
     let dragging = false;
+    let snapBack = true;
 
     function handlePointerUp(e: PointerEvent) {
-        dragging = false;
         div.style.cursor = "";
 
+        if (!dragging)
+            return;
+
+        dragging = false;
+
         if (dropTarget != undefined) {
-            dropTarget.style.fill = previousColor;
-            dropTarget.style.stroke = previousColor;
+            setColors(dropTarget, previousColor, previousStroke);
 
             let targetRect = (
                 dropTarget as HTMLElement
             ).getBoundingClientRect();
 
-            console.log(targetRect.width, targetRect.height);
-
-            div.style.left = `${targetRect.left + targetRect.width / 2 - width / 2 - offsetX}px`;
-            div.style.top = `${targetRect.top + targetRect.height / 2 - height / 2 - offsetY}px`;
+            div.style.left = `${targetRect.left + targetRect.width / 2 - width / 2 - pOffsetX}px`;
+            div.style.top = `${targetRect.top + targetRect.height / 2 - height / 2 - pOffsetY}px`;
             dropTarget = undefined;
+
+            return;
+        }
+
+        if(snapBack) {
+            div.style.left = startX;
+            div.style.top = startY;
+            return;
         }
     }
 
@@ -47,8 +66,11 @@
         width = div.getBoundingClientRect().width;
         height = div.getBoundingClientRect().height;
 
-        offsetX = div.parentElement?.getBoundingClientRect().left as number;
-        offsetY = div.parentElement?.getBoundingClientRect().top as number;
+        pOffsetX = div.parentElement?.getBoundingClientRect().left as number;
+        pOffsetY = div.parentElement?.getBoundingClientRect().top as number;
+
+        startX = div.style.left;
+        startY = div.style.top;
 
         handleMove(e);
 
@@ -62,16 +84,16 @@
     }
 
     function handleMove(e: PointerEvent) {
-        x = e.clientX - width / 2 - offsetX;
-        y = e.clientY - height / 2 - offsetY;
+        console.log(offset.x, offset.y);
+        x = e.clientX - width / 2 - pOffsetX;
+        y = e.clientY - height / 2 - pOffsetY;
         div.style.left = `${x}px`;
         div.style.top = `${y}px`;
 
         dropList = document.elementsFromPoint(e.clientX, e.clientY);
 
         if (dropTarget != undefined) {
-            dropTarget.style.fill = previousColor;
-            dropTarget.style.stroke = previousColor;
+            setColors(dropTarget, previousColor, previousStroke);
 
             dropTarget = undefined;
         }
@@ -83,9 +105,14 @@
 
         if (dropTarget != undefined) {
             previousColor = dropTarget.style.fill;
-            dropTarget.style.fill = "yellow";
-            dropTarget.style.stroke = "yellow";
+            previousStroke = dropTarget.style.stroke;
+            setColors(dropTarget, "yellow", previousStroke);
         }
+    }
+
+    function setColors(element: HTMLElement, color: string, stroke: string) {
+        element.style.fill = color;
+        element.style.stroke = stroke;
     }
 </script>
 
@@ -95,7 +122,7 @@
 />
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown}>
+<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown} style="left:{offset.x}px; top:{offset.y}px;">
     <slot></slot>
 </div>
 
@@ -103,13 +130,5 @@
     .draggable {
         cursor: grab;
         position: absolute;
-        top: 50%;
-        left: 50%;
-        /* width: 50px;
-        height: 50px;
-        text-align: center; */
-        /* border: 5px solid black; */
-        /* background-color: white; */
-        /* color: black; */
     }
 </style>
