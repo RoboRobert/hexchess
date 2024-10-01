@@ -42,7 +42,6 @@
             let pHeight = div.parentElement?.getBoundingClientRect()
                 .height as number;
 
-            console.log(pWidth, pHeight)
             div.setAttribute(
                 "style",
                 `left:${offset.x + pWidth / 2 - width / 2}px; top:${offset.y + pHeight / 2 - height / 2}px;`,
