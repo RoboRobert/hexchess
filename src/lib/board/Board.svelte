@@ -21,7 +21,7 @@
     var hexArray: HexData[] = [];
 
     var pieceArr: PieceData[] = [];
-    pieceStore.subscribe((array) => {pieceArr = array});
+    pieceStore.subscribe((array) => {pieceArr = array; console.log(pieceArr.length); console.log(pieceArr)});
 
     function createHexArray() {
         hexArray = [];

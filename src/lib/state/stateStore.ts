@@ -1,7 +1,6 @@
 import { Theme } from "$lib/board/ColorPicker";
 import { Layout, Point } from "$lib/hexagons/HexLib";
-import { PieceData } from "$lib/pieces/PieceData";
-import { PieceEnum } from "$lib/pieces/PieceEnum";
+import { PieceData, PieceEnum } from "$lib/pieces/PieceData";
 import { writable } from "svelte/store";
 
 export const themeStore = writable(Theme.GRAYSCALE);

@@ -6,7 +6,7 @@
 
     export let piece: PieceData;
 
-    let hex = new Hex(piece.hexTuple[0], piece.hexTuple[1]);
+    let hex = new Hex(piece.hexCoords[0], piece.hexCoords[1]);
 
     let layout: Layout = flatLayout;
     layoutStore.subscribe((newLayout) => {layout = newLayout});
@@ -14,7 +14,7 @@
     let offset = layout.hexToPixel(hex);
 </script>
 
-<DragPiece offset={offset}>
+<DragPiece offset={offset} currentPiece={piece}>
     <!-- svelte-ignore a11y-missing-attribute -->
     <img class="piece" draggable=false src="{piece.pieceImage}">
 </DragPiece>

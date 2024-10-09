@@ -2,8 +2,11 @@
     import { Hex, Point, type Layout } from "$lib/hexagons/HexLib";
     import { flatLayout, layoutStore } from "$lib/state/stateStore";
     import { onMount } from "svelte";
+    import type { PieceData } from "./PieceData";
 
     export let offset: Point | undefined = undefined;
+
+    export let currentPiece: PieceData;
 
     let layout: Layout = flatLayout;
     layoutStore.subscribe((newLayout) => {layout = newLayout});
@@ -33,6 +36,10 @@
     let snapBack = true;
 
     onMount(() => {
+        updatePos();
+    });
+
+    function updatePos() {
         width = div.getBoundingClientRect().width;
         height = div.getBoundingClientRect().height;
 
@@ -47,10 +54,6 @@
                 `left:${offset.x + pWidth / 2 - width / 2}px; top:${offset.y + pHeight / 2 - height / 2}px;`,
             );
         }
-    });
-
-    function screenToHex() {
-        return new Hex(0,0);
     }
 
     function handlePointerUp(e: PointerEvent) {
@@ -69,11 +72,14 @@
             
             let q = parseInt(dropTarget.getAttribute("data-q") as string);
             let r = parseInt(dropTarget.getAttribute("data-r") as string);
-            console.log(q,r);
-            // console.log(targetRect);
 
-            // div.style.left = `${targetRect.left + targetRect.width / 2 - width / 2 - pOffsetX}px`;
-            // div.style.top = `${targetRect.top + targetRect.height / 2 - height / 2 - pOffsetY}px`;
+            offset = layout.hexToPixel(new Hex(q,r));
+            
+            currentPiece.movePiece([q,r]);
+            updatePos();
+
+            div.style.left = `${targetRect.left + targetRect.width / 2 - width / 2 - pOffsetX}px`;
+            div.style.top = `${targetRect.top + targetRect.height / 2 - height / 2 - pOffsetY}px`;
             dropTarget = undefined;
 
             return;
