@@ -1,16 +1,16 @@
 <script lang="ts">
-    import Hexagon from "./Hexagon.svelte";
-    import { ColorPicker, Theme} from "./ColorPicker";
     import { HexData } from '$lib/hexagons/HexData';
-    import { Hex, Layout, Orientation, Point } from '$lib/hexagons/HexLib';
+    import { Layout, Point } from '$lib/hexagons/HexLib';
     import Piece from "$lib/pieces/Piece.svelte";
-    import { PieceEnum } from "$lib/pieces/PieceEnum";
-    import { defaultLayout, layoutStore, themeStore } from "$lib/state/stateStore";
+    import { PieceData } from "$lib/pieces/PieceData";
+    import { flatLayout, layoutStore, pieceStore, themeStore } from "$lib/state/stateStore";
+    import { ColorPicker, Theme } from "./ColorPicker";
+    import Hexagon from "./Hexagon.svelte";
 
     export let radius: number;
     export let hexSize: number;
     // export let layoutOrientation: Orientation;
-    let layout: Layout = defaultLayout;
+    let layout: Layout = flatLayout;
     layoutStore.subscribe((newLayout) => {layout = newLayout});
     
     let theme: Theme = Theme.GRAYSCALE;
@@ -19,6 +19,9 @@
     const gridLength = (radius*2) + 1;
 
     var hexArray: HexData[] = [];
+
+    var pieceArr: PieceData[] = [];
+    pieceStore.subscribe((array) => {pieceArr = array});
 
     function createHexArray() {
         hexArray = [];
@@ -50,67 +53,17 @@
 
 {#key layout}
     <div class="board" bind:this={div}>
+        <!-- Board hexagons -->
         <svg overflow="visible" viewBox={viewBoxString} width={heightWidth.x} height={heightWidth.y}>
             {#each hexArray as {q,r,s,color}}
                 <Hexagon layout={layout} q={q} r={r} s={s} color={color}></Hexagon>
             {/each}
         </svg>
-        
-        <!-- Black Bishops -->
-        <Piece hex={new Hex(0,-5)} pieceString={PieceEnum.BLACK_BISHOP}></Piece>
-        <Piece hex={new Hex(0,-4)} pieceString={PieceEnum.BLACK_BISHOP}></Piece>
-        <Piece hex={new Hex(0,-3)} pieceString={PieceEnum.BLACK_BISHOP}></Piece>
 
-        <!-- White Bishops -->
-        <Piece hex={new Hex(0,5)} pieceString={PieceEnum.WHITE_BISHOP}></Piece>
-        <Piece hex={new Hex(0,4)} pieceString={PieceEnum.WHITE_BISHOP}></Piece>
-        <Piece hex={new Hex(0,3)} pieceString={PieceEnum.WHITE_BISHOP}></Piece>
-
-        <!-- Black pawns -->
-        <Piece hex={new Hex(-4,-1)} pieceString={PieceEnum.BLACK_PAWN}></Piece>
-        <Piece hex={new Hex(-3,-1)} pieceString={PieceEnum.BLACK_PAWN}></Piece>
-        <Piece hex={new Hex(-2,-1)} pieceString={PieceEnum.BLACK_PAWN}></Piece>
-        <Piece hex={new Hex(-1,-1)} pieceString={PieceEnum.BLACK_PAWN}></Piece>
-        <Piece hex={new Hex(0,-1)} pieceString={PieceEnum.BLACK_PAWN}></Piece>
-        <Piece hex={new Hex(1,-2)} pieceString={PieceEnum.BLACK_PAWN}></Piece>
-        <Piece hex={new Hex(2,-3)} pieceString={PieceEnum.BLACK_PAWN}></Piece>
-        <Piece hex={new Hex(3,-4)} pieceString={PieceEnum.BLACK_PAWN}></Piece>
-        <Piece hex={new Hex(4,-5)} pieceString={PieceEnum.BLACK_PAWN}></Piece>
-        
-        <!-- White Pawns -->
-        <Piece hex={new Hex(-4,5)} pieceString={PieceEnum.WHITE_PAWN}></Piece>
-        <Piece hex={new Hex(-3,4)} pieceString={PieceEnum.WHITE_PAWN}></Piece>
-        <Piece hex={new Hex(-2,3)} pieceString={PieceEnum.WHITE_PAWN}></Piece>
-        <Piece hex={new Hex(-1,2)} pieceString={PieceEnum.WHITE_PAWN}></Piece>
-        <Piece hex={new Hex(0,1)} pieceString={PieceEnum.WHITE_PAWN}></Piece>
-        <Piece hex={new Hex(1,1)} pieceString={PieceEnum.WHITE_PAWN}></Piece>
-        <Piece hex={new Hex(2,1)} pieceString={PieceEnum.WHITE_PAWN}></Piece>
-        <Piece hex={new Hex(3,1)} pieceString={PieceEnum.WHITE_PAWN}></Piece>
-        <Piece hex={new Hex(4,1)} pieceString={PieceEnum.WHITE_PAWN}></Piece>
-
-        <!-- Black Rooks -->
-        <Piece hex={new Hex(-3,-2)} pieceString={PieceEnum.BLACK_ROOK}></Piece>
-        <Piece hex={new Hex(3,-5)} pieceString={PieceEnum.BLACK_ROOK}></Piece>
-
-        <!-- White Rooks -->
-        <Piece hex={new Hex(-3,5)} pieceString={PieceEnum.WHITE_ROOK}></Piece>
-        <Piece hex={new Hex(3,2)} pieceString={PieceEnum.WHITE_ROOK}></Piece>
-
-        <!-- Black Knights -->
-        <Piece hex={new Hex(-2,-3)} pieceString={PieceEnum.BLACK_KNIGHT}></Piece>
-        <Piece hex={new Hex(2,-5)} pieceString={PieceEnum.BLACK_KNIGHT}></Piece>
-
-        <!-- White Knights -->
-        <Piece hex={new Hex(-2,5)} pieceString={PieceEnum.WHITE_KNIGHT}></Piece>
-        <Piece hex={new Hex(2,3)} pieceString={PieceEnum.WHITE_KNIGHT}></Piece>
-
-        <!-- Queens -->
-        <Piece hex={new Hex(-1,-4)} pieceString={PieceEnum.BLACK_QUEEN}></Piece>
-        <Piece hex={new Hex(-1,5)} pieceString={PieceEnum.WHITE_QUEEN}></Piece>
-
-        <!-- Kings -->
-        <Piece hex={new Hex(1,-5)} pieceString={PieceEnum.BLACK_KING}></Piece>
-        <Piece hex={new Hex(1,4)} pieceString={PieceEnum.WHITE_KING}></Piece>
+        <!-- All pieces -->
+        {#each pieceArr as data}
+            <Piece piece = {data}></Piece>
+        {/each}
     </div>
 {/key}
 

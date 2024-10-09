@@ -1,22 +1,23 @@
 <script lang="ts">
-    import Board from "$lib/board/Board.svelte";
-    import Draggable from "$lib/Draggable.svelte";
     import { Hex, Layout } from "$lib/hexagons/HexLib";
-    import { defaultLayout, layoutStore } from "$lib/state/stateStore";
+    import { flatLayout, layoutStore } from "$lib/state/stateStore";
+    import DragPiece from "./DragPiece.svelte";
+    import { PieceData } from "./PieceData";
 
-    export let hex: Hex;
-    export let pieceString: string;
+    export let piece: PieceData;
 
-    let layout: Layout = defaultLayout;
+    let hex = new Hex(piece.hexTuple[0], piece.hexTuple[1]);
+
+    let layout: Layout = flatLayout;
     layoutStore.subscribe((newLayout) => {layout = newLayout});
 
     let offset = layout.hexToPixel(hex);
 </script>
 
-<Draggable offset={offset}>
+<DragPiece offset={offset}>
     <!-- svelte-ignore a11y-missing-attribute -->
-    <img class="piece" draggable=false src="{pieceString}">
-</Draggable>
+    <img class="piece" draggable=false src="{piece.pieceImage}">
+</DragPiece>
 
 <style>
     .piece {

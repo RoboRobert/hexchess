@@ -3,8 +3,9 @@
     import { Theme } from "$lib/board/ColorPicker";
     import { Layout, Point } from "$lib/hexagons/HexLib";
     import {
-        defaultLayout,
+        flatLayout,
         layoutStore,
+        pointyLayout,
         themeStore,
     } from "$lib/state/stateStore";
 
@@ -12,23 +13,15 @@
     $: selectedLayout = 0;
 
     function updateLayout(id: number) {
-        let newLayout: Layout = defaultLayout;
+        let newLayout: Layout = flatLayout;
         switch (id) {
             case 0: {
-                newLayout = new Layout(
-                    Layout.FLAT,
-                    new Point(50, 50),
-                    new Point(0, 0),
-                );
+                newLayout = flatLayout;
                 break;
             }
 
             case 1: {
-                newLayout = new Layout(
-                    Layout.POINTY,
-                    new Point(50, 50),
-                    new Point(0, 0),
-                );
+                newLayout = pointyLayout;
                 break;
             }
         }
@@ -56,7 +49,7 @@
         updateLayout(selectedLayout);
     }}
 >
-    <option selected value={0}>Flat</option>
+    <option value={0} selected>Flat</option>
     <option value={1}>Pointy</option>
 </select>
 
