@@ -24,9 +24,6 @@ export class PieceData {
         pieceStore.update((array) => array
             .filter((e) => (!e.equals(newCoords)))
             .map((e) => {
-                if (e.equals(this.hexCoords)) {
-                    e.hexCoords = newCoords;
-                }
 
                 return e;
             }));
