@@ -1,4 +1,4 @@
-import { pieceStore } from "$lib/state/stateStore";
+import { pieceStore, themeStore } from "$lib/state/stateStore";
 
 export class PieceData {
     pieceImage: string;
@@ -9,7 +9,7 @@ export class PieceData {
         this.pieceImage = pieceImage;
     }
 
-    equals(coords: [number, number]) {
+    equals(coords: [number, number]): boolean {
         if (this.hexCoords[0] === coords[0] && this.hexCoords[1] === coords[1])
             return true;
         return false;
@@ -17,12 +17,17 @@ export class PieceData {
 
     // Updates the global board state with the new position of the piece
     movePiece(newCoords: [number, number]) {
-        pieceStore.update((array) => array = array
-            .filter((e) => !e.equals(newCoords))
+        if(this.equals(newCoords)) {
+            return;
+        }
+           
+        pieceStore.update((array) => array
+            .filter((e) => (!e.equals(newCoords)))
             .map((e) => {
                 if (e.equals(this.hexCoords)) {
-                    return new PieceData(newCoords, this.pieceImage);
+                    e.hexCoords = newCoords;
                 }
+
                 return e;
             }));
     }

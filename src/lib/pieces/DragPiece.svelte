@@ -4,12 +4,12 @@
     import { onMount } from "svelte";
     import type { PieceData } from "./PieceData";
 
-    export let offset: Point | undefined = undefined;
-
     export let currentPiece: PieceData;
 
     let layout: Layout = flatLayout;
     layoutStore.subscribe((newLayout) => {layout = newLayout});
+
+    let offset: Point;
 
     let x = 0;
     let y = 0;
@@ -35,25 +35,22 @@
     let dragging = false;
     let snapBack = true;
 
-    onMount(() => {
-        updatePos();
-    });
+    onMount(() => {updatePos()});
 
     function updatePos() {
+        offset = layout.hexToPixel(new Hex(currentPiece.hexCoords[0], currentPiece.hexCoords[1]));
         width = div.getBoundingClientRect().width;
         height = div.getBoundingClientRect().height;
 
-        if (offset != undefined) {
-            let pWidth = div.parentElement?.getBoundingClientRect()
-                .width as number;
-            let pHeight = div.parentElement?.getBoundingClientRect()
-                .height as number;
+        let pWidth = div.parentElement?.getBoundingClientRect()
+            .width as number;
+        let pHeight = div.parentElement?.getBoundingClientRect()
+            .height as number;
 
-            div.setAttribute(
-                "style",
-                `left:${offset.x + pWidth / 2 - width / 2}px; top:${offset.y + pHeight / 2 - height / 2}px;`,
-            );
-        }
+        div.setAttribute(
+            "style",
+            `left:${offset.x + pWidth / 2 - width / 2}px; top:${offset.y + pHeight / 2 - height / 2}px;`,
+        );
     }
 
     function handlePointerUp(e: PointerEvent) {
@@ -76,10 +73,9 @@
             offset = layout.hexToPixel(new Hex(q,r));
             
             currentPiece.movePiece([q,r]);
-            updatePos();
 
-            div.style.left = `${targetRect.left + targetRect.width / 2 - width / 2 - pOffsetX}px`;
-            div.style.top = `${targetRect.top + targetRect.height / 2 - height / 2 - pOffsetY}px`;
+            // div.style.left = `${targetRect.left + targetRect.width / 2 - width / 2 - pOffsetX}px`;
+            // div.style.top = `${targetRect.top + targetRect.height / 2 - height / 2 - pOffsetY}px`;
             dropTarget = undefined;
 
             return;

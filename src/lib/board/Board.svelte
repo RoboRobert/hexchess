@@ -9,7 +9,7 @@
 
     export let radius: number;
     export let hexSize: number;
-    // export let layoutOrientation: Orientation;
+
     let layout: Layout = flatLayout;
     layoutStore.subscribe((newLayout) => {layout = newLayout});
     
@@ -21,7 +21,8 @@
     var hexArray: HexData[] = [];
 
     var pieceArr: PieceData[] = [];
-    pieceStore.subscribe((array) => {pieceArr = array; console.log(pieceArr.length); console.log(pieceArr)});
+    pieceStore.subscribe((array) => {pieceArr = array; array.forEach((e) => console.log(e))});
+    // pieceStore.subscribe((array) => {pieceArr = array;});
 
     function createHexArray() {
         hexArray = [];
@@ -33,7 +34,7 @@
             for(let r = radius; r >= (radius*-1); r--) {
                 let s = (q*-1) + (r*-1);
                 if((Math.abs(q) + Math.abs(r) + Math.abs(s)) <= 2*radius) {
-                    hexArray.push(new HexData(q,r,s,hexSize,picker.next()));
+                    hexArray.push(new HexData(q,r,hexSize,picker.next()));
                 }
             }
             if(q > 0) 
@@ -51,12 +52,12 @@
     let div: HTMLElement;
 </script>
 
-{#key layout}
+{#key [layout, pieceArr]}
     <div class="board" bind:this={div}>
         <!-- Board hexagons -->
         <svg overflow="visible" viewBox={viewBoxString} width={heightWidth.x} height={heightWidth.y}>
-            {#each hexArray as {q,r,s,color}}
-                <Hexagon layout={layout} q={q} r={r} s={s} color={color}></Hexagon>
+            {#each hexArray as {q,r,color}}
+                <Hexagon q={q} r={r} color={color}></Hexagon>
             {/each}
         </svg>
 

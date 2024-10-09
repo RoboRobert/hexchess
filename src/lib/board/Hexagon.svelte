@@ -1,5 +1,6 @@
 <script lang="ts">
     import { Hex, Point, Layout } from "$lib/hexagons/HexLib";
+    import { flatLayout, layoutStore } from "$lib/state/stateStore";
 
     function pointsToString(points: Point[]): string {
         var pointString = "";
@@ -10,16 +11,18 @@
         return pointString;
     }
 
-    export let layout: Layout;
     export let q: number;
     export let r: number;
-    export let s: number;
+    let s: number = -q-r;
     export let color: string;
+
+    let layout: Layout = flatLayout;
+    layoutStore.subscribe((newLayout) => {layout = newLayout});
 
     const originHex: Hex = new Hex(0,0,0);
     const points: Point[] = layout.polygonCorners(originHex);
 
-    const hex: Hex = new Hex(q, r, s);
+    const hex: Hex = new Hex(q, r);
     const originOffset: Point = layout.hexToPixel(hex);
     const size = layout.size.x;
 
