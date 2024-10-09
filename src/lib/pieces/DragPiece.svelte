@@ -66,12 +66,14 @@
             let targetRect = (
                 dropTarget as HTMLElement
             ).getBoundingClientRect();
+            
+            let q = parseInt(dropTarget.getAttribute("data-q") as string);
+            let r = parseInt(dropTarget.getAttribute("data-r") as string);
+            console.log(q,r);
+            // console.log(targetRect);
 
-            // console.log(layout.pixelToHex(new Point(targetRect.left - pOffsetX, targetRect.top - pOffsetY)));
-            console.log(targetRect);
-
-            div.style.left = `${targetRect.left + targetRect.width / 2 - width / 2 - pOffsetX}px`;
-            div.style.top = `${targetRect.top + targetRect.height / 2 - height / 2 - pOffsetY}px`;
+            // div.style.left = `${targetRect.left + targetRect.width / 2 - width / 2 - pOffsetX}px`;
+            // div.style.top = `${targetRect.top + targetRect.height / 2 - height / 2 - pOffsetY}px`;
             dropTarget = undefined;
 
             return;
