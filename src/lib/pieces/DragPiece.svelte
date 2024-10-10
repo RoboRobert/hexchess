@@ -9,9 +9,6 @@
     let boardMeta: BoardData = defaultBoard;
     boardData.subscribe((data) => {boardMeta = data});
 
-    let x = 0;
-    let y = 0;
-
     let startX: string;
     let startY: string;
 
@@ -57,7 +54,7 @@
         div.style.cursor = "";
         div.style.zIndex = "";
 
-        hexPossible.forEach((e) => setColors(e, previousColor, previousStroke));
+        hexPossible.forEach((e) => e.classList.remove("orange"));
 
         hexPossible = [];
 
@@ -100,7 +97,7 @@
         let moves = currentPiece.getLegalMoves();
         moves.forEach((e) => hexPossible.push(document.getElementById(`${e[0]},${e[1]}`) as HTMLElement))
 
-        hexPossible.forEach((e) => setColors(e,"orange", "black"));
+        hexPossible.forEach((e) => e.classList.add("orange"));
 
         handleMove(e);
 
@@ -115,8 +112,8 @@
     }
 
     function handleMove(e: PointerEvent) {
-        x = e.clientX - width / 2 - pOffsetX;
-        y = e.clientY - height / 2 - pOffsetY;
+        let x = e.clientX - width / 2 - pOffsetX;
+        let y = e.clientY - height / 2 - pOffsetY;
         div.style.left = `${x}px`;
         div.style.top = `${y}px`;
 

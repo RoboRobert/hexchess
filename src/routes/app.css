@@ -18,3 +18,13 @@ body {
 .piece {
     user-select: none;
 }
+
+.yellow {
+    fill: yellow !important;
+    stroke: black;
+}
+
+.orange {
+    fill: orange !important;
+    stroke: black;
+}
