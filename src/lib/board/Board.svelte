@@ -5,11 +5,11 @@
     import { PieceData } from "$lib/pieces/PieceData";
     import type { BoardData } from '$lib/state/BoardData';
     import { boardData, defaultBoard, pieceStore } from "$lib/state/stateStore";
-    import { ColorPicker, Theme } from "./ColorPicker";
+    import { ColorPicker } from "./ColorPicker";
     import Hexagon from "./Hexagon.svelte";
 
     let boardMeta: BoardData = defaultBoard;
-    boardData.subscribe((data) => {boardMeta = data});
+    boardData.subscribe((data) => {boardMeta = data; createHexArray();});
 
     const gridLength = (boardMeta.radius*2) + 1;
 
