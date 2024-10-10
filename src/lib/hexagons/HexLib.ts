@@ -1,3 +1,6 @@
+// This library (with some minor modifications) was sourced from RedBlobGames!
+// Here's the link: https://www.redblobgames.com/grids/hexagons/implementation.html#codegen
+
 export class Point {
     constructor(
         public x: number,
