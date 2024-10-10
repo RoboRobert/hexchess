@@ -106,10 +106,10 @@ export class PieceData {
     }
 
     // Returns piece on a square or undefined if no piece
-    private pieceOn(coords: [number, number]): PieceData | undefined {
+    private pieceOn(hex: Hex): PieceData | undefined {
         pieceStore.subscribe((array) => { this.boardState = array; });
         // If there's a piece on the square, return it.
-        return this.boardState.find((e) => PieceData.equals(e.hexCoords, coords));
+        return this.boardState.find((e) => PieceData.equals(e.hexCoords, [hex.q, hex.r]));
     }
 
     private adjacentMoves(): [number, number][] {
@@ -118,7 +118,7 @@ export class PieceData {
 
         for (let i = 0; i < 6; i++) {
             let hex = startHex.neighbor(i);
-            let hexPiece = this.pieceOn([hex.q, hex.r]);
+            let hexPiece = this.pieceOn(hex);
 
             if (hex.inRadius(this.boardMeta.radius) &&
                 (hexPiece === undefined || hexPiece.color !== this.color)) {
@@ -136,7 +136,7 @@ export class PieceData {
         for (let i = 0; i < 6; i++) {
             let hex = startHex.diagonalNeighbor(i);
             for (let j = 0; (j < maxDistance && hex.inRadius(this.boardMeta.radius)); j++) {
-                const hexPiece = this.pieceOn([hex.q, hex.r]);
+                const hexPiece = this.pieceOn(hex);
                 if (hexPiece) {
                     if (hexPiece.color !== this.color) directions.push(hex);
                     break;
@@ -156,7 +156,7 @@ export class PieceData {
         for (let i = 0; i < 6; i++) {
             let hex = startHex.neighbor(i);
             while (hex.inRadius(this.boardMeta.radius)) {
-                const hexPiece = this.pieceOn([hex.q, hex.r]);
+                const hexPiece = this.pieceOn(hex);
                 if (hexPiece) {
                     if (hexPiece.color !== this.color) directions.push(hex);
                     break;
@@ -175,7 +175,7 @@ export class PieceData {
 
         for (let i = 0; i < 12; i++) {
             let hex = startHex.knightNeighbor(i);
-            let hexPiece = this.pieceOn([hex.q, hex.r]);
+            let hexPiece = this.pieceOn(hex);
 
             if (hex.inRadius(this.boardMeta.radius) &&
                 (hexPiece === undefined || hexPiece.color !== this.color)) {
@@ -189,17 +189,12 @@ export class PieceData {
     private pawnMoves(): [number, number][] {
         let pawn: Hex[] = [];
         let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
-        let hex: Hex = startHex;
         switch (this.color) {
-            case ColorEnum.BLACK: { hex = startHex.neighbor(5); break; }
-            case ColorEnum.WHITE: { hex = startHex.neighbor(2); break; }
-        }
-        let hexPiece: PieceData | undefined = this.pieceOn([hex.q, hex.r]);
-        if (hex.inRadius(this.boardMeta.radius) &&
-            (hexPiece === undefined)) {
-            pawn.push(hex);
+            case ColorEnum.BLACK: { pawn.push(startHex.neighbor(5)); break; }
+            case ColorEnum.WHITE: { pawn.push(startHex.neighbor(2));; break; }
         }
 
-        return pawn.map((e) => [e.q, e.r]);
+        return pawn.filter((e) => e.inRadius(this.boardMeta.radius) &&
+        (this.pieceOn(e) === undefined)).map((e) => [e.q, e.r]);
     }
 }
