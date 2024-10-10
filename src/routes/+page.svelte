@@ -3,9 +3,7 @@
     import { Theme } from "$lib/board/ColorPicker";
     import { Layout } from "$lib/hexagons/HexLib";
     import { pointyLayout, flatLayout } from "$lib/state/BoardData";
-    import {
-        boardData,
-    } from "$lib/state/stateStore";
+    import { boardData } from "$lib/state/stateStore";
 
     $: selectedTheme = Theme.GRAYSCALE;
     $: selectedLayout = 0;
@@ -24,7 +22,11 @@
             }
         }
 
-        boardData.update((old) => {let newData = old; newData.layout = newLayout; return newData;})
+        boardData.update((old) => {
+            let newData = old;
+            newData.layout = newLayout;
+            return newData;
+        });
     }
 </script>
 
@@ -34,7 +36,11 @@
     style="margin:10px"
     bind:value={selectedTheme}
     on:change={(e) =>
-        boardData.update((old) => {let newData = old; newData.theme = selectedTheme; return newData;})}
+        boardData.update((old) => {
+            let newData = old;
+            newData.theme = selectedTheme;
+            return newData;
+        })}
 >
     <option value={Theme.GRAYSCALE} selected>Grayscale</option>
     <option value={Theme.WOOD}>Wood</option>
