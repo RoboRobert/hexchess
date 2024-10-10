@@ -21,12 +21,9 @@ export class PieceData {
             return;
         }
            
-        pieceStore.update((array) => array
-            .filter((e) => (!e.equals(newCoords)))
-            .map((e) => {
+        pieceStore.update((array) => array.filter((e) => (!e.equals(newCoords))));
 
-                return e;
-            }));
+        this.hexCoords = newCoords;
     }
 }
 

@@ -37,9 +37,10 @@
     /> -->
 
     <polygon
-        class="hexagon droppable"
+        id="{q},{r}"
         data-q={q},
         data-r={r},
+        class="hexagon droppable"
         points={pointString}
         style="fill:{color};stroke:black;stroke-width:2px"
     />
