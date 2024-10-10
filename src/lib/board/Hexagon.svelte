@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Hex, Point, Layout } from "$lib/hexagons/HexLib";
-    import { flatLayout, layoutStore } from "$lib/state/stateStore";
+    import type { BoardData } from "$lib/state/BoardData";
+    import { boardData, defaultBoard } from "$lib/state/stateStore";
 
     function pointsToString(points: Point[]): string {
         var pointString = "";
@@ -16,26 +17,20 @@
     let s: number = -q-r;
     export let color: string;
 
-    let layout: Layout = flatLayout;
-    layoutStore.subscribe((newLayout) => {layout = newLayout});
+    let boardMeta: BoardData = defaultBoard;
+    boardData.subscribe((data) => {boardMeta = data});
 
     const originHex: Hex = new Hex(0,0,0);
-    const points: Point[] = layout.polygonCorners(originHex);
+    const points: Point[] = boardMeta.layout.polygonCorners(originHex);
 
     const hex: Hex = new Hex(q, r);
-    const originOffset: Point = layout.hexToPixel(hex);
-    const size = layout.size.x;
+    const originOffset: Point = boardMeta.layout.hexToPixel(hex);
+    const size = boardMeta.layout.size.x;
 
     const pointString = pointsToString(points);
 </script>
 
 <g transform="translate({originOffset.x}, {originOffset.y})">
-    <!-- <polygon
-        class="hexagon droppable"
-        points={pointString}
-        style="fill:{color};stroke:{color};stroke-width:10px"
-    /> -->
-
     <polygon
         id="{q},{r}"
         data-q={q},

@@ -1,13 +1,13 @@
 <script lang="ts">
-    import { Hex, Point, type Layout } from "$lib/hexagons/HexLib";
-    import { flatLayout, layoutStore } from "$lib/state/stateStore";
+    import type { BoardData } from "$lib/state/BoardData";
+    import { boardData, defaultBoard } from "$lib/state/stateStore";
     import { onMount } from "svelte";
     import type { PieceData } from "./PieceData";
 
     export let currentPiece: PieceData;
 
-    let layout: Layout = flatLayout;
-    layoutStore.subscribe((newLayout) => {layout = newLayout});
+    let boardMeta: BoardData = defaultBoard;
+    boardData.subscribe((data) => {boardMeta = data});
 
     let x = 0;
     let y = 0;
@@ -26,6 +26,8 @@
 
     let dropList: Element[] = [];
 
+    let hexPossible: HTMLElement[] = [];
+
     let previousColor: string;
     let previousStroke: string;
     let dropTarget: HTMLElement | undefined;
@@ -39,6 +41,7 @@
         width = div.getBoundingClientRect().width;
         height = div.getBoundingClientRect().height;
 
+        // Find the correct hexagon by id
         let targetRect = (document.getElementById(`${currentPiece.hexCoords[0]},${currentPiece.hexCoords[1]}`) as HTMLElement).getBoundingClientRect();
 
         pOffsetX = div.parentElement?.getBoundingClientRect().left as number;
@@ -52,6 +55,11 @@
 
     function handlePointerUp(e: PointerEvent) {
         div.style.cursor = "";
+        div.style.zIndex = "";
+
+        hexPossible.forEach((e) => setColors(e, previousColor, previousStroke));
+
+        hexPossible = [];
 
         if (!dragging) return;
 
@@ -59,22 +67,17 @@
 
         if (dropTarget != undefined) {
             setColors(dropTarget, previousColor, previousStroke);
-
-            // let targetRect = (
-            //     dropTarget as HTMLElement
-            // ).getBoundingClientRect();
             
+            // Get the coordinates from the drop target's attributes
             let q = parseInt(dropTarget.getAttribute("data-q") as string);
             let r = parseInt(dropTarget.getAttribute("data-r") as string);
             
-            currentPiece.movePiece([q,r]);
+            // If the move was successful, then reset the possible moves
+            currentPiece.movePiece([q,r])
 
             updatePos();
-
-            // div.style.left = `${targetRect.left + targetRect.width / 2 - width / 2 - pOffsetX}px`;
-            // div.style.top = `${targetRect.top + targetRect.height / 2 - height / 2 - pOffsetY}px`;
+            
             dropTarget = undefined;
-
             return;
         }
 
@@ -94,9 +97,15 @@
         pOffsetX = div.parentElement?.getBoundingClientRect().left as number;
         pOffsetY = div.parentElement?.getBoundingClientRect().top as number;
 
+        let moves = currentPiece.getLegalMoves();
+        moves.forEach((e) => hexPossible.push(document.getElementById(`${e[0]},${e[1]}`) as HTMLElement))
+
+        hexPossible.forEach((e) => setColors(e,"orange", "black"));
+
         handleMove(e);
 
         div.style.cursor = "grabbing";
+        div.style.zIndex = "100";
     }
 
     function handlePointerMove(e: PointerEvent) {
@@ -106,9 +115,6 @@
     }
 
     function handleMove(e: PointerEvent) {
-        // Set the Z-Index
-        
-
         x = e.clientX - width / 2 - pOffsetX;
         y = e.clientY - height / 2 - pOffsetY;
         div.style.left = `${x}px`;
@@ -138,6 +144,7 @@
         element.style.fill = color;
         element.style.stroke = stroke;
     }
+
 </script>
 
 <svelte:window

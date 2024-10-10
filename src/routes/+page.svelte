@@ -1,12 +1,10 @@
 <script lang="ts">
     import Board from "$lib/board/Board.svelte";
     import { Theme } from "$lib/board/ColorPicker";
-    import { Layout, Point } from "$lib/hexagons/HexLib";
+    import { Layout } from "$lib/hexagons/HexLib";
+    import { pointyLayout, flatLayout } from "$lib/state/BoardData";
     import {
-        flatLayout,
-        layoutStore,
-        pointyLayout,
-        themeStore,
+        boardData,
     } from "$lib/state/stateStore";
 
     $: selectedTheme = Theme.GRAYSCALE;
@@ -26,7 +24,7 @@
             }
         }
 
-        layoutStore.update((oldLayout) => (oldLayout = newLayout));
+        boardData.update((old) => {let newData = old; newData.layout = newLayout; return newData;})
     }
 </script>
 
@@ -36,7 +34,7 @@
     style="margin:10px"
     bind:value={selectedTheme}
     on:change={(e) =>
-        themeStore.update((oldTheme) => (oldTheme = selectedTheme))}
+        boardData.update((old) => {let newData = old; newData.theme = selectedTheme; return newData;})}
 >
     <option value={Theme.GRAYSCALE} selected>Grayscale</option>
     <option value={Theme.WOOD}>Wood</option>
@@ -53,4 +51,4 @@
     <option value={1}>Pointy</option>
 </select>
 
-<Board radius={5} hexSize={50}></Board>
+<Board></Board>

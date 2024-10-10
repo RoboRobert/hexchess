@@ -21,6 +21,13 @@ export class Hex {
         if (Math.round(q + r + this.s) !== 0) throw "q + r + s must be 0";
     }
 
+    // Determines if the current hexagon is outside a specified hexagon radius
+    public inRadius(radius: number) {
+        if((Math.abs(this.q) + Math.abs(this.r) + Math.abs(this.s)) <= 2*radius)
+            return true;
+        return false;
+    }
+
     public add(b: Hex): Hex {
         return new Hex(this.q + b.q, this.r + b.r, this.s + b.s);
     }

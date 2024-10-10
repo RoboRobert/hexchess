@@ -1,13 +1,8 @@
 <script lang="ts">
-    import { Hex, Layout } from "$lib/hexagons/HexLib";
-    import { flatLayout, layoutStore } from "$lib/state/stateStore";
     import DragPiece from "./DragPiece.svelte";
     import { PieceData } from "./PieceData";
 
     export let piece: PieceData;
-
-    let layout: Layout = flatLayout;
-    layoutStore.subscribe((newLayout) => {layout = newLayout});
 </script>
 
 <DragPiece currentPiece={piece}>
