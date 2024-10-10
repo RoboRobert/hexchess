@@ -31,7 +31,7 @@ export enum PieceEnum {
     BLACK_KING,
 };
 
-const Data: readonly [number, number, string][] = Object.freeze([
+const Data: readonly [number, number, string][] = [
     [ColorEnum.WHITE, PieceTypes.PAWN, "/svgs/Chess_plt45.svg"],
     [ColorEnum.BLACK, PieceTypes.PAWN, "/svgs/Chess_pdt45.svg"],
     [ColorEnum.WHITE, PieceTypes.ROOK, "/svgs/Chess_rlt45.svg"],
@@ -44,15 +44,19 @@ const Data: readonly [number, number, string][] = Object.freeze([
     [ColorEnum.BLACK, PieceTypes.QUEEN, "/svgs/Chess_qdt45.svg"],
     [ColorEnum.WHITE, PieceTypes.KING, "/svgs/Chess_klt45.svg"],
     [ColorEnum.BLACK, PieceTypes.KING, "/svgs/Chess_kdt45.svg"],
-]);
+];
 
 export class PieceData {
-    pieceType: number;
     hexCoords: [number, number];
+
+    pieceType: number;
 
     pieceImage: string;
 
     private color: number;
+    public enPassantable: boolean;
+    private firstMove: boolean;
+
     private boardMeta: BoardData = defaultBoard;
     private boardState: PieceData[] = [];
 
@@ -62,6 +66,9 @@ export class PieceData {
         this.color = Data[pieceType][0];
         this.pieceType = Data[pieceType][1];
         this.pieceImage = Data[pieceType][2];
+
+        this.enPassantable = false;
+        this.firstMove = true;
 
         boardData.subscribe((data) => { this.boardMeta = data });
     }
@@ -80,11 +87,17 @@ export class PieceData {
             return false;
         }
 
+        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
+        // Set pawn to be en-passantable after moving 2 spaces
+        if(this.pieceType == PieceTypes.PAWN && startHex.distance(new Hex(newCoords[0], newCoords[1])) > 1)
+            this.enPassantable = true;
+
         // Remove the piece that previously was on the other square
         pieceStore.update((array) => array.filter((e) => (!PieceData.equals(e.hexCoords, newCoords))));
 
         // Update the coordinates of the current piece
         this.hexCoords = newCoords;
+        this.firstMove = false;
 
         return true;
     }
@@ -112,6 +125,7 @@ export class PieceData {
         return this.boardState.find((e) => PieceData.equals(e.hexCoords, [hex.q, hex.r]));
     }
 
+    // All adjacent moves
     private adjacentMoves(): [number, number][] {
         let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
         let adjacent: Hex[] = [];
@@ -129,6 +143,7 @@ export class PieceData {
         return adjacent.map(e => [e.q, e.r]);
     }
 
+    // All diagonal moves within a certain range
     private diagonalMoves(maxDistance: number): [number, number][] {
         let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
         let directions: Hex[] = [];
@@ -149,6 +164,7 @@ export class PieceData {
         return directions.map(e => [e.q, e.r]);
     }
 
+    // All moves in the 6 hexagonal directions
     private directionalMoves(): [number, number][] {
         let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
         let directions: Hex[] = [];
@@ -169,6 +185,7 @@ export class PieceData {
         return directions.map(e => [e.q, e.r]);
     }
 
+    // Knight moves
     private knightMoves(): [number, number][] {
         let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
         let knight: Hex[] = [];
@@ -186,15 +203,69 @@ export class PieceData {
         return knight.map(e => [e.q, e.r]);
     }
 
+    // Pawn moves.
     private pawnMoves(): [number, number][] {
         let pawn: Hex[] = [];
+        let captures: Hex[] = [];
+        let en_passant: Hex[] = [];
         let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
+        let num_spaces = 1;
+        if(this.firstMove == true)
+            num_spaces = 2;
+
+        console.log(num_spaces);
         switch (this.color) {
-            case ColorEnum.BLACK: { pawn.push(startHex.neighbor(5)); break; }
-            case ColorEnum.WHITE: { pawn.push(startHex.neighbor(2));; break; }
+            case ColorEnum.WHITE: {
+                let hex: Hex = startHex;
+                for (let i = 0; i < num_spaces; i++) {
+                    hex = hex.neighbor(2);
+                    const hexPiece = this.pieceOn(hex);
+                    if(hexPiece) {
+                        break;
+                    }
+                        
+                    pawn.push(hex);
+                }
+                captures.push(startHex.neighbor(1), startHex.neighbor(3));
+
+                // White en-passant
+                if (this.pieceOn(startHex.neighbor(0))?.color != this.color && this.pieceOn(startHex.neighbor(0))?.enPassantable) {
+                    en_passant.push(startHex.neighbor(1));
+                }
+                if (this.pieceOn(startHex.neighbor(4))?.color != this.color && this.pieceOn(startHex.neighbor(4))?.enPassantable) {
+                    en_passant.push(startHex.neighbor(3));
+                }
+                break;
+            }
+            case ColorEnum.BLACK: {
+                let hex: Hex = startHex;
+                for (let i = 0; i < num_spaces; i++) {
+                    hex = hex.neighbor(5);
+                    const hexPiece = this.pieceOn(hex);
+                    if(hexPiece) {
+                        break;
+                    }
+                        
+                    pawn.push(hex);
+                }
+                captures.push(startHex.neighbor(0), startHex.neighbor(4));
+
+                // Black en-passant
+                if (this.pieceOn(startHex.neighbor(1))?.color != this.color && this.pieceOn(startHex.neighbor(1))?.enPassantable) {
+                    en_passant.push(startHex.neighbor(0));
+                }
+                if (this.pieceOn(startHex.neighbor(3))?.color != this.color && this.pieceOn(startHex.neighbor(3))?.enPassantable) {
+                    en_passant.push(startHex.neighbor(4));
+                }
+
+                break;
+            }
         }
 
+        // This is stupid
         return pawn.filter((e) => e.inRadius(this.boardMeta.radius) &&
-        (this.pieceOn(e) === undefined)).map((e) => [e.q, e.r]);
+            (this.pieceOn(e) === undefined))
+            .concat(captures.filter((e) => e.inRadius(this.boardMeta.radius) &&
+                (this.pieceOn(e) != undefined && this.pieceOn(e)?.color != this.color))).concat(en_passant).map((e) => [e.q, e.r]);
     }
 }
