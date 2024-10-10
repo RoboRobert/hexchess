@@ -53,7 +53,6 @@ export class PieceData {
     pieceImage: string;
 
     private color: number;
-    private hex: Hex;
     private boardMeta: BoardData = defaultBoard;
     private boardState: PieceData[] = [];
 
@@ -63,8 +62,6 @@ export class PieceData {
         this.color = Data[pieceType][0];
         this.pieceType = Data[pieceType][1];
         this.pieceImage = Data[pieceType][2];
-
-        this.hex = new Hex(this.hexCoords[0], this.hexCoords[1]);
 
         boardData.subscribe((data) => { this.boardMeta = data });
     }
@@ -88,7 +85,6 @@ export class PieceData {
 
         // Update the coordinates of the current piece
         this.hexCoords = newCoords;
-        this.hex = new Hex(this.hexCoords[0], this.hexCoords[1]);
 
         return true;
     }
@@ -102,6 +98,8 @@ export class PieceData {
             case PieceTypes.KING: { moves = moves.concat(this.diagonalMoves(1), this.adjacentMoves()); break; }
             case PieceTypes.BISHOP: {moves = moves.concat(this.diagonalMoves(this.boardMeta.radius)); break;}
             case PieceTypes.ROOK: {moves = moves.concat(this.directionalMoves()); break;}
+            case PieceTypes.KNIGHT: {moves = moves.concat(this.knightMoves()); break;}
+            case PieceTypes.PAWN: {moves = moves.concat(this.pawnMoves()); break;}
         }
 
         return moves;
@@ -116,8 +114,9 @@ export class PieceData {
 
     private adjacentMoves(): [number, number][] {
         let adjacent: Hex[] = [];
+        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
         for (let i = 0; i < 6; i++) {
-            let hex: Hex = this.hex.neighbor(i);
+            let hex: Hex = startHex.neighbor(i);
             let hexPiece: PieceData | undefined = this.pieceOn([hex.q, hex.r]);
             if (hexPiece == undefined && hex.inRadius(this.boardMeta.radius)) {
                 adjacent.push(hex);
@@ -133,8 +132,9 @@ export class PieceData {
 
     private diagonalMoves(maxDistance: number): [number, number][] {
         let diagonals: Hex[] = [];
+        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
         for (let i = 0; i < 6; i++) {
-            let hex: Hex = this.hex.diagonalNeighbor(i);
+            let hex: Hex = startHex.diagonalNeighbor(i);
             let hexPiece: PieceData | undefined = this.pieceOn([hex.q, hex.r]);
             for(let j = 0; j < maxDistance; j++) {
                 if (hexPiece != undefined && hexPiece.color != this.color)
@@ -157,8 +157,9 @@ export class PieceData {
 
     private directionalMoves(): [number, number][] {
         let directions: Hex[] = [];
+        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
         for (let i = 0; i < 6; i++) {
-            let hex: Hex = this.hex.neighbor(i);
+            let hex: Hex = startHex.neighbor(i);
             let hexPiece: PieceData | undefined = this.pieceOn([hex.q, hex.r]);
             while (hexPiece == undefined && hex.inRadius(this.boardMeta.radius)) {
                 directions.push(hex);
@@ -173,5 +174,13 @@ export class PieceData {
         let moves: [number, number][] = directions.map((e) => [e.q, e.r]);
 
         return moves;
+    }
+
+    private knightMoves(): [number, number][] {
+        return [];
+    }
+
+    private pawnMoves(): [number, number][] {
+        return [];
     }
 }
