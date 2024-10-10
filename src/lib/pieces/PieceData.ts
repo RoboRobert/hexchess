@@ -2,22 +2,71 @@ import { Hex } from "$lib/hexagons/HexLib";
 import type { BoardData } from "$lib/state/BoardData";
 import { pieceStore, boardData, defaultBoard } from "$lib/state/stateStore";
 
+export enum ColorEnum {
+    WHITE,
+    BLACK,
+};
+
+export enum Pieces {
+    PAWN,
+    ROOK,
+    BISHOP,
+    KNIGHT,
+    QUEEN,
+    KING,
+};
+
+export enum PieceEnum {
+    WHITE_PAWN,
+    BLACK_PAWN,
+    WHITE_ROOK,
+    BLACK_ROOK,
+    WHITE_KNIGHT,
+    BLACK_KNIGHT,
+    WHITE_BISHOP,
+    BLACK_BISHOP,
+    WHITE_QUEEN,
+    BLACK_QUEEN,
+    WHITE_KING,
+    BLACK_KING,
+};
+
+// export const Data = [
+//     [ColorEnum.WHITE, EnumPiece.PAWN,"/svgs/Chess_plt45.svg"],
+//     [ColorEnum.BLACK, EnumPiece.PAWN,"/svgs/Chess_pdt45.svg"],
+//     [ColorEnum.WHITE, EnumPiece.ROOK,"/svgs/Chess_rlt45.svg"],
+//     [ColorEnum.BLACK, EnumPiece.ROOK,"/svgs/Chess_rdt45.svg"],
+//     [ColorEnum.WHITE, EnumPiece.KNIGHT,"/svgs/Chess_nlt45.svg"],
+//     [ColorEnum.BLACK, EnumPiece.KNIGHT,"/svgs/Chess_ndt45.svg"],
+//     [ColorEnum.WHITE, EnumPiece.BISHOP,"/svgs/Chess_blt45.svg"],
+//     [ColorEnum.BLACK, EnumPiece.BISHOP,"/svgs/Chess_bdt45.svg"],
+//     [ColorEnum.WHITE, EnumPiece.QUEEN,"/svgs/Chess_qlt45.svg"],
+//     [ColorEnum.BLACK, EnumPiece.QUEEN,"/svgs/Chess_qdt45.svg"],
+//     [ColorEnum.WHITE, EnumPiece.KING,"/svgs/Chess_klt45.svg"],
+//     [ColorEnum.BLACK, EnumPiece.KING,"/svgs/Chess_kdt45.svg"],
+// ];
+
 export class PieceData {
-    pieceImage: string;
+    pieceType: number;
     hexCoords: [number, number];
 
+    pieceImage: string;
+
+    private color: number;
     private hex: Hex;
     private boardMeta: BoardData = defaultBoard;
     private boardState: PieceData[] = [];
 
-    constructor(hexTuple: [number, number], pieceImage: string) {
+    constructor(hexTuple: [number, number], pieceType: number) {
         this.hexCoords = hexTuple;
-        this.pieceImage = pieceImage;
+        
+        this.color = ColorEnum.WHITE;
+        this.pieceType = Pieces.PAWN;
+        this.pieceImage = "/svgs/Chess_plt45.svg";
 
         this.hex = new Hex(this.hexCoords[0], this.hexCoords[1]);
 
         boardData.subscribe((data) => {this.boardMeta = data});
-        // pieceStore.subscribe((array) => {this.boardState = array;});
     }
 
     private static equals(coord1: [number, number], coord2: [number, number]): boolean {
@@ -30,7 +79,7 @@ export class PieceData {
     // Returns true on success, false on fail.
     movePiece(newCoords: [number, number]): boolean {
         // If the move is not legal, do nothing.
-        if(this.getLegalMoves().filter((e) => PieceData.equals(e, newCoords)).length < 1) {
+        if(this.getLegalMoves().find((e) => PieceData.equals(e, newCoords)) == undefined) {
             return false;
         }
         
@@ -53,13 +102,23 @@ export class PieceData {
         return moves;
     }
 
+    // Returns piece on a square or undefined if no piece
+    private pieceOn(coords: [number, number]): PieceData | undefined {
+        pieceStore.subscribe((array) => {this.boardState = array;});
+        // If there's a piece on the square, return it.
+        return this.boardState.find((e) => PieceData.equals(e.hexCoords, coords));
+    }
+
     private adjacentMoves(): [number, number][] {
         let adjacent: Hex[] = [];
         for(let i = 0; i < 6; i++) {
-            let currentHex: Hex = this.hex.neighbor(i);
-            if(currentHex.inRadius(this.boardMeta.radius)) {
-                adjacent.push(currentHex);
+            let hex: Hex = this.hex.neighbor(i);
+            let hexPiece: PieceData | undefined = this.pieceOn([hex.q, hex.r]);
+            if(hexPiece == undefined && hex.inRadius(this.boardMeta.radius)) {
+                adjacent.push(hex);
             }
+            if(hexPiece != undefined && hexPiece.color != this.color)
+                adjacent.push(hex);
         }
 
         let moves: [number,number][] = adjacent.map((e) => [e.q, e.r]);
@@ -70,12 +129,15 @@ export class PieceData {
     private diagonalMoves(): [number, number][] {
         let diagonals: Hex[] = [];
         for(let i = 0; i < 6; i++) {
-            let currentHex: Hex = this.hex.diagonalNeighbor(i);
-            while(currentHex.inRadius(this.boardMeta.radius)) {
-                diagonals.push(currentHex);
+            let hex: Hex = this.hex.diagonalNeighbor(i);
+            let hexPiece: PieceData | undefined = this.pieceOn([hex.q, hex.r]);
+            while(hexPiece == undefined && hex.inRadius(this.boardMeta.radius)) {
+                diagonals.push(hex);
 
-                currentHex = currentHex.diagonalNeighbor(i);
+                hex = hex.diagonalNeighbor(i);
             }
+            if(hexPiece != undefined && hexPiece.color != this.color)
+                diagonals.push(hex);
         }
 
         let moves: [number,number][] = diagonals.map((e) => [e.q, e.r]);
@@ -86,12 +148,15 @@ export class PieceData {
     private directionalMoves(): [number, number][]{
         let directions: Hex[] = [];
         for(let i = 0; i < 6; i++) {
-            let currentHex: Hex = this.hex.neighbor(i);
-            while(currentHex.inRadius(this.boardMeta.radius)) {
-                directions.push(currentHex);
+            let hex: Hex = this.hex.neighbor(i);
+            let hexPiece: PieceData | undefined = this.pieceOn([hex.q, hex.r]);
+            while(hexPiece == undefined && hex.inRadius(this.boardMeta.radius)) {
+                directions.push(hex);
 
-                currentHex = currentHex.neighbor(i);
+                hex = hex.neighbor(i);
             }
+            if(hexPiece != undefined && hexPiece.color != this.color)
+                directions.push(hex);
         }
 
         let moves: [number,number][] = directions.map((e) => [e.q, e.r]);
@@ -99,18 +164,3 @@ export class PieceData {
         return moves;
     }
 }
-
-export const PieceEnum = Object.freeze({
-    WHITE_PAWN: "/svgs/Chess_plt45.svg",
-    BLACK_PAWN: "/svgs/Chess_pdt45.svg",
-    WHITE_ROOK: "/svgs/Chess_rlt45.svg",
-    BLACK_ROOK: "/svgs/Chess_rdt45.svg",
-    WHITE_KNIGHT: "/svgs/Chess_nlt45.svg",
-    BLACK_KNIGHT: "/svgs/Chess_ndt45.svg",
-    WHITE_BISHOP: "/svgs/Chess_blt45.svg",
-    BLACK_BISHOP: "/svgs/Chess_bdt45.svg",
-    WHITE_QUEEN: "/svgs/Chess_qlt45.svg",
-    BLACK_QUEEN: "/svgs/Chess_qdt45.svg",
-    WHITE_KING: "/svgs/Chess_klt45.svg",
-    BLACK_KING: "/svgs/Chess_kdt45.svg",
-});
