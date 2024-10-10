@@ -41,7 +41,7 @@
     />
 
     <!-- Optional rendering of cube coordinates for debugging -->
-    <!-- <text x={-5} y={-size/2} class="small">{q}</text>
+    <text x={-5} y={-size/2} class="small">{q}</text>
     <text x={size/2} y={size/2} class="small">{r}</text>
-    <text x={-size/2} y={size/2} class="small">{s}</text> -->
+    <text x={-size/2} y={size/2} class="small">{s}</text>
 </g>

@@ -96,10 +96,10 @@ export class PieceData {
         switch (this.pieceType) {
             case PieceTypes.QUEEN: { moves = moves.concat(this.diagonalMoves(this.boardMeta.radius), this.adjacentMoves(), this.directionalMoves()); break; }
             case PieceTypes.KING: { moves = moves.concat(this.diagonalMoves(1), this.adjacentMoves()); break; }
-            case PieceTypes.BISHOP: {moves = moves.concat(this.diagonalMoves(this.boardMeta.radius)); break;}
-            case PieceTypes.ROOK: {moves = moves.concat(this.directionalMoves()); break;}
-            case PieceTypes.KNIGHT: {moves = moves.concat(this.knightMoves()); break;}
-            case PieceTypes.PAWN: {moves = moves.concat(this.pawnMoves()); break;}
+            case PieceTypes.BISHOP: { moves = moves.concat(this.diagonalMoves(this.boardMeta.radius)); break; }
+            case PieceTypes.ROOK: { moves = moves.concat(this.directionalMoves()); break; }
+            case PieceTypes.KNIGHT: { moves = moves.concat(this.knightMoves()); break; }
+            case PieceTypes.PAWN: { moves = moves.concat(this.pawnMoves()); break; }
         }
 
         return moves;
@@ -131,56 +131,78 @@ export class PieceData {
     }
 
     private diagonalMoves(maxDistance: number): [number, number][] {
-        let diagonals: Hex[] = [];
         let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
+        let directions: Hex[] = [];
+
         for (let i = 0; i < 6; i++) {
-            let hex: Hex = startHex.diagonalNeighbor(i);
-            let hexPiece: PieceData | undefined = this.pieceOn([hex.q, hex.r]);
-            for(let j = 0; j < maxDistance; j++) {
-                if (hexPiece != undefined && hexPiece.color != this.color)
-                    diagonals.push(hex);
-
-                if(hexPiece != undefined || !hex.inRadius(this.boardMeta.radius))
+            let hex = startHex.diagonalNeighbor(i);
+            for (let j = 0; (j < maxDistance && hex.inRadius(this.boardMeta.radius)); j++) {
+                const hexPiece = this.pieceOn([hex.q, hex.r]);
+                if (hexPiece) {
+                    if (hexPiece.color !== this.color) directions.push(hex);
                     break;
-
-                diagonals.push(hex);
-
+                }
+                directions.push(hex);
                 hex = hex.diagonalNeighbor(i);
-                hexPiece = this.pieceOn([hex.q, hex.r]);
             }
         }
 
-        let moves: [number, number][] = diagonals.map((e) => [e.q, e.r]);
-
-        return moves;
+        return directions.map(e => [e.q, e.r]);
     }
 
     private directionalMoves(): [number, number][] {
-        let directions: Hex[] = [];
         let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
-        for (let i = 0; i < 6; i++) {
-            let hex: Hex = startHex.neighbor(i);
-            let hexPiece: PieceData | undefined = this.pieceOn([hex.q, hex.r]);
-            while (hexPiece == undefined && hex.inRadius(this.boardMeta.radius)) {
-                directions.push(hex);
+        let directions: Hex[] = [];
 
-                hex = hex.neighbor(i);
-                hexPiece = this.pieceOn([hex.q, hex.r]);
-            }
-            if (hexPiece != undefined && hexPiece.color != this.color)
+        for (let i = 0; i < 6; i++) {
+            let hex = startHex.neighbor(i);
+            while (hex.inRadius(this.boardMeta.radius)) {
+                const hexPiece = this.pieceOn([hex.q, hex.r]);
+                if (hexPiece) {
+                    if (hexPiece.color !== this.color) directions.push(hex);
+                    break;
+                }
                 directions.push(hex);
+                hex = hex.neighbor(i);
+            }
         }
 
-        let moves: [number, number][] = directions.map((e) => [e.q, e.r]);
-
-        return moves;
+        return directions.map(e => [e.q, e.r]);
     }
 
     private knightMoves(): [number, number][] {
-        return [];
+        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
+        let knight: Hex[] = [];
+
+        for (let i = 0; i < 12; i++) {
+            let hex = startHex.knightNeighbor(i);
+            let hexPiece = this.pieceOn([hex.q, hex.r]);
+
+            if (hex.inRadius(this.boardMeta.radius) &&
+                (hexPiece === undefined || hexPiece.color !== this.color)) {
+                knight.push(hex);
+            }
+        }
+
+        return knight.map(e => [e.q, e.r]);
     }
 
     private pawnMoves(): [number, number][] {
-        return [];
+        let pawn: Hex[] = [];
+        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
+        let hex: Hex = startHex;
+        switch (this.color) {
+            case ColorEnum.BLACK: { hex = startHex.neighbor(5); break; }
+            case ColorEnum.WHITE: { hex = startHex.neighbor(2); break; }
+        }
+        let hexPiece: PieceData | undefined = this.pieceOn([hex.q, hex.r]);
+        if (hex.inRadius(this.boardMeta.radius) &&
+            (hexPiece === undefined)) {
+            pawn.push(hex);
+        }
+
+        let moves: [number, number][] = pawn.map((e) => [e.q, e.r]);
+
+        return moves;
     }
 }

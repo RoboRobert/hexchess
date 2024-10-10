@@ -78,6 +78,25 @@ export class Hex {
         return this.add(Hex.diagonals[direction]);
     }
 
+    public static knightMoves: Hex[] = [
+        new Hex(2, 1),
+        new Hex(1, 2),
+        new Hex(-1, 3),
+        new Hex(-2, 3),
+        new Hex(-3, 2),
+        new Hex(-3, 1),
+        new Hex(-2, -1),
+        new Hex(-1, -2),
+        new Hex(1, -3),
+        new Hex(2, -3),
+        new Hex(3, -2),
+        new Hex(3, -1),
+    ];
+
+    public knightNeighbor(direction: number): Hex {
+        return this.add(Hex.knightMoves[direction]);
+    }
+
     public len(): number {
         return (Math.abs(this.q) + Math.abs(this.r) + Math.abs(this.s)) / 2;
     }
