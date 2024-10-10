@@ -113,21 +113,20 @@ export class PieceData {
     }
 
     private adjacentMoves(): [number, number][] {
-        let adjacent: Hex[] = [];
         let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
+        let adjacent: Hex[] = [];
+
         for (let i = 0; i < 6; i++) {
-            let hex: Hex = startHex.neighbor(i);
-            let hexPiece: PieceData | undefined = this.pieceOn([hex.q, hex.r]);
-            if (hexPiece == undefined && hex.inRadius(this.boardMeta.radius)) {
+            let hex = startHex.neighbor(i);
+            let hexPiece = this.pieceOn([hex.q, hex.r]);
+
+            if (hex.inRadius(this.boardMeta.radius) &&
+                (hexPiece === undefined || hexPiece.color !== this.color)) {
                 adjacent.push(hex);
             }
-            if (hexPiece != undefined && hexPiece.color != this.color)
-                adjacent.push(hex);
         }
 
-        let moves: [number, number][] = adjacent.map((e) => [e.q, e.r]);
-
-        return moves;
+        return adjacent.map(e => [e.q, e.r]);
     }
 
     private diagonalMoves(maxDistance: number): [number, number][] {
@@ -201,8 +200,6 @@ export class PieceData {
             pawn.push(hex);
         }
 
-        let moves: [number, number][] = pawn.map((e) => [e.q, e.r]);
-
-        return moves;
+        return pawn.map((e) => [e.q, e.r]);
     }
 }
