@@ -32,7 +32,8 @@ let pieceArray: PieceData[] = [
     // new PieceData([4,-5], PieceEnum.BLACK_PAWN),
 
     // // White Pawns
-    // new PieceData([-4,5], PieceEnum.WHITE_PAWN),
+    new PieceData([-4,5], PieceEnum.WHITE_PAWN),
+    new PieceData([-3,4], PieceEnum.BLACK_PAWN),
     // new PieceData([-3,4], PieceEnum.WHITE_PAWN),
     // new PieceData([-2,3], PieceEnum.WHITE_PAWN),
     // new PieceData([-1,2], PieceEnum.WHITE_PAWN),
@@ -51,12 +52,12 @@ let pieceArray: PieceData[] = [
     // new PieceData([3,2], PieceEnum.WHITE_ROOK),
 
     // // Black knights
-    new PieceData([-2,-3], PieceEnum.BLACK_KNIGHT),
-    new PieceData([2,-5], PieceEnum.BLACK_KNIGHT),
+    // new PieceData([-2,-3], PieceEnum.BLACK_KNIGHT),
+    // new PieceData([2,-5], PieceEnum.BLACK_KNIGHT),
 
-    // // White knights
-    new PieceData([-2,5], PieceEnum.WHITE_KNIGHT),
-    new PieceData([2,3], PieceEnum.WHITE_KNIGHT),
+    // // // White knights
+    // new PieceData([-2,5], PieceEnum.WHITE_KNIGHT),
+    // new PieceData([2,3], PieceEnum.WHITE_KNIGHT),
     
     // Queens
     // new PieceData([-1,-4], PieceEnum.BLACK_QUEEN),

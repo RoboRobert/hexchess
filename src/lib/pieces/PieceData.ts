@@ -102,16 +102,18 @@ export class PieceData {
     }
 
     // Used to test if a move would put the king in check
-    testMove(data: MoveData, board: PieceData[]) {
-        // console.log(data);
-        console.log(board);
+    testMove(data: MoveData, board: PieceData[]): PieceData[] {
         let piece: PieceData = board.find((e) => PieceData.equals(e.hex, data.from)) as PieceData
 
         // If a board is specified, use it instead of the global state.
         board = board.filter((e) => (PieceData.equals(e.hex, data.attacking)));
 
+        console.log(board);
+
         // Update the coordinates of the current piece
         piece.hex = data.to;
+
+        return board;
     }
 
     // Gets all legal moves for the current piece. Considers check
@@ -120,52 +122,48 @@ export class PieceData {
         pieceStore.subscribe((array) => { startBoard = array });
 
         let legalMoves: MoveData[] = [];
-        let moves = this.getMoves();
+        let moves = this.getMoves(startBoard);
 
         // Repeatedly tests check on different boards to determine the legal moves
         // structuredClone(startBoard) is used to create a deep copy
-        moves.forEach((e) => { let newBoard: PieceData[] = structuredClone(startBoard); this.testMove(e, newBoard); console.log(newBoard); legalMoves.push(e) })
+        moves.forEach((e) => { let newBoard: PieceData[] = structuredClone(startBoard); newBoard = this.testMove(e, newBoard); if(!PieceData.inCheck(this.color, newBoard)) legalMoves.push(e) })
 
         return legalMoves;
         // return moves;
     }
 
     // Gets any potential moves for the current piece. Does not consider check.
-    getMoves(): MoveData[] {
+    getMoves(board: PieceData[]): MoveData[] {
         // Get any diagonal moves by moving down the diagonals in all directions
         let moves: MoveData[] = [];
         switch (this.pieceType) {
-            case PieceTypes.QUEEN: { moves = moves.concat(this.diagonalMoves(this.boardMeta.radius), this.adjacentMoves(), this.directionalMoves()); break; }
-            case PieceTypes.KING: { moves = moves.concat(this.diagonalMoves(1), this.adjacentMoves()); break; }
-            case PieceTypes.BISHOP: { moves = moves.concat(this.diagonalMoves(this.boardMeta.radius)); break; }
-            case PieceTypes.ROOK: { moves = moves.concat(this.directionalMoves()); break; }
-            case PieceTypes.KNIGHT: { moves = moves.concat(this.knightMoves()); break; }
-            case PieceTypes.PAWN: { moves = moves.concat(this.pawnMoves()); break; }
+            case PieceTypes.QUEEN: { moves = moves.concat(this.diagonalMoves(this.boardMeta.radius, board), this.adjacentMoves(board), this.directionalMoves(board)); break; }
+            case PieceTypes.KING: { moves = moves.concat(this.diagonalMoves(1, board), this.adjacentMoves(board)); break; }
+            case PieceTypes.BISHOP: { moves = moves.concat(this.diagonalMoves(this.boardMeta.radius, board)); break; }
+            case PieceTypes.ROOK: { moves = moves.concat(this.directionalMoves(board)); break; }
+            case PieceTypes.KNIGHT: { moves = moves.concat(this.knightMoves(board)); break; }
+            case PieceTypes.PAWN: { moves = moves.concat(this.pawnMoves(board)); break; }
         }
 
         return moves;
     }
 
     // Return whether the king of specified color is in check on a specified board
-    public static inCheck(color: number, board?: PieceData[]): boolean {
-        let boardState: PieceData[] = [];
-        if (board)
-            boardState = board;
-        else pieceStore.subscribe((array) => { boardState = array });
+    public static inCheck(color: number, board: PieceData[]): boolean {
         let allMoves: MoveData[] = [];
-
-        boardState.forEach((e) => allMoves = allMoves.concat(e.getMoves()));
+        
+        board.forEach((e) => {allMoves = allMoves.concat(e.getMoves(board))});
 
         let captures: Hex[] = allMoves.map((e) => e.attacking);
 
-        if (boardState.find((king) => (king.color == color && king.pieceType == PieceTypes.KING && captures.find((e) => PieceData.equals(king.hex, e)))))
+        if (board.find((king) => (king.color == color && king.pieceType == PieceTypes.KING && captures.find((e) => PieceData.equals(king.hex, e)))))
             return true;
 
         return false;
     }
 
     // Returns piece on a square or undefined if no piece. A board can be specified.
-    public static pieceOn(hex: Hex, board?: PieceData[]): PieceData | undefined {
+    public static pieceOn(hex: Hex, board: PieceData[]): PieceData | undefined {
         let boardState: PieceData[] = [];
         if (board != undefined)
             boardState = board;
@@ -176,12 +174,11 @@ export class PieceData {
     }
 
     // All adjacent moves
-    private adjacentMoves(): MoveData[] {
+    private adjacentMoves(board: PieceData[]): MoveData[] {
         let adjacent: MoveData[] = [];
         for (let i = 0; i < 6; i++) {
             let hex = this.hex.neighbor(i);
-            let hexPiece = PieceData.pieceOn(hex);
-
+            let hexPiece = PieceData.pieceOn(hex, board);
             if (hex.inRadius(this.boardMeta.radius) &&
                 (hexPiece === undefined || hexPiece.color !== this.color)) {
                 adjacent.push(new MoveData(this.hex, hex, hex));
@@ -192,12 +189,13 @@ export class PieceData {
     }
 
     // All diagonal moves within a certain range
-    private diagonalMoves(maxDistance: number): MoveData[] {
+    private diagonalMoves(maxDistance: number, board: PieceData[]): MoveData[] {
         let diagonals: MoveData[] = [];
         for (let i = 0; i < 6; i++) {
             let hex = this.hex.diagonalNeighbor(i);
             for (let j = 0; (j < maxDistance && hex.inRadius(this.boardMeta.radius)); j++) {
-                const hexPiece = PieceData.pieceOn(hex);
+                let hex = this.hex.neighbor(i);
+                let hexPiece = PieceData.pieceOn(hex, board);
                 if (hexPiece) {
                     if (hexPiece.color !== this.color) diagonals.push(new MoveData(this.hex, hex, hex));
                     break;
@@ -211,12 +209,12 @@ export class PieceData {
     }
 
     // All moves in the 6 hexagonal directions
-    private directionalMoves(): MoveData[] {
+    private directionalMoves(board: PieceData[]): MoveData[] {
         let directions: MoveData[] = [];
         for (let i = 0; i < 6; i++) {
             let hex = this.hex.neighbor(i);
             while (hex.inRadius(this.boardMeta.radius)) {
-                const hexPiece = PieceData.pieceOn(hex);
+                let hexPiece = PieceData.pieceOn(hex, board);
                 if (hexPiece) {
                     if (hexPiece.color !== this.color) directions.push(new MoveData(this.hex, hex, hex));
                     break;
@@ -230,12 +228,11 @@ export class PieceData {
     }
 
     // Knight moves
-    private knightMoves(): MoveData[] {
+    private knightMoves(board: PieceData[]): MoveData[] {
         let knight: MoveData[] = [];
         for (let i = 0; i < 12; i++) {
             let hex = this.hex.knightNeighbor(i);
-            let hexPiece = PieceData.pieceOn(hex);
-
+            let hexPiece = PieceData.pieceOn(hex, board);
             if (hex.inRadius(this.boardMeta.radius) &&
                 (hexPiece === undefined || hexPiece.color !== this.color)) {
                 knight.push(new MoveData(this.hex, hex, hex));
@@ -246,7 +243,7 @@ export class PieceData {
     }
 
     // Pawn moves.
-    private pawnMoves(): MoveData[] {
+    private pawnMoves(board: PieceData[]): MoveData[] {
         let pawn: MoveData[] = [];
         let captures: MoveData[] = [];
         let en_passant: MoveData[] = [];
@@ -259,7 +256,7 @@ export class PieceData {
                 let hex: Hex = this.hex;
                 for (let i = 0; i < num_spaces; i++) {
                     hex = hex.neighbor(2);
-                    const hexPiece = PieceData.pieceOn(hex);
+                    const hexPiece = PieceData.pieceOn(hex, board);
                     if (hexPiece) {
                         break;
                     }
@@ -269,10 +266,10 @@ export class PieceData {
                 captures.push(new MoveData(this.hex, this.hex.neighbor(1), this.hex.neighbor(1)), new MoveData(this.hex, this.hex.neighbor(3), this.hex.neighbor(3)));
 
                 // White en-passant
-                if (PieceData.pieceOn(this.hex.neighbor(0))?.color != this.color && PieceData.pieceOn(this.hex.neighbor(0))?.enPassantable) {
+                if (PieceData.pieceOn(this.hex.neighbor(0), board)?.color != this.color && PieceData.pieceOn(this.hex.neighbor(0), board)?.enPassantable) {
                     en_passant.push(new MoveData(this.hex, this.hex.neighbor(1), this.hex.neighbor(0)));
                 }
-                if (PieceData.pieceOn(this.hex.neighbor(4))?.color != this.color && PieceData.pieceOn(this.hex.neighbor(4))?.enPassantable) {
+                if (PieceData.pieceOn(this.hex.neighbor(4), board)?.color != this.color && PieceData.pieceOn(this.hex.neighbor(4), board)?.enPassantable) {
                     en_passant.push(new MoveData(this.hex, this.hex.neighbor(3), this.hex.neighbor(4)));
                 }
                 break;
@@ -281,7 +278,7 @@ export class PieceData {
                 let hex: Hex = this.hex;
                 for (let i = 0; i < num_spaces; i++) {
                     hex = hex.neighbor(5);
-                    const hexPiece = PieceData.pieceOn(hex);
+                    const hexPiece = PieceData.pieceOn(hex, board);
                     if (hexPiece) {
                         break;
                     }
@@ -292,10 +289,10 @@ export class PieceData {
                 captures.push(new MoveData(this.hex, this.hex.neighbor(0), this.hex.neighbor(0)), new MoveData(this.hex, this.hex.neighbor(4), this.hex.neighbor(4)));
 
                 // Black en-passant
-                if (PieceData.pieceOn(this.hex.neighbor(1))?.color != this.color && PieceData.pieceOn(this.hex.neighbor(1))?.enPassantable) {
+                if (PieceData.pieceOn(this.hex.neighbor(1), board)?.color != this.color && PieceData.pieceOn(this.hex.neighbor(1), board)?.enPassantable) {
                     en_passant.push(new MoveData(this.hex, this.hex.neighbor(0), this.hex.neighbor(1)));
                 }
-                if (PieceData.pieceOn(this.hex.neighbor(3))?.color != this.color && PieceData.pieceOn(this.hex.neighbor(3))?.enPassantable) {
+                if (PieceData.pieceOn(this.hex.neighbor(3), board)?.color != this.color && PieceData.pieceOn(this.hex.neighbor(3), board)?.enPassantable) {
                     en_passant.push(new MoveData(this.hex, this.hex.neighbor(4), this.hex.neighbor(3)));
                 }
 
@@ -305,9 +302,9 @@ export class PieceData {
 
         // This is stupid
         return pawn.filter((e) => e.to.inRadius(this.boardMeta.radius) &&
-            (PieceData.pieceOn(e.to) === undefined))
+            (PieceData.pieceOn(e.to, board) === undefined))
             .concat(captures.filter((e) => e.to.inRadius(this.boardMeta.radius) &&
-                (PieceData.pieceOn(e.to) != undefined && PieceData.pieceOn(e.to)?.color != this.color))).concat(en_passant);
+                (PieceData.pieceOn(e.to, board) != undefined && PieceData.pieceOn(e.to, board)?.color != this.color))).concat(en_passant);
     }
 }
 
