@@ -89,7 +89,7 @@ export class PieceData {
         // Set pawn to be en-passantable after moving 2 spaces
         if (this.pieceType == PieceTypes.PAWN && this.hex.distance(legalMove.to) > 1)
             this.enPassantable = true;
-        
+
         // If a board is specified, use it instead of the global state.
         // Remove the piece that was being attacked
         pieceStore.update((array) => array.filter((e) => (!PieceData.equals(e.hex, legalMove.attacking))));
@@ -108,8 +108,6 @@ export class PieceData {
         // If a board is specified, use it instead of the global state.
         board = board.filter((e) => (PieceData.equals(e.hex, data.attacking)));
 
-        console.log(board);
-
         // Update the coordinates of the current piece
         piece.hex = data.to;
 
@@ -126,10 +124,24 @@ export class PieceData {
 
         // Repeatedly tests check on different boards to determine the legal moves
         // structuredClone(startBoard) is used to create a deep copy
-        moves.forEach((e) => { let newBoard: PieceData[] = structuredClone(startBoard); newBoard = this.testMove(e, newBoard); if(!PieceData.inCheck(this.color, newBoard)) legalMoves.push(e) })
+        moves.forEach((e) => { let newBoard: PieceData[] = structuredClone(startBoard); newBoard = this.testMove(e, newBoard); if (!PieceData.inCheck(this.color, newBoard)) legalMoves.push(e) })
 
+        console.log(legalMoves);
         return legalMoves;
-        // return moves;
+    }
+
+    // Return whether the king of specified color is in check on a specified board
+    public static inCheck(color: number, board: PieceData[]): boolean {
+        let allMoves: MoveData[] = [];
+        
+        board.forEach((e) => {let piece = new PieceData([e.hex.q, e.hex.r], e.pieceType); allMoves = allMoves.concat(piece.getMoves(board))});
+
+        let captures: Hex[] = allMoves.map((e) => e.attacking);
+
+        if (board.find((king) => (king.color == color && king.pieceType == PieceTypes.KING && captures.find((e) => PieceData.equals(king.hex, e)))))
+            return true;
+
+        return false;
     }
 
     // Gets any potential moves for the current piece. Does not consider check.
@@ -146,20 +158,6 @@ export class PieceData {
         }
 
         return moves;
-    }
-
-    // Return whether the king of specified color is in check on a specified board
-    public static inCheck(color: number, board: PieceData[]): boolean {
-        let allMoves: MoveData[] = [];
-        
-        board.forEach((e) => {allMoves = allMoves.concat(e.getMoves(board))});
-
-        let captures: Hex[] = allMoves.map((e) => e.attacking);
-
-        if (board.find((king) => (king.color == color && king.pieceType == PieceTypes.KING && captures.find((e) => PieceData.equals(king.hex, e)))))
-            return true;
-
-        return false;
     }
 
     // Returns piece on a square or undefined if no piece. A board can be specified.
@@ -194,7 +192,7 @@ export class PieceData {
         for (let i = 0; i < 6; i++) {
             let hex = this.hex.diagonalNeighbor(i);
             for (let j = 0; (j < maxDistance && hex.inRadius(this.boardMeta.radius)); j++) {
-                let hex = this.hex.neighbor(i);
+                let hex = this.hex.diagonalNeighbor(i);
                 let hexPiece = PieceData.pieceOn(hex, board);
                 if (hexPiece) {
                     if (hexPiece.color !== this.color) diagonals.push(new MoveData(this.hex, hex, hex));
