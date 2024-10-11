@@ -47,23 +47,18 @@ const Data: readonly [number, number, string][] = [
 ];
 
 export class PieceData {
-    hexCoords: [number, number];
-
     pieceType: number;
-
     pieceImage: string;
+
+    hex: Hex;
 
     private color: number;
     public enPassantable: boolean;
     private firstMove: boolean;
 
-    private hex: Hex;
-
     private boardMeta: BoardData = defaultBoard;
 
     constructor(hexTuple: [number, number], pieceType: number) {
-        this.hexCoords = hexTuple;
-
         this.color = Data[pieceType][0];
         this.pieceType = Data[pieceType][1];
         this.pieceImage = Data[pieceType][2];
@@ -76,38 +71,66 @@ export class PieceData {
         boardData.subscribe((data) => { this.boardMeta = data });
     }
 
-    private static equals(coord1: [number, number], coord2: [number, number]): boolean {
-        if (coord1[0] === coord2[0] && coord1[1] === coord2[1])
+    private equals(other: Hex): boolean {
+        if (this.hex.q === other.q && this.hex.r === other.r)
             return true;
         return false;
     }
 
     // Updates the global board state with the new position of the piece
     // Returns true on success, false on fail.
-    movePiece(newCoords: [number, number]): boolean {
+    movePiece(newCoords: Hex): boolean {
         // If the move is not legal, do nothing.
-        let legalMove: MoveData | undefined = this.getLegalMoves().find((e) => PieceData.equals([e.to.q, e.to.r], newCoords))
+        let legalMove: MoveData | undefined = this.getLegalMoves().find((e) => this.equals(newCoords))
         if (legalMove == undefined) {
             return false;
         }
-        
-        // Set pawn to be en-passantable after moving 2 spaces
-        if(this.pieceType == PieceTypes.PAWN && this.hex.distance(new Hex(newCoords[0], newCoords[1])) > 1)
-            this.enPassantable = true;
 
-        this.hex = new Hex(newCoords[0], newCoords[1]);
+        // Set pawn to be en-passantable after moving 2 spaces
+        if (this.pieceType == PieceTypes.PAWN && this.hex.distance(legalMove.to) > 1)
+            this.enPassantable = true;
+        
+        // If a board is specified, use it instead of the global state.
         // Remove the piece that previously was on the other square
-        pieceStore.update((array) => array.filter((e) => (!PieceData.equals(e.hexCoords, [legalMove.attacking.q, legalMove.attacking.r]))));
+        pieceStore.update((array) => array.filter((e) => (!e.equals(legalMove.attacking))));
 
         // Update the coordinates of the current piece
-        this.hexCoords = newCoords;
+        this.hex = legalMove.to;
         this.firstMove = false;
 
         return true;
     }
 
-    // Gets any legal moves for the current piece
+    // Used to test if a move would put the king in check
+    testMove(data: MoveData, board: PieceData[]): PieceData[] {
+        console.log(data);
+        let piece: PieceData = board.find((e) => e.equals(this.hex)) as PieceData
+
+        // If a board is specified, use it instead of the global state.
+        board = board.filter((e) => (!e.equals(data.attacking)));
+
+        // Update the coordinates of the current piece
+        piece.hex = data.to;
+
+        return board;
+    }
+
+    // Gets all legal moves for the current piece. Considers check
     getLegalMoves(): MoveData[] {
+        let startBoard: PieceData[] = [];
+        pieceStore.subscribe((array) => { startBoard = array });
+
+        let legalMoves: MoveData[] = [];
+        let moves = this.getMoves();
+        console.log(moves);
+        // moves.forEach((e) => { let newBoard = startBoard; newBoard = this.testMove(e, newBoard); if (!PieceData.inCheck(this.color, newBoard)) legalMoves.push(e) })
+
+        // return legalMoves;
+        return moves;
+    }
+
+    // Gets any potential moves for the current piece. Does not consider check.
+    getMoves(): MoveData[] {
         // Get any diagonal moves by moving down the diagonals in all directions
         let moves: MoveData[] = [];
         switch (this.pieceType) {
@@ -122,18 +145,38 @@ export class PieceData {
         return moves;
     }
 
-    // Returns piece on a square or undefined if no piece
-    public static pieceOn(hex: Hex): PieceData | undefined {
+    // Return whether the king of specified color is in check on a specified board
+    public static inCheck(color: number, board?: PieceData[]): boolean {
         let boardState: PieceData[] = [];
-        pieceStore.subscribe((array) => { boardState = array; });
+        if (board)
+            boardState = board;
+        else pieceStore.subscribe((array) => { boardState = array });
+        let allMoves: MoveData[] = [];
+
+        boardState.forEach((e) => allMoves = allMoves.concat(e.getMoves()));
+
+        let captures: Hex[] = allMoves.map((e) => e.attacking);
+
+        if (boardState.find((king) => (king.color == color && king.pieceType == PieceTypes.KING && captures.find((e) => king.equals(e)))))
+            return true;
+
+        return false;
+    }
+
+    // Returns piece on a square or undefined if no piece. A board can be specified.
+    public static pieceOn(hex: Hex, board?: PieceData[]): PieceData | undefined {
+        let boardState: PieceData[] = [];
+        if (board != undefined)
+            boardState = board;
+        else pieceStore.subscribe((array) => { boardState = array; });
+
         // If there's a piece on the square, return it.
-        return boardState.find((e) => PieceData.equals(e.hexCoords, [hex.q, hex.r]));
+        return boardState.find((e) => e.equals(hex));
     }
 
     // All adjacent moves
     private adjacentMoves(): MoveData[] {
         let adjacent: MoveData[] = [];
-
         for (let i = 0; i < 6; i++) {
             let hex = this.hex.neighbor(i);
             let hexPiece = PieceData.pieceOn(hex);
@@ -150,7 +193,6 @@ export class PieceData {
     // All diagonal moves within a certain range
     private diagonalMoves(maxDistance: number): MoveData[] {
         let diagonals: MoveData[] = [];
-
         for (let i = 0; i < 6; i++) {
             let hex = this.hex.diagonalNeighbor(i);
             for (let j = 0; (j < maxDistance && hex.inRadius(this.boardMeta.radius)); j++) {
@@ -170,7 +212,6 @@ export class PieceData {
     // All moves in the 6 hexagonal directions
     private directionalMoves(): MoveData[] {
         let directions: MoveData[] = [];
-
         for (let i = 0; i < 6; i++) {
             let hex = this.hex.neighbor(i);
             while (hex.inRadius(this.boardMeta.radius)) {
@@ -190,7 +231,6 @@ export class PieceData {
     // Knight moves
     private knightMoves(): MoveData[] {
         let knight: MoveData[] = [];
-
         for (let i = 0; i < 12; i++) {
             let hex = this.hex.knightNeighbor(i);
             let hexPiece = PieceData.pieceOn(hex);
@@ -210,7 +250,7 @@ export class PieceData {
         let captures: MoveData[] = [];
         let en_passant: MoveData[] = [];
         let num_spaces = 1;
-        if(this.firstMove == true)
+        if (this.firstMove == true)
             num_spaces = 2;
 
         switch (this.color) {
@@ -219,10 +259,10 @@ export class PieceData {
                 for (let i = 0; i < num_spaces; i++) {
                     hex = hex.neighbor(2);
                     const hexPiece = PieceData.pieceOn(hex);
-                    if(hexPiece) {
+                    if (hexPiece) {
                         break;
                     }
-                        
+
                     pawn.push(new MoveData(this.hex, hex, hex));
                 }
                 captures.push(new MoveData(this.hex, this.hex.neighbor(1), this.hex.neighbor(1)), new MoveData(this.hex, this.hex.neighbor(3), this.hex.neighbor(3)));
@@ -241,10 +281,10 @@ export class PieceData {
                 for (let i = 0; i < num_spaces; i++) {
                     hex = hex.neighbor(5);
                     const hexPiece = PieceData.pieceOn(hex);
-                    if(hexPiece) {
+                    if (hexPiece) {
                         break;
                     }
-                        
+
                     pawn.push(new MoveData(this.hex, hex, hex));
 
                 }
