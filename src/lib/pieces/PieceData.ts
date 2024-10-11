@@ -57,8 +57,9 @@ export class PieceData {
     public enPassantable: boolean;
     private firstMove: boolean;
 
+    private hex: Hex;
+
     private boardMeta: BoardData = defaultBoard;
-    private boardState: PieceData[] = [];
 
     constructor(hexTuple: [number, number], pieceType: number) {
         this.hexCoords = hexTuple;
@@ -69,6 +70,8 @@ export class PieceData {
 
         this.enPassantable = false;
         this.firstMove = true;
+
+        this.hex = new Hex(hexTuple[0], hexTuple[1]);
 
         boardData.subscribe((data) => { this.boardMeta = data });
     }
@@ -83,17 +86,18 @@ export class PieceData {
     // Returns true on success, false on fail.
     movePiece(newCoords: [number, number]): boolean {
         // If the move is not legal, do nothing.
-        if (this.getLegalMoves().find((e) => PieceData.equals(e, newCoords)) == undefined) {
+        let legalMove: MoveData | undefined = this.getLegalMoves().find((e) => PieceData.equals([e.to.q, e.to.r], newCoords))
+        if (legalMove == undefined) {
             return false;
         }
-
-        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
+        
         // Set pawn to be en-passantable after moving 2 spaces
-        if(this.pieceType == PieceTypes.PAWN && startHex.distance(new Hex(newCoords[0], newCoords[1])) > 1)
+        if(this.pieceType == PieceTypes.PAWN && this.hex.distance(new Hex(newCoords[0], newCoords[1])) > 1)
             this.enPassantable = true;
 
+        this.hex = new Hex(newCoords[0], newCoords[1]);
         // Remove the piece that previously was on the other square
-        pieceStore.update((array) => array.filter((e) => (!PieceData.equals(e.hexCoords, newCoords))));
+        pieceStore.update((array) => array.filter((e) => (!PieceData.equals(e.hexCoords, [legalMove.attacking.q, legalMove.attacking.r]))));
 
         // Update the coordinates of the current piece
         this.hexCoords = newCoords;
@@ -103,9 +107,9 @@ export class PieceData {
     }
 
     // Gets any legal moves for the current piece
-    getLegalMoves(): [number, number][] {
+    getLegalMoves(): MoveData[] {
         // Get any diagonal moves by moving down the diagonals in all directions
-        let moves: [number, number][] = [];
+        let moves: MoveData[] = [];
         switch (this.pieceType) {
             case PieceTypes.QUEEN: { moves = moves.concat(this.diagonalMoves(this.boardMeta.radius), this.adjacentMoves(), this.directionalMoves()); break; }
             case PieceTypes.KING: { moves = moves.concat(this.diagonalMoves(1), this.adjacentMoves()); break; }
@@ -119,143 +123,139 @@ export class PieceData {
     }
 
     // Returns piece on a square or undefined if no piece
-    private pieceOn(hex: Hex): PieceData | undefined {
-        pieceStore.subscribe((array) => { this.boardState = array; });
+    public static pieceOn(hex: Hex): PieceData | undefined {
+        let boardState: PieceData[] = [];
+        pieceStore.subscribe((array) => { boardState = array; });
         // If there's a piece on the square, return it.
-        return this.boardState.find((e) => PieceData.equals(e.hexCoords, [hex.q, hex.r]));
+        return boardState.find((e) => PieceData.equals(e.hexCoords, [hex.q, hex.r]));
     }
 
     // All adjacent moves
-    private adjacentMoves(): [number, number][] {
-        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
-        let adjacent: Hex[] = [];
+    private adjacentMoves(): MoveData[] {
+        let adjacent: MoveData[] = [];
 
         for (let i = 0; i < 6; i++) {
-            let hex = startHex.neighbor(i);
-            let hexPiece = this.pieceOn(hex);
+            let hex = this.hex.neighbor(i);
+            let hexPiece = PieceData.pieceOn(hex);
 
             if (hex.inRadius(this.boardMeta.radius) &&
                 (hexPiece === undefined || hexPiece.color !== this.color)) {
-                adjacent.push(hex);
+                adjacent.push(new MoveData(this.hex, hex, hex));
             }
         }
 
-        return adjacent.map(e => [e.q, e.r]);
+        return adjacent;
     }
 
     // All diagonal moves within a certain range
-    private diagonalMoves(maxDistance: number): [number, number][] {
-        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
-        let directions: Hex[] = [];
+    private diagonalMoves(maxDistance: number): MoveData[] {
+        let diagonals: MoveData[] = [];
 
         for (let i = 0; i < 6; i++) {
-            let hex = startHex.diagonalNeighbor(i);
+            let hex = this.hex.diagonalNeighbor(i);
             for (let j = 0; (j < maxDistance && hex.inRadius(this.boardMeta.radius)); j++) {
-                const hexPiece = this.pieceOn(hex);
+                const hexPiece = PieceData.pieceOn(hex);
                 if (hexPiece) {
-                    if (hexPiece.color !== this.color) directions.push(hex);
+                    if (hexPiece.color !== this.color) diagonals.push(new MoveData(this.hex, hex, hex));
                     break;
                 }
-                directions.push(hex);
+                diagonals.push(new MoveData(this.hex, hex, hex));
                 hex = hex.diagonalNeighbor(i);
             }
         }
 
-        return directions.map(e => [e.q, e.r]);
+        return diagonals;
     }
 
     // All moves in the 6 hexagonal directions
-    private directionalMoves(): [number, number][] {
-        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
-        let directions: Hex[] = [];
+    private directionalMoves(): MoveData[] {
+        let directions: MoveData[] = [];
 
         for (let i = 0; i < 6; i++) {
-            let hex = startHex.neighbor(i);
+            let hex = this.hex.neighbor(i);
             while (hex.inRadius(this.boardMeta.radius)) {
-                const hexPiece = this.pieceOn(hex);
+                const hexPiece = PieceData.pieceOn(hex);
                 if (hexPiece) {
-                    if (hexPiece.color !== this.color) directions.push(hex);
+                    if (hexPiece.color !== this.color) directions.push(new MoveData(this.hex, hex, hex));
                     break;
                 }
-                directions.push(hex);
+                directions.push(new MoveData(this.hex, hex, hex));
                 hex = hex.neighbor(i);
             }
         }
 
-        return directions.map(e => [e.q, e.r]);
+        return directions;
     }
 
     // Knight moves
-    private knightMoves(): [number, number][] {
-        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
-        let knight: Hex[] = [];
+    private knightMoves(): MoveData[] {
+        let knight: MoveData[] = [];
 
         for (let i = 0; i < 12; i++) {
-            let hex = startHex.knightNeighbor(i);
-            let hexPiece = this.pieceOn(hex);
+            let hex = this.hex.knightNeighbor(i);
+            let hexPiece = PieceData.pieceOn(hex);
 
             if (hex.inRadius(this.boardMeta.radius) &&
                 (hexPiece === undefined || hexPiece.color !== this.color)) {
-                knight.push(hex);
+                knight.push(new MoveData(this.hex, hex, hex));
             }
         }
 
-        return knight.map(e => [e.q, e.r]);
+        return knight;
     }
 
     // Pawn moves.
-    private pawnMoves(): [number, number][] {
-        let pawn: Hex[] = [];
-        let captures: Hex[] = [];
-        let en_passant: Hex[] = [];
-        let startHex = new Hex(this.hexCoords[0], this.hexCoords[1]);
+    private pawnMoves(): MoveData[] {
+        let pawn: MoveData[] = [];
+        let captures: MoveData[] = [];
+        let en_passant: MoveData[] = [];
         let num_spaces = 1;
         if(this.firstMove == true)
             num_spaces = 2;
 
-        console.log(num_spaces);
         switch (this.color) {
             case ColorEnum.WHITE: {
-                let hex: Hex = startHex;
+                let hex: Hex = this.hex;
                 for (let i = 0; i < num_spaces; i++) {
                     hex = hex.neighbor(2);
-                    const hexPiece = this.pieceOn(hex);
+                    const hexPiece = PieceData.pieceOn(hex);
                     if(hexPiece) {
                         break;
                     }
                         
-                    pawn.push(hex);
+                    pawn.push(new MoveData(this.hex, hex, hex));
                 }
-                captures.push(startHex.neighbor(1), startHex.neighbor(3));
+                captures.push(new MoveData(this.hex, this.hex.neighbor(1), this.hex.neighbor(1)), new MoveData(this.hex, this.hex.neighbor(3), this.hex.neighbor(3)));
 
                 // White en-passant
-                if (this.pieceOn(startHex.neighbor(0))?.color != this.color && this.pieceOn(startHex.neighbor(0))?.enPassantable) {
-                    en_passant.push(startHex.neighbor(1));
+                if (PieceData.pieceOn(this.hex.neighbor(0))?.color != this.color && PieceData.pieceOn(this.hex.neighbor(0))?.enPassantable) {
+                    en_passant.push(new MoveData(this.hex, this.hex.neighbor(1), this.hex.neighbor(0)));
                 }
-                if (this.pieceOn(startHex.neighbor(4))?.color != this.color && this.pieceOn(startHex.neighbor(4))?.enPassantable) {
-                    en_passant.push(startHex.neighbor(3));
+                if (PieceData.pieceOn(this.hex.neighbor(4))?.color != this.color && PieceData.pieceOn(this.hex.neighbor(4))?.enPassantable) {
+                    en_passant.push(new MoveData(this.hex, this.hex.neighbor(3), this.hex.neighbor(4)));
                 }
                 break;
             }
             case ColorEnum.BLACK: {
-                let hex: Hex = startHex;
+                let hex: Hex = this.hex;
                 for (let i = 0; i < num_spaces; i++) {
                     hex = hex.neighbor(5);
-                    const hexPiece = this.pieceOn(hex);
+                    const hexPiece = PieceData.pieceOn(hex);
                     if(hexPiece) {
                         break;
                     }
                         
-                    pawn.push(hex);
+                    pawn.push(new MoveData(this.hex, hex, hex));
+
                 }
-                captures.push(startHex.neighbor(0), startHex.neighbor(4));
+                captures.push(new MoveData(this.hex, this.hex.neighbor(0), this.hex.neighbor(0)), new MoveData(this.hex, this.hex.neighbor(4), this.hex.neighbor(4)));
 
                 // Black en-passant
-                if (this.pieceOn(startHex.neighbor(1))?.color != this.color && this.pieceOn(startHex.neighbor(1))?.enPassantable) {
-                    en_passant.push(startHex.neighbor(0));
+                if (PieceData.pieceOn(this.hex.neighbor(1))?.color != this.color && PieceData.pieceOn(this.hex.neighbor(1))?.enPassantable) {
+                    en_passant.push(new MoveData(this.hex, this.hex.neighbor(0), this.hex.neighbor(1)));
                 }
-                if (this.pieceOn(startHex.neighbor(3))?.color != this.color && this.pieceOn(startHex.neighbor(3))?.enPassantable) {
-                    en_passant.push(startHex.neighbor(4));
+                if (PieceData.pieceOn(this.hex.neighbor(3))?.color != this.color && PieceData.pieceOn(this.hex.neighbor(3))?.enPassantable) {
+                    en_passant.push(new MoveData(this.hex, this.hex.neighbor(4), this.hex.neighbor(3)));
                 }
 
                 break;
@@ -263,9 +263,21 @@ export class PieceData {
         }
 
         // This is stupid
-        return pawn.filter((e) => e.inRadius(this.boardMeta.radius) &&
-            (this.pieceOn(e) === undefined))
-            .concat(captures.filter((e) => e.inRadius(this.boardMeta.radius) &&
-                (this.pieceOn(e) != undefined && this.pieceOn(e)?.color != this.color))).concat(en_passant).map((e) => [e.q, e.r]);
+        return pawn.filter((e) => e.to.inRadius(this.boardMeta.radius) &&
+            (PieceData.pieceOn(e.to) === undefined))
+            .concat(captures.filter((e) => e.to.inRadius(this.boardMeta.radius) &&
+                (PieceData.pieceOn(e.to) != undefined && PieceData.pieceOn(e.to)?.color != this.color))).concat(en_passant);
+    }
+}
+
+class MoveData {
+    from: Hex;
+    to: Hex;
+    attacking: Hex;
+
+    constructor(from: Hex, to: Hex, attacking: Hex) {
+        this.from = from;
+        this.to = to;
+        this.attacking = attacking;
     }
 }

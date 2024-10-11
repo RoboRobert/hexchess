@@ -2,7 +2,7 @@
     import type { BoardData } from "$lib/state/BoardData";
     import { boardData, defaultBoard } from "$lib/state/stateStore";
     import { onMount } from "svelte";
-    import type { PieceData } from "./PieceData";
+    import { PieceData } from "./PieceData";
 
     export let currentPiece: PieceData;
 
@@ -23,7 +23,8 @@
 
     let dropList: Element[] = [];
 
-    let hexPossible: HTMLElement[] = [];
+    let hexMoves: HTMLElement[] = [];
+    let hexCaptures: HTMLElement[] = [];
 
     let previousColor: string;
     let previousStroke: string;
@@ -54,9 +55,9 @@
         div.style.cursor = "";
         div.style.zIndex = "";
 
-        hexPossible.forEach((e) => e.classList.remove("orange"));
+        hexCaptures.forEach((e) => e.classList.remove("orange"));
 
-        hexPossible = [];
+        hexCaptures = [];
 
         if (!dragging) return;
 
@@ -94,10 +95,14 @@
         pOffsetX = div.parentElement?.getBoundingClientRect().left as number;
         pOffsetY = div.parentElement?.getBoundingClientRect().top as number;
 
-        let moves = currentPiece.getLegalMoves();
-        moves.forEach((e) => hexPossible.push(document.getElementById(`${e[0]},${e[1]}`) as HTMLElement))
+        let captures = currentPiece.getLegalMoves().filter((e) => PieceData.pieceOn(e.attacking));
+        captures.forEach((e) => hexCaptures.push(document.getElementById(`${e.to.q},${e.to.r}`) as HTMLElement))
 
-        hexPossible.forEach((e) => e.classList.add("orange"));
+        let moves = currentPiece.getLegalMoves().filter((e) => !PieceData.pieceOn(e.attacking));
+        moves.forEach((e) => hexMoves.push(document.getElementById(`${e.to.q},${e.to.r}`) as HTMLElement))
+
+        hexMoves.forEach((e) => e.classList.add("orange"));
+        hexCaptures.forEach((e) => e.classList.add("red"));
 
         handleMove(e);
 

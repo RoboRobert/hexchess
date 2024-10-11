@@ -28,3 +28,8 @@ body {
     fill: orange !important;
     stroke: black;
 }
+
+.red {
+    fill: red !important;
+    stroke: black;
+}
