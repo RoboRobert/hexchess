@@ -71,8 +71,8 @@ export class PieceData {
         boardData.subscribe((data) => { this.boardMeta = data });
     }
 
-    private equals(other: Hex): boolean {
-        if (this.hex.q === other.q && this.hex.r === other.r)
+    private static equals(hex1: Hex, hex2: Hex): boolean {
+        if (hex1.q === hex2.q && hex1.r === hex2.r)
             return true;
         return false;
     }
@@ -81,7 +81,7 @@ export class PieceData {
     // Returns true on success, false on fail.
     movePiece(newCoords: Hex): boolean {
         // If the move is not legal, do nothing.
-        let legalMove: MoveData | undefined = this.getLegalMoves().find((e) => this.equals(newCoords))
+        let legalMove: MoveData | undefined = this.getLegalMoves().find((e) => PieceData.equals(e.to, newCoords))
         if (legalMove == undefined) {
             return false;
         }
@@ -91,28 +91,27 @@ export class PieceData {
             this.enPassantable = true;
         
         // If a board is specified, use it instead of the global state.
-        // Remove the piece that previously was on the other square
-        pieceStore.update((array) => array.filter((e) => (!e.equals(legalMove.attacking))));
+        // Remove the piece that was being attacked
+        pieceStore.update((array) => array.filter((e) => (!PieceData.equals(e.hex, legalMove.attacking))));
 
         // Update the coordinates of the current piece
-        this.hex = legalMove.to;
         this.firstMove = false;
+        this.hex = legalMove.to;
 
         return true;
     }
 
     // Used to test if a move would put the king in check
-    testMove(data: MoveData, board: PieceData[]): PieceData[] {
-        console.log(data);
-        let piece: PieceData = board.find((e) => e.equals(this.hex)) as PieceData
+    testMove(data: MoveData, board: PieceData[]) {
+        // console.log(data);
+        console.log(board);
+        let piece: PieceData = board.find((e) => PieceData.equals(e.hex, data.from)) as PieceData
 
         // If a board is specified, use it instead of the global state.
-        board = board.filter((e) => (!e.equals(data.attacking)));
+        board = board.filter((e) => (PieceData.equals(e.hex, data.attacking)));
 
         // Update the coordinates of the current piece
         piece.hex = data.to;
-
-        return board;
     }
 
     // Gets all legal moves for the current piece. Considers check
@@ -122,11 +121,13 @@ export class PieceData {
 
         let legalMoves: MoveData[] = [];
         let moves = this.getMoves();
-        console.log(moves);
-        // moves.forEach((e) => { let newBoard = startBoard; newBoard = this.testMove(e, newBoard); if (!PieceData.inCheck(this.color, newBoard)) legalMoves.push(e) })
 
-        // return legalMoves;
-        return moves;
+        // Repeatedly tests check on different boards to determine the legal moves
+        // structuredClone(startBoard) is used to create a deep copy
+        moves.forEach((e) => { let newBoard: PieceData[] = structuredClone(startBoard); this.testMove(e, newBoard); console.log(newBoard); legalMoves.push(e) })
+
+        return legalMoves;
+        // return moves;
     }
 
     // Gets any potential moves for the current piece. Does not consider check.
@@ -157,7 +158,7 @@ export class PieceData {
 
         let captures: Hex[] = allMoves.map((e) => e.attacking);
 
-        if (boardState.find((king) => (king.color == color && king.pieceType == PieceTypes.KING && captures.find((e) => king.equals(e)))))
+        if (boardState.find((king) => (king.color == color && king.pieceType == PieceTypes.KING && captures.find((e) => PieceData.equals(king.hex, e)))))
             return true;
 
         return false;
@@ -171,7 +172,7 @@ export class PieceData {
         else pieceStore.subscribe((array) => { boardState = array; });
 
         // If there's a piece on the square, return it.
-        return boardState.find((e) => e.equals(hex));
+        return boardState.find((e) => PieceData.equals(e.hex, hex));
     }
 
     // All adjacent moves
