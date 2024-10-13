@@ -19,15 +19,17 @@ body {
     user-select: none;
 }
 
+.orange {
+    fill: orange !important;
+    stroke: black;
+}
+
 .yellow {
     fill: yellow !important;
     stroke: black;
 }
 
-.orange {
-    fill: orange !important;
-    stroke: black;
-}
+
 
 .red {
     fill: red !important;

@@ -26,6 +26,7 @@ let pieceArray: PieceData[] = [
     new PieceData([-2,-1], PieceEnum.BLACK_PAWN),
     new PieceData([-1,-1], PieceEnum.BLACK_PAWN),
     new PieceData([0,-1], PieceEnum.BLACK_PAWN),
+    // new PieceData([1,-1], PieceEnum.WHITE_PAWN),
     new PieceData([1,-2], PieceEnum.BLACK_PAWN),
     new PieceData([2,-3], PieceEnum.BLACK_PAWN),
     new PieceData([3,-4], PieceEnum.BLACK_PAWN),

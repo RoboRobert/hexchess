@@ -98,6 +98,8 @@ export class PieceData {
         this.firstMove = false;
         this.hex = legalMove.to;
 
+        console.log(PieceData.inCheck(this.color))
+
         return true;
     }
 
@@ -105,8 +107,9 @@ export class PieceData {
     testMove(data: MoveData, board: PieceData[]): PieceData[] {
         let piece: PieceData = board.find((e) => PieceData.equals(e.hex, data.from)) as PieceData
 
-        // If a board is specified, use it instead of the global state.
-        board = board.filter((e) => (PieceData.equals(e.hex, data.attacking)));
+        // Remove the attacked piece
+        let newBoard = board.filter((e) => {!PieceData.equals(e.hex, data.attacking)});
+        // let newBoard = [];
 
         // Update the coordinates of the current piece
         piece.hex = data.to;
@@ -123,26 +126,51 @@ export class PieceData {
         let moves = this.getMoves(startBoard);
 
         // Repeatedly tests check on different boards to determine the legal moves
-        // structuredClone(startBoard) is used to create a deep copy
-        moves.forEach((e) => { let newBoard: PieceData[] = structuredClone(startBoard); newBoard = this.testMove(e, newBoard); if (!PieceData.inCheck(this.color, newBoard)) legalMoves.push(e) })
+        // structuredClone(startBoard) is used to create a deep copy of the board state.
+        // moves.forEach((e) => { let newBoard: PieceData[] = structuredClone(startBoard); newBoard = this.testMove(e, newBoard); console.log(newBoard); if (!PieceData.inCheck(this.color, newBoard)) legalMoves.push(e) })
+            
+        // return legalMoves;
 
-        console.log(legalMoves);
-        return legalMoves;
+        return this.getMoves(startBoard);
     }
 
     // Return whether the king of specified color is in check on a specified board
-    public static inCheck(color: number, board: PieceData[]): boolean {
+    public static inCheck(color: number, board?: PieceData[]): boolean {
+        let boardState: PieceData[] = [];
+        if (board)
+            boardState = board;
+        else pieceStore.subscribe((array) => { boardState = array });
         let allMoves: MoveData[] = [];
-        
-        board.forEach((e) => {let piece = new PieceData([e.hex.q, e.hex.r], e.pieceType); allMoves = allMoves.concat(piece.getMoves(board))});
+
+        boardState.filter((e) => e.color != color).forEach((e) => {let piece = new PieceData([e.hex.q, e.hex.r], e.pieceType); allMoves = allMoves.concat(piece.getMoves(boardState))});
 
         let captures: Hex[] = allMoves.map((e) => e.attacking);
 
-        if (board.find((king) => (king.color == color && king.pieceType == PieceTypes.KING && captures.find((e) => PieceData.equals(king.hex, e)))))
+        if (boardState.find((king) => (king.color == color && king.pieceType == PieceTypes.KING && captures.find((e) => PieceData.equals(e, king.hex)))))
             return true;
 
         return false;
     }
+
+    // // Return whether the king of specified color is in check on a specified board
+    // public static inCheck(color: number, board?: PieceData[]): boolean {
+    //     let boardState: PieceData[] = [];
+    //     if(board)
+    //         boardState = board;
+    //     else pieceStore.subscribe((array) => { boardState = array; });
+
+    //     let allMoves: MoveData[] = [];
+        
+    //     boardState.filter((e) => e.color != color).forEach((e) => {let piece = new PieceData([e.hex.q, e.hex.r], e.pieceType); allMoves = allMoves.concat(piece.getMoves(boardState))});
+
+    //     let captures: Hex[] = allMoves.filter((e) => PieceData.pieceOn(e.attacking, boardState)).map((e) => e.attacking);
+
+    //     if (boardState.find((king) => (king.color == color && king.pieceType == PieceTypes.KING && captures.find((e) => PieceData.equals(king.hex, e))))) {
+    //         return true;
+    //     }
+        
+    //     return false;
+    // }
 
     // Gets any potential moves for the current piece. Does not consider check.
     getMoves(board: PieceData[]): MoveData[] {
@@ -160,10 +188,10 @@ export class PieceData {
         return moves;
     }
 
-    // Returns piece on a square or undefined if no piece. A board can be specified.
-    public static pieceOn(hex: Hex, board: PieceData[]): PieceData | undefined {
+    // Returns piece on a square or undefined if no piece on specified board
+    public static pieceOn(hex: Hex, board?: PieceData[]): PieceData | undefined {
         let boardState: PieceData[] = [];
-        if (board != undefined)
+        if (board)
             boardState = board;
         else pieceStore.subscribe((array) => { boardState = array; });
 

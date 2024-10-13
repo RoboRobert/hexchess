@@ -79,7 +79,7 @@
             let r = parseInt(dropTarget.getAttribute("data-r") as string);
 
             // If the move was successful, then update the board's state
-            currentPiece.movePiece(new Hex(q,r));
+            currentPiece.movePiece(new Hex(q, r));
 
             updatePos();
 
@@ -109,14 +109,14 @@
         captures.forEach((e) =>
             hexCaptures.push(
                 document.getElementById(`${e.to.q},${e.to.r}`) as HTMLElement,
-            ),
+            )
         );
 
         let moves = legalMoves.filter((e) => !PieceData.pieceOn(e.attacking));
         moves.forEach((e) =>
             hexMoves.push(
                 document.getElementById(`${e.to.q},${e.to.r}`) as HTMLElement,
-            ),
+            )
         );
 
         hexMoves.forEach((e) => e.classList.add("orange"));
