@@ -8,7 +8,7 @@ import { GameState } from "./GameState";
 export const defaultBoard = new BoardData(flatLayout, Theme.GRAYSCALE, 5, 50);
 export const boardData = writable(defaultBoard);
 
-export const defaultState = new GameState(true, "WHITE")
+export const defaultState = new GameState(true, "WHITE", false)
 export const gameState = writable(defaultState);
 
 let pieceArray: PieceData[] = [
@@ -61,12 +61,19 @@ let pieceArray: PieceData[] = [
     // new PieceData([2,3], PieceEnum.WHITE_KNIGHT),
     
     // Queens
-    new PieceData([-1,-4], PieceEnum.BLACK_QUEEN),
-    new PieceData([-1,5], PieceEnum.WHITE_QUEEN),
+    // new PieceData([-1,-4], PieceEnum.BLACK_QUEEN),
+    // new PieceData([-1,5], PieceEnum.WHITE_QUEEN),
+
+    // // // Kings
+    // new PieceData([1,-5], PieceEnum.BLACK_KING),
+    // new PieceData([1,4], PieceEnum.WHITE_KING),
+
+    // Testing checkmate
+    new PieceData([3,-2], PieceEnum.WHITE_QUEEN),
 
     // // Kings
-    new PieceData([1,-5], PieceEnum.BLACK_KING),
-    new PieceData([1,4], PieceEnum.WHITE_KING),
+    new PieceData([5,-5], PieceEnum.BLACK_KING),
+    new PieceData([5,-3], PieceEnum.WHITE_KING),
 ]
 
 export const pieceStore = writable(pieceArray);

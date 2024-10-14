@@ -102,7 +102,7 @@
         pOffsetX = div.parentElement?.getBoundingClientRect().left as number;
         pOffsetY = div.parentElement?.getBoundingClientRect().top as number;
 
-        let legalMoves = currentPiece.getLegalMoves();
+        let legalMoves = currentPiece.getLegalMoves(false);
 
         let captures = legalMoves.filter((e) => PieceData.pieceOn(e.attacking));
         captures.forEach((e) =>

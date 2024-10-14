@@ -5,6 +5,7 @@
     import { pointyLayout, flatLayout } from "$lib/state/BoardData";
     import type { GameState } from "$lib/state/GameState";
     import { boardData, gameState } from "$lib/state/stateStore";
+    import Popup from "$lib/ui/Popup.svelte";
 
     $: selectedTheme = Theme.GRAYSCALE;
     $: selectedLayout = 0;
@@ -65,3 +66,13 @@
 <h2 style="margin-bottom: 20px">{currentState.currentColor} TO MOVE</h2>
 
 <Board></Board>
+
+{#if currentState.checkmate}
+    <Popup text={currentState.checkmate[0] + " checkmated " + currentState.checkmate[1]}></Popup>
+{/if}
+
+{#if currentState.stalemate}
+    <Popup text="Stalemate!"></Popup>
+{/if}
+
+

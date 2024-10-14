@@ -112,7 +112,7 @@ export class PieceData {
     // Returns true on success, false on fail.
     movePiece(newCoords: Hex): boolean {
         // If the move is not legal, do nothing.
-        let legalMove: MoveData | undefined = this.getLegalMoves().find((e) => PieceData.equals(e.to, newCoords))
+        let legalMove: MoveData | undefined = this.getLegalMoves(false).find((e) => PieceData.equals(e.to, newCoords))
         if (legalMove == undefined) {
             return false;
         }
@@ -128,27 +128,40 @@ export class PieceData {
         // Update the coordinates of the current piece
         this.firstMove = false;
         this.hex = legalMove.to;
+
+        let enemyColor = this.getEnemyColor();
     
-        let newState: GameState = new GameState(true, PieceData.enumToColor(this.getEnemyColor()));
+        let newState: GameState = new GameState(true, PieceData.enumToColor(enemyColor), false);
 
         // If the next color has no legal moves, set the game state to be ended.
-        // if(PieceData.getAllLegalMoves(this.getEnemyColor()).length == 0)
-        //     newState.running = false;
+        if(PieceData.getAllLegalMoves(enemyColor).length == 0) {
+            newState.running = false;
 
+            // If the enemy is in check, set game state to be checkmate.
+            if(PieceData.inCheck(enemyColor)) {
+                newState.checkmate = [PieceData.enumToColor(this.color), PieceData.enumToColor(enemyColor)];
+            }
+            // Otherwise it must be a stalemate
+            else newState.stalemate = true;
+        }
+            
         gameState.update((data) => newState);
 
         return true;
     }
 
     // Gets all legal moves for the current piece. Considers check
-    getLegalMoves(): MoveData[] {
-        // Get the current board state.
-        let currentState: GameState = defaultState;
-        gameState.subscribe((data) => currentState = data);
+    // Takes a boolean that is used to set whether the legal moves are being checked for a test
+    getLegalMoves(test: boolean): MoveData[] {
+        if(!test) {
+            // Get the current board state.
+            let currentState: GameState = defaultState;
+            gameState.subscribe((data) => currentState = data);
 
-        if(!currentState.running || this.color != PieceData.colorToEnum(currentState.currentColor))
-            return [];
-
+            if(!currentState.running || this.color != PieceData.colorToEnum(currentState.currentColor))
+                return [];
+        }
+        
         let startBoard: PieceData[] = [];
         pieceStore.subscribe((array) => { startBoard = array });
 
@@ -206,9 +219,7 @@ export class PieceData {
 
         let legalMoves: MoveData[] = [];
 
-        boardState.forEach((piece) => {if(piece.color === color) legalMoves = legalMoves.concat(piece.getLegalMoves())});
-
-        console.log(legalMoves);
+        boardState.forEach((piece) => {if(piece.color === color) legalMoves = legalMoves.concat(piece.getLegalMoves(true))});
 
         return legalMoves;
     }
