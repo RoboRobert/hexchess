@@ -108,32 +108,46 @@ export class PieceData {
         return ColorEnum.WHITE;
     }
 
-    // Updates the global board state with the new position of the piece
+    // Updates the global board state with the new position of the pieces
     // Returns true on success, false on fail.
     movePiece(newCoords: Hex): boolean {
+        // Gets a clone of the global board state.
+        let boardState: PieceData[] = [];
+        pieceStore.subscribe((array) => { boardState = array });
+
+        // let currentPiece: PieceData = boardState
+
         // If the move is not legal, do nothing.
-        let legalMove: MoveData | undefined = this.getLegalMoves(false).find((e) => PieceData.equals(e.to, newCoords))
+        let legalMove: MoveData | undefined = this.getLegalMoves(false, boardState).find((e) => PieceData.equals(e.to, newCoords))
         if (legalMove == undefined) {
             return false;
         }
+
+        // Remove en-passantable from any existing pawns.
+        boardState = boardState.map((e) => {e.enPassantable = false; return e;});
 
         // Set pawn to be en-passantable after moving 2 spaces
         if (this.pieceType == PieceTypes.PAWN && this.hex.distance(legalMove.to) > 1)
             this.enPassantable = true;
 
-        // If a board is specified, use it instead of the global state.
-        // Remove the piece that was being attacked
-        pieceStore.update((array) => array.filter((e) => (!PieceData.equals(e.hex, legalMove.attacking))));
+        // Removes the attacked piece from the board.
+        boardState = boardState.filter((e) => (!PieceData.equals(e.hex, legalMove.attacking)));
 
         // Update the coordinates of the current piece
         this.firstMove = false;
         this.hex = legalMove.to;
 
+        // Handle promotion
         const promotion = this.getPromotion();
         if(promotion) {
             this.pieceImage = promotion.pieceImage;
             this.pieceType = promotion.pieceType;
+            this.enumNumber = promotion.enumNumber;
         }
+
+        // Update the main state with the board state
+        // pieceStore.update((array) => array.filter((e) => (!PieceData.equals(e.hex, legalMove.attacking))));
+        pieceStore.set(boardState);
 
         let enemyColor = this.getEnemyColor();
     
@@ -151,14 +165,19 @@ export class PieceData {
             else newState.stalemate = true;
         }
             
-        gameState.update((data) => newState);
+        gameState.set(newState);
 
         return true;
     }
 
     // Gets all legal moves for the current piece. Considers check
     // Takes a boolean that is used to set whether the legal moves are being checked for a test
-    getLegalMoves(test: boolean): MoveData[] {
+    getLegalMoves(test: boolean, board?: PieceData[]): MoveData[] {
+        let boardState: PieceData[] = [];
+        if (board)
+            boardState = board;
+        else pieceStore.subscribe((array) => { boardState = array });
+
         if(!test) {
             // Get the current board state.
             let currentState: GameState = defaultState;
@@ -167,15 +186,12 @@ export class PieceData {
             if(!currentState.running || this.color != PieceData.colorToEnum(currentState.currentColor))
                 return [];
         }
-        
-        let startBoard: PieceData[] = [];
-        pieceStore.subscribe((array) => { startBoard = array });
 
         let legalMoves: MoveData[] = [];
-        let moves = this.getMoves(startBoard);
+        let moves = this.getMoves(boardState);
 
         // Repeatedly tests check on different boards to determine the legal moves
-        moves.forEach((e) => { let newBoard: PieceData[] = PieceData.cloneArray(startBoard); if (PieceData.testMove(e, newBoard)) legalMoves.push(e) })
+        moves.forEach((e) => { let newBoard: PieceData[] = PieceData.cloneArray(boardState); if (PieceData.testMove(e, newBoard)) legalMoves.push(e) })
             
         return legalMoves;
     }
@@ -391,7 +407,7 @@ export class PieceData {
 
     // Checks if the current piece is promotable based on piece type and coordinates
     // Returns undefined if not promotable. Returns a queen object with the correct color otherwise.
-    private getPromotion(board?: PieceData[]): PieceData | undefined {
+    private getPromotion(): PieceData | undefined {
         if(this.pieceType != PieceTypes.PAWN)
             return undefined;
 

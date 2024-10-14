@@ -15,6 +15,16 @@
     }
 </script>
 
+{#if isOpen}
+    <div class="popup" on:click={handleClickOutside}>
+        <div class="popup-content">
+            <span class="close-button" on:click={closePopup}>&times;</span>
+            <p>GAME OVER!</p>
+            <p>{text}</p>
+        </div>
+    </div>
+{/if}
+
 <style>
     .popup {
         position: fixed;
@@ -33,6 +43,7 @@
         padding: 20px;
         border-radius: 5px;
         position: relative;
+        font-size: 25px;
     }
 
     .close-button {
@@ -42,12 +53,3 @@
         cursor: pointer;
     }
 </style>
-
-{#if isOpen}
-    <div class="popup" on:click={handleClickOutside}>
-        <div class="popup-content">
-            <span class="close-button" on:click={closePopup}>&times;</span>
-            <p>{text}</p>
-        </div>
-    </div>
-{/if}
