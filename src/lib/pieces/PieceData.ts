@@ -31,7 +31,7 @@ export enum PieceEnum {
     BLACK_KING,
 };
 
-const Data: readonly [number, number, string][] = [
+const Data: [number, number, string][] = [
     [ColorEnum.WHITE, PieceTypes.PAWN, "/svgs/Chess_plt45.svg"],
     [ColorEnum.BLACK, PieceTypes.PAWN, "/svgs/Chess_pdt45.svg"],
     [ColorEnum.WHITE, PieceTypes.ROOK, "/svgs/Chess_rlt45.svg"],
@@ -47,6 +47,7 @@ const Data: readonly [number, number, string][] = [
 ];
 
 export class PieceData {
+    enumNumber: number;
     pieceType: number;
     pieceImage: string;
 
@@ -58,10 +59,11 @@ export class PieceData {
 
     private boardMeta: BoardData = defaultBoard;
 
-    constructor(hexTuple: [number, number], pieceType: number) {
-        this.color = Data[pieceType][0];
-        this.pieceType = Data[pieceType][1];
-        this.pieceImage = Data[pieceType][2];
+    constructor(hexTuple: [number, number], enumNumber: number) {
+        this.enumNumber = enumNumber;
+        this.color = Data[enumNumber][0];
+        this.pieceType = Data[enumNumber][1];
+        this.pieceImage = Data[enumNumber][2];
 
         this.enPassantable = false;
         this.firstMove = true;
@@ -75,6 +77,13 @@ export class PieceData {
         if (hex1.q === hex2.q && hex1.r === hex2.r)
             return true;
         return false;
+    }
+
+    public static cloneArray(array: PieceData[]) : PieceData[] {
+        var returnArray: PieceData[] = [];
+        array.forEach((e) => {returnArray.push(new PieceData([e.hex.q, e.hex.r], e.enumNumber))});
+        
+        return returnArray;
     }
 
     // Updates the global board state with the new position of the piece
@@ -98,23 +107,25 @@ export class PieceData {
         this.firstMove = false;
         this.hex = legalMove.to;
 
-        console.log(PieceData.inCheck(this.color))
-
         return true;
     }
 
     // Used to test if a move would put the king in check
-    testMove(data: MoveData, board: PieceData[]): PieceData[] {
+    public static testMove(data: MoveData, board: PieceData[]): boolean {
         let piece: PieceData = board.find((e) => PieceData.equals(e.hex, data.from)) as PieceData
 
         // Remove the attacked piece
-        let newBoard = board.filter((e) => {!PieceData.equals(e.hex, data.attacking)});
-        // let newBoard = [];
+        let newBoard: PieceData[] = [];
+        board.forEach((e) => {if(!PieceData.equals(e.hex, data.attacking)) newBoard.push(e)});
 
         // Update the coordinates of the current piece
         piece.hex = data.to;
 
-        return board;
+        if(PieceData.inCheck(piece.color, newBoard)) {
+            return false;
+        }
+            
+        return true;
     }
 
     // Gets all legal moves for the current piece. Considers check
@@ -122,16 +133,14 @@ export class PieceData {
         let startBoard: PieceData[] = [];
         pieceStore.subscribe((array) => { startBoard = array });
 
-        // let legalMoves: MoveData[] = [];
-        // let moves = this.getMoves(startBoard);
+        let legalMoves: MoveData[] = [];
+        let moves = this.getMoves(startBoard);
 
         // // Repeatedly tests check on different boards to determine the legal moves
-        // // structuredClone(startBoard) is used to create a deep copy of the board state.
-        // moves.forEach((e) => { let newBoard: PieceData[] = structuredClone(startBoard); newBoard = this.testMove(e, newBoard); console.log(newBoard); if (!PieceData.inCheck(this.color, newBoard)) legalMoves.push(e) })
+        // moves.forEach((e) => { let newBoard: PieceData[] = PieceData.cloneArray(startBoard); console.log(newBoard); if (PieceData.testMove(e, newBoard)) legalMoves.push(e) })
+        moves.forEach((e) => { let newBoard: PieceData[] = PieceData.cloneArray(startBoard); if (PieceData.testMove(e, newBoard)) legalMoves.push(e) })
             
-        // return legalMoves;
-
-        return this.getMoves(startBoard);
+        return legalMoves;
     }
 
     // Return whether the king of specified color is in check on a specified board
@@ -142,7 +151,7 @@ export class PieceData {
         else pieceStore.subscribe((array) => { boardState = array });
         let allMoves: MoveData[] = [];
 
-        boardState.filter((e) => e.color != color).forEach((e) => {let piece = new PieceData([e.hex.q, e.hex.r], e.pieceType); allMoves = allMoves.concat(piece.getMoves(boardState))});
+        boardState.forEach((piece) => {if(piece.color != color) allMoves = allMoves.concat(piece.getMoves(boardState))});
 
         let captures: Hex[] = allMoves.map((e) => e.attacking);
 
