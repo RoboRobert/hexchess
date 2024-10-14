@@ -132,8 +132,8 @@ export class PieceData {
         let newState: GameState = new GameState(true, PieceData.enumToColor(this.getEnemyColor()));
 
         // If the next color has no legal moves, set the game state to be ended.
-        if(PieceData.getAllLegalMoves(this.getEnemyColor()).length == 0)
-            newState.running = false;
+        // if(PieceData.getAllLegalMoves(this.getEnemyColor()).length == 0)
+        //     newState.running = false;
 
         gameState.update((data) => newState);
 
@@ -206,7 +206,9 @@ export class PieceData {
 
         let legalMoves: MoveData[] = [];
 
-        boardState.forEach((piece) => {if(piece.color != color) legalMoves = legalMoves.concat(piece.getMoves(boardState))});
+        boardState.forEach((piece) => {if(piece.color === color) legalMoves = legalMoves.concat(piece.getLegalMoves())});
+
+        console.log(legalMoves);
 
         return legalMoves;
     }
