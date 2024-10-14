@@ -129,6 +129,12 @@ export class PieceData {
         this.firstMove = false;
         this.hex = legalMove.to;
 
+        const promotion = this.getPromotion();
+        if(promotion) {
+            this.pieceImage = promotion.pieceImage;
+            this.pieceType = promotion.pieceType;
+        }
+
         let enemyColor = this.getEnemyColor();
     
         let newState: GameState = new GameState(true, PieceData.enumToColor(enemyColor), false);
@@ -381,6 +387,27 @@ export class PieceData {
             (PieceData.pieceOn(e.to, board) === undefined))
             .concat(captures.filter((e) => e.to.inRadius(this.boardMeta.radius) &&
                 (PieceData.pieceOn(e.to, board) != undefined && PieceData.pieceOn(e.to, board)?.color != this.color))).concat(en_passant);
+    }
+
+    // Checks if the current piece is promotable based on piece type and coordinates
+    // Returns undefined if not promotable. Returns a queen object with the correct color otherwise.
+    private getPromotion(board?: PieceData[]): PieceData | undefined {
+        if(this.pieceType != PieceTypes.PAWN)
+            return undefined;
+
+        // White promotion
+        if(this.color == ColorEnum.WHITE) {
+            if(this.hex.q + this.hex.r == -5 || this.hex.r == -5)
+                return new PieceData([this.hex.q, this.hex.r], PieceEnum.WHITE_QUEEN);
+        }
+
+        // Black promotion
+        if(this.color == ColorEnum.BLACK) {
+            if(this.hex.q + this.hex.r == 5 || this.hex.r == 5)
+                return new PieceData([this.hex.q, this.hex.r], PieceEnum.BLACK_QUEEN);
+        }
+
+        return undefined;
     }
 }
 
