@@ -14,13 +14,13 @@
 
     export let q: number;
     export let r: number;
-    let s: number = -q-r;
+    let s = -q-r;
     export let color: string;
 
     let boardMeta: BoardData = defaultBoard;
     boardData.subscribe((data) => {boardMeta = data});
 
-    const originHex: Hex = new Hex(0,0,0);
+    const originHex: Hex = new Hex(0,0);
     const points: Point[] = boardMeta.layout.polygonCorners(originHex);
 
     const hex: Hex = new Hex(q, r);

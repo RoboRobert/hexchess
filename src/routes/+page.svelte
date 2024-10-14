@@ -33,7 +33,7 @@
 <h1>Hexagonal Chess</h1>
 
 <select
-    style="margin:10px"
+    style="margin:10px; margin-bottom: 20px;"
     bind:value={selectedTheme}
     on:change={(e) =>
         boardData.update((old) => {
@@ -47,7 +47,7 @@
 </select>
 
 <select
-    style="margin:10px"
+    style="margin:10px; margin-bottom: 20px;"
     bind:value={selectedLayout}
     on:change={(e) => {
         updateLayout(selectedLayout);

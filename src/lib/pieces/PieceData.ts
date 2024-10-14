@@ -125,8 +125,8 @@ export class PieceData {
         // let legalMoves: MoveData[] = [];
         // let moves = this.getMoves(startBoard);
 
-        // Repeatedly tests check on different boards to determine the legal moves
-        // structuredClone(startBoard) is used to create a deep copy of the board state.
+        // // Repeatedly tests check on different boards to determine the legal moves
+        // // structuredClone(startBoard) is used to create a deep copy of the board state.
         // moves.forEach((e) => { let newBoard: PieceData[] = structuredClone(startBoard); newBoard = this.testMove(e, newBoard); console.log(newBoard); if (!PieceData.inCheck(this.color, newBoard)) legalMoves.push(e) })
             
         // return legalMoves;

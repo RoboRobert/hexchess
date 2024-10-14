@@ -19,6 +19,13 @@ body {
     user-select: none;
 }
 
+.coordinate {
+    fill: white;
+    stroke:white;
+    font: 25px monospace;
+    pointer-events: none;
+}
+
 .orange {
     fill: orange !important;
     stroke: black;
@@ -28,8 +35,6 @@ body {
     fill: yellow !important;
     stroke: black;
 }
-
-
 
 .red {
     fill: red !important;
