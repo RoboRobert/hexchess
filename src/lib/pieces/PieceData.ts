@@ -1,6 +1,7 @@
 import { Hex } from "$lib/hexagons/HexLib";
 import type { BoardData } from "$lib/state/BoardData";
-import { pieceStore, boardData, defaultBoard } from "$lib/state/stateStore";
+import { GameState } from "$lib/state/GameState";
+import { pieceStore, boardData, defaultBoard, gameState, defaultState } from "$lib/state/stateStore";
 
 export enum ColorEnum {
     WHITE,
@@ -86,6 +87,27 @@ export class PieceData {
         return returnArray;
     }
 
+    public static colorToEnum(color: string): number {
+        if(color.toLowerCase() == "white")
+            return ColorEnum.WHITE;
+
+        return ColorEnum.BLACK;
+    }
+
+    public static enumToColor(color: number): string {
+        if(color == ColorEnum.WHITE)
+            return "WHITE";
+
+        return "BLACK";
+    }
+
+    public getEnemyColor(): number {
+        if(this.color == ColorEnum.WHITE)
+            return ColorEnum.BLACK;
+        
+        return ColorEnum.WHITE;
+    }
+
     // Updates the global board state with the new position of the piece
     // Returns true on success, false on fail.
     movePiece(newCoords: Hex): boolean {
@@ -106,8 +128,37 @@ export class PieceData {
         // Update the coordinates of the current piece
         this.firstMove = false;
         this.hex = legalMove.to;
+    
+        let newState: GameState = new GameState(true, PieceData.enumToColor(this.getEnemyColor()));
+
+        // If the next color has no legal moves, set the game state to be ended.
+        if(PieceData.getAllLegalMoves(this.getEnemyColor()).length == 0)
+            newState.running = false;
+
+        gameState.update((data) => newState);
 
         return true;
+    }
+
+    // Gets all legal moves for the current piece. Considers check
+    getLegalMoves(): MoveData[] {
+        // Get the current board state.
+        let currentState: GameState = defaultState;
+        gameState.subscribe((data) => currentState = data);
+
+        if(!currentState.running || this.color != PieceData.colorToEnum(currentState.currentColor))
+            return [];
+
+        let startBoard: PieceData[] = [];
+        pieceStore.subscribe((array) => { startBoard = array });
+
+        let legalMoves: MoveData[] = [];
+        let moves = this.getMoves(startBoard);
+
+        // Repeatedly tests check on different boards to determine the legal moves
+        moves.forEach((e) => { let newBoard: PieceData[] = PieceData.cloneArray(startBoard); if (PieceData.testMove(e, newBoard)) legalMoves.push(e) })
+            
+        return legalMoves;
     }
 
     // Used to test if a move would put the king in check
@@ -128,21 +179,6 @@ export class PieceData {
         return true;
     }
 
-    // Gets all legal moves for the current piece. Considers check
-    getLegalMoves(): MoveData[] {
-        let startBoard: PieceData[] = [];
-        pieceStore.subscribe((array) => { startBoard = array });
-
-        let legalMoves: MoveData[] = [];
-        let moves = this.getMoves(startBoard);
-
-        // // Repeatedly tests check on different boards to determine the legal moves
-        // moves.forEach((e) => { let newBoard: PieceData[] = PieceData.cloneArray(startBoard); console.log(newBoard); if (PieceData.testMove(e, newBoard)) legalMoves.push(e) })
-        moves.forEach((e) => { let newBoard: PieceData[] = PieceData.cloneArray(startBoard); if (PieceData.testMove(e, newBoard)) legalMoves.push(e) })
-            
-        return legalMoves;
-    }
-
     // Return whether the king of specified color is in check on a specified board
     public static inCheck(color: number, board?: PieceData[]): boolean {
         let boardState: PieceData[] = [];
@@ -159,6 +195,20 @@ export class PieceData {
             return true;
 
         return false;
+    }
+
+    // Gets all the legal moves for a color on a specified board
+    public static getAllLegalMoves(color: number, board?: PieceData[]) {
+        let boardState: PieceData[] = [];
+        if (board)
+            boardState = board;
+        else pieceStore.subscribe((array) => { boardState = array });
+
+        let legalMoves: MoveData[] = [];
+
+        boardState.forEach((piece) => {if(piece.color != color) legalMoves = legalMoves.concat(piece.getMoves(boardState))});
+
+        return legalMoves;
     }
 
     // Gets any potential moves for the current piece. Does not consider check.

@@ -37,7 +37,7 @@
         data-r={r},
         class="hexagon droppable"
         points={pointString}
-        style="fill:{color};stroke:black;stroke-width:2px"
+        style="--theme-color: {color}"
     />
 
     <!-- Optional rendering of cube coordinates for debugging -->
@@ -45,3 +45,11 @@
     <text x={size/2} y={size/2} class="small">{r}</text>
     <text x={-size/2} y={size/2} class="small">{s}</text> -->
 </g>
+
+<style>
+    .hexagon {
+        fill: var(--theme-color);
+        stroke:black;
+        stroke-width: 2px;
+    }
+</style>

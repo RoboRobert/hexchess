@@ -29,8 +29,7 @@
     let hexMoves: HTMLElement[] = [];
     let hexCaptures: HTMLElement[] = [];
 
-    let previousColor: string;
-    let previousStroke: string;
+    let previousClass: string | undefined;
     let dropTarget: HTMLElement | undefined;
 
     let dragging = false;
@@ -64,15 +63,15 @@
         div.style.cursor = "";
         div.style.zIndex = "";
 
-        hexMoves.forEach((e) => e.classList.remove("orange"));
-        hexCaptures.forEach((e) => e.classList.remove("red"));
+        hexMoves.forEach((e) => e.classList.remove("possible"));
+        hexCaptures.forEach((e) => e.classList.remove("attack"));
 
         if (!dragging) return;
 
         dragging = false;
 
         if (dropTarget != undefined) {
-            setColors(dropTarget, previousColor, previousStroke);
+            dropTarget.classList.remove("selection");
 
             // Get the coordinates from the drop target's attributes
             let q = parseInt(dropTarget.getAttribute("data-q") as string);
@@ -119,8 +118,8 @@
             )
         );
 
-        hexMoves.forEach((e) => e.classList.add("orange"));
-        hexCaptures.forEach((e) => e.classList.add("red"));
+        hexMoves.forEach((e) => e.classList.add("possible"));
+        hexCaptures.forEach((e) => e.classList.add("attack"));
 
         handleMove(e);
 
@@ -143,7 +142,9 @@
         dropList = document.elementsFromPoint(e.clientX, e.clientY);
 
         if (dropTarget != undefined) {
-            setColors(dropTarget, previousColor, previousStroke);
+            dropTarget.classList.remove("selection");
+            if(previousClass)
+                dropTarget.classList.add(previousClass);
 
             dropTarget = undefined;
         }
@@ -154,15 +155,21 @@
             | undefined;
 
         if (dropTarget != undefined) {
-            previousColor = dropTarget.style.fill;
-            previousStroke = dropTarget.style.stroke;
-            setColors(dropTarget, "yellow", previousStroke);
+            previousClass = getPrevious(dropTarget);
+            if(previousClass)
+                dropTarget.classList.remove(previousClass);
+            dropTarget.classList.add("selection");
         }
     }
+    
+    // Gets the previous effect style that was removed.
+    function getPrevious(element: HTMLElement): string | undefined {
+        if(element.classList.contains("possible"))
+            return "possible";
+        if(element.classList.contains("attack"))
+            return "attack";
 
-    function setColors(element: HTMLElement, color: string, stroke: string) {
-        element.style.fill = color;
-        element.style.stroke = stroke;
+        return undefined;
     }
 </script>
 

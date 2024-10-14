@@ -13,6 +13,7 @@ body {
     min-width: 320px;
     min-height: 100vh;
     text-align: center;
+    /* font-family: courier; */
 }
 
 .piece {
@@ -26,17 +27,17 @@ body {
     pointer-events: none;
 }
 
-.orange {
-    fill: orange !important;
-    stroke: black;
-}
-
-.yellow {
+.selection {
     fill: yellow !important;
     stroke: black;
 }
 
-.red {
+.possible {
+    fill: orange !important;
+    stroke: black;
+}
+
+.attack {
     fill: red !important;
     stroke: black;
 }

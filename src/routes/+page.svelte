@@ -3,10 +3,14 @@
     import { Theme } from "$lib/board/ColorPicker";
     import { Layout } from "$lib/hexagons/HexLib";
     import { pointyLayout, flatLayout } from "$lib/state/BoardData";
-    import { boardData } from "$lib/state/stateStore";
+    import type { GameState } from "$lib/state/GameState";
+    import { boardData, gameState } from "$lib/state/stateStore";
 
     $: selectedTheme = Theme.GRAYSCALE;
     $: selectedLayout = 0;
+
+    let currentState: GameState;
+    gameState.subscribe((data) => currentState = data);
 
     function updateLayout(id: number) {
         let newLayout: Layout = flatLayout;
@@ -30,7 +34,7 @@
     }
 </script>
 
-<h1>Hexagonal Chess</h1>
+<h1 class="header">Hexagonal Chess</h1>
 
 <select
     style="margin:10px; margin-bottom: 20px;"
@@ -56,5 +60,7 @@
     <option value={0} selected>Flat</option>
     <option value={1}>Pointy</option>
 </select>
+
+<h2 style="margin-bottom: 20px">{currentState.currentColor} TO MOVE</h2>
 
 <Board></Board>

@@ -3,11 +3,13 @@ import { Layout, Point } from "$lib/hexagons/HexLib";
 import { PieceData, PieceEnum } from "$lib/pieces/PieceData";
 import { writable } from "svelte/store";
 import { BoardData, flatLayout } from "./BoardData";
+import { GameState } from "./GameState";
 
 export const defaultBoard = new BoardData(flatLayout, Theme.GRAYSCALE, 5, 50);
 export const boardData = writable(defaultBoard);
 
-// export const gameState = writable()
+export const defaultState = new GameState(true, "WHITE")
+export const gameState = writable(defaultState);
 
 let pieceArray: PieceData[] = [
     // Black bishops
