@@ -122,8 +122,8 @@ export class PieceData {
         let startBoard: PieceData[] = [];
         pieceStore.subscribe((array) => { startBoard = array });
 
-        let legalMoves: MoveData[] = [];
-        let moves = this.getMoves(startBoard);
+        // let legalMoves: MoveData[] = [];
+        // let moves = this.getMoves(startBoard);
 
         // Repeatedly tests check on different boards to determine the legal moves
         // structuredClone(startBoard) is used to create a deep copy of the board state.
@@ -152,29 +152,8 @@ export class PieceData {
         return false;
     }
 
-    // // Return whether the king of specified color is in check on a specified board
-    // public static inCheck(color: number, board?: PieceData[]): boolean {
-    //     let boardState: PieceData[] = [];
-    //     if(board)
-    //         boardState = board;
-    //     else pieceStore.subscribe((array) => { boardState = array; });
-
-    //     let allMoves: MoveData[] = [];
-        
-    //     boardState.filter((e) => e.color != color).forEach((e) => {let piece = new PieceData([e.hex.q, e.hex.r], e.pieceType); allMoves = allMoves.concat(piece.getMoves(boardState))});
-
-    //     let captures: Hex[] = allMoves.filter((e) => PieceData.pieceOn(e.attacking, boardState)).map((e) => e.attacking);
-
-    //     if (boardState.find((king) => (king.color == color && king.pieceType == PieceTypes.KING && captures.find((e) => PieceData.equals(king.hex, e))))) {
-    //         return true;
-    //     }
-        
-    //     return false;
-    // }
-
     // Gets any potential moves for the current piece. Does not consider check.
     getMoves(board: PieceData[]): MoveData[] {
-        // Get any diagonal moves by moving down the diagonals in all directions
         let moves: MoveData[] = [];
         switch (this.pieceType) {
             case PieceTypes.QUEEN: { moves = moves.concat(this.diagonalMoves(this.boardMeta.radius, board), this.adjacentMoves(board), this.directionalMoves(board)); break; }
@@ -220,7 +199,6 @@ export class PieceData {
         for (let i = 0; i < 6; i++) {
             let hex = this.hex.diagonalNeighbor(i);
             for (let j = 0; (j < maxDistance && hex.inRadius(this.boardMeta.radius)); j++) {
-                let hex = this.hex.diagonalNeighbor(i);
                 let hexPiece = PieceData.pieceOn(hex, board);
                 if (hexPiece) {
                     if (hexPiece.color !== this.color) diagonals.push(new MoveData(this.hex, hex, hex));
