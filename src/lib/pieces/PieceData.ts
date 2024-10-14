@@ -145,8 +145,7 @@ export class PieceData {
             this.enumNumber = promotion.enumNumber;
         }
 
-        // Update the main state with the board state
-        // pieceStore.update((array) => array.filter((e) => (!PieceData.equals(e.hex, legalMove.attacking))));
+        // Set the main board state to match the modified state.
         pieceStore.set(boardState);
 
         let enemyColor = this.getEnemyColor();
