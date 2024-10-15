@@ -53,7 +53,7 @@
     // Calculates the height and width of the array of hexagons
     const heightWidth: Point = new Point(
         boardMeta.hexSize * (3 / 2) * gridLength,
-        boardMeta.hexSize * Math.sqrt(3) * (gridLength+1),
+        boardMeta.hexSize * Math.sqrt(3) * (gridLength + 1),
     );
     const viewBoxString = `${heightWidth.x / -2} ${heightWidth.y / -2} ${heightWidth.x} ${heightWidth.y}`;
 

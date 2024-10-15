@@ -83,14 +83,15 @@
             updatePos();
 
             dropTarget = undefined;
-            return;
+            return true;
         }
 
         if (snapBack) {
             div.style.left = startX;
             div.style.top = startY;
-            return;
         }
+
+        return true;
     }
 
     function handlePointerDown(e: any) {
@@ -184,7 +185,7 @@
 />
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown}>
+<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown} on:contextmenu={function(e) {e.preventDefault()}}>
     <slot></slot>
 </div>
 
