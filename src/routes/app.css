@@ -23,6 +23,7 @@ select {
 }
 
 .piece {
+    pointer-events: none;
     user-select: none;
 }
 
@@ -31,6 +32,7 @@ select {
     stroke: white;
     font: 25px monospace;
     pointer-events: none;
+    user-select: none;
 }
 
 .selection {

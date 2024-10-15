@@ -26,8 +26,11 @@
 </script>
 
 <g transform="translate({originOffset.x}, {originOffset.y})">
-    <!-- Optional rendering of cube coordinates for debugging -->
     <text x={-15 * xNormalized - 12} y={-15 * yNormalized} class="coordinate"
         >{text}</text
     >
 </g>
+
+<style>
+    
+</style>
