@@ -9,19 +9,25 @@
     export let text: string;
 
     let boardMeta: BoardData = defaultBoard;
-    boardData.subscribe((data) => {boardMeta = data});
+    boardData.subscribe((data) => {
+        boardMeta = data;
+    });
 
     const hex: Hex = new Hex(q, r);
     const originOffset: Point = boardMeta.layout.hexToPixel(hex);
     // Distance to the origin. Used for normalizing
-    const distance = Math.sqrt((originOffset.x*originOffset.x) + (originOffset.y*originOffset.y));
+    const distance = Math.sqrt(
+        originOffset.x * originOffset.x + originOffset.y * originOffset.y,
+    );
 
-    const xNormalized = originOffset.x/distance;
-    const yNormalized = originOffset.y/distance;
+    const xNormalized = originOffset.x / distance;
+    const yNormalized = originOffset.y / distance;
     const size = boardMeta.layout.size.x;
 </script>
 
 <g transform="translate({originOffset.x}, {originOffset.y})">
     <!-- Optional rendering of cube coordinates for debugging -->
-    <text x={-15*xNormalized - 12} y={-15*yNormalized} class="coordinate">{text}</text>
+    <text x={-15 * xNormalized - 12} y={-15 * yNormalized} class="coordinate"
+        >{text}</text
+    >
 </g>

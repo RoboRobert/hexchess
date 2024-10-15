@@ -11,7 +11,7 @@
     $: selectedLayout = 0;
 
     let currentState: GameState;
-    gameState.subscribe((data) => currentState = data);
+    gameState.subscribe((data) => (currentState = data));
 
     function updateLayout(id: number) {
         let newLayout: Layout = flatLayout;
@@ -68,11 +68,13 @@
 <Board></Board>
 
 {#if currentState.checkmate}
-    <Popup text={currentState.checkmate[0] + " checkmated " + currentState.checkmate[1]}></Popup>
+    <Popup
+        text={currentState.checkmate[0] +
+            " checkmated " +
+            currentState.checkmate[1]}
+    ></Popup>
 {/if}
 
 {#if currentState.stalemate}
     <Popup text="Stalemate!"></Popup>
 {/if}
-
-

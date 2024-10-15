@@ -9,9 +9,9 @@ export class Point {
 }
 
 export class Hex {
-    public q:number;
-    public r:number;
-    private s:number;
+    public q: number;
+    public r: number;
+    private s: number;
 
     constructor(
         q: number,
@@ -20,13 +20,13 @@ export class Hex {
     ) {
         this.q = q;
         this.r = r;
-        this.s = -q-r;
+        this.s = -q - r;
         if (Math.round(q + r + this.s) !== 0) throw "q + r + s must be 0";
     }
 
     // Determines if the current hexagon is outside a specified hexagon radius
     public inRadius(radius: number) {
-        if((Math.abs(this.q) + Math.abs(this.r) + Math.abs(this.s)) <= 2*radius)
+        if ((Math.abs(this.q) + Math.abs(this.r) + Math.abs(this.s)) <= 2 * radius)
             return true;
         return false;
     }

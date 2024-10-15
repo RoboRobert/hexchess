@@ -3,7 +3,7 @@
     color: white;
     display: flex;
     place-items: center;
-    position:relative;
+    position: relative;
 }
 
 body {
@@ -22,7 +22,7 @@ body {
 
 .coordinate {
     fill: white;
-    stroke:white;
+    stroke: white;
     font: 25px monospace;
     pointer-events: none;
 }

@@ -108,14 +108,14 @@
         captures.forEach((e) =>
             hexCaptures.push(
                 document.getElementById(`${e.to.q},${e.to.r}`) as HTMLElement,
-            )
+            ),
         );
 
         let moves = legalMoves.filter((e) => !PieceData.pieceOn(e.attacking));
         moves.forEach((e) =>
             hexMoves.push(
                 document.getElementById(`${e.to.q},${e.to.r}`) as HTMLElement,
-            )
+            ),
         );
 
         hexMoves.forEach((e) => e.classList.add("possible"));
@@ -127,7 +127,7 @@
         div.style.zIndex = "100";
     }
 
-    function handlePointerMove(e: any) {
+    function handlePointerMove(e: PointerEvent) {
         if (dragging) {
             handleMove(e.clientX, e.clientY);
         }
@@ -146,13 +146,11 @@
         div.style.left = `${x}px`;
         div.style.top = `${y}px`;
 
-        console.log(clientX, clientY)
         dropList = document.elementsFromPoint(clientX, clientY);
 
         if (dropTarget != undefined) {
             dropTarget.classList.remove("selection");
-            if(previousClass)
-                dropTarget.classList.add(previousClass);
+            if (previousClass) dropTarget.classList.add(previousClass);
 
             dropTarget = undefined;
         }
@@ -164,18 +162,15 @@
 
         if (dropTarget != undefined) {
             previousClass = getPrevious(dropTarget);
-            if(previousClass)
-                dropTarget.classList.remove(previousClass);
+            if (previousClass) dropTarget.classList.remove(previousClass);
             dropTarget.classList.add("selection");
         }
     }
-    
+
     // Gets the previous effect style that was removed.
     function getPrevious(element: HTMLElement): string | undefined {
-        if(element.classList.contains("possible"))
-            return "possible";
-        if(element.classList.contains("attack"))
-            return "attack";
+        if (element.classList.contains("possible")) return "possible";
+        if (element.classList.contains("attack")) return "attack";
 
         return undefined;
     }

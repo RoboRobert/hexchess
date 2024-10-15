@@ -4,5 +4,5 @@ export class HexData {
         public r: number,
         public size: number,
         public color: string,
-    ) {}
+    ) { }
 }

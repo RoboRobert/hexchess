@@ -18,7 +18,7 @@ export class BoardData {
 export const flatLayout = new Layout(
     Layout.FLAT,
     new Point(50, 50),
-    new Point(0,0),
+    new Point(0, 0),
 );
 export const pointyLayout = new Layout(
     Layout.POINTY,
