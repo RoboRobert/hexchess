@@ -33,18 +33,18 @@ export enum PieceEnum {
 };
 
 const Data: [number, number, string][] = [
-    [ColorEnum.WHITE, PieceTypes.PAWN, "/svgs/Chess_plt45.svg"],
-    [ColorEnum.BLACK, PieceTypes.PAWN, "/svgs/Chess_pdt45.svg"],
-    [ColorEnum.WHITE, PieceTypes.ROOK, "/svgs/Chess_rlt45.svg"],
-    [ColorEnum.BLACK, PieceTypes.ROOK, "/svgs/Chess_rdt45.svg"],
-    [ColorEnum.WHITE, PieceTypes.KNIGHT, "/svgs/Chess_nlt45.svg"],
-    [ColorEnum.BLACK, PieceTypes.KNIGHT, "/svgs/Chess_ndt45.svg"],
-    [ColorEnum.WHITE, PieceTypes.BISHOP, "/svgs/Chess_blt45.svg"],
-    [ColorEnum.BLACK, PieceTypes.BISHOP, "/svgs/Chess_bdt45.svg"],
-    [ColorEnum.WHITE, PieceTypes.QUEEN, "/svgs/Chess_qlt45.svg"],
-    [ColorEnum.BLACK, PieceTypes.QUEEN, "/svgs/Chess_qdt45.svg"],
-    [ColorEnum.WHITE, PieceTypes.KING, "/svgs/Chess_klt45.svg"],
-    [ColorEnum.BLACK, PieceTypes.KING, "/svgs/Chess_kdt45.svg"],
+    [ColorEnum.WHITE, PieceTypes.PAWN, "svgs/Chess_plt45.svg"],
+    [ColorEnum.BLACK, PieceTypes.PAWN, "svgs/Chess_pdt45.svg"],
+    [ColorEnum.WHITE, PieceTypes.ROOK, "svgs/Chess_rlt45.svg"],
+    [ColorEnum.BLACK, PieceTypes.ROOK, "svgs/Chess_rdt45.svg"],
+    [ColorEnum.WHITE, PieceTypes.KNIGHT, "svgs/Chess_nlt45.svg"],
+    [ColorEnum.BLACK, PieceTypes.KNIGHT, "svgs/Chess_ndt45.svg"],
+    [ColorEnum.WHITE, PieceTypes.BISHOP, "svgs/Chess_blt45.svg"],
+    [ColorEnum.BLACK, PieceTypes.BISHOP, "svgs/Chess_bdt45.svg"],
+    [ColorEnum.WHITE, PieceTypes.QUEEN, "svgs/Chess_qlt45.svg"],
+    [ColorEnum.BLACK, PieceTypes.QUEEN, "svgs/Chess_qdt45.svg"],
+    [ColorEnum.WHITE, PieceTypes.KING, "svgs/Chess_klt45.svg"],
+    [ColorEnum.BLACK, PieceTypes.KING, "svgs/Chess_kdt45.svg"],
 ];
 
 export class PieceData {
