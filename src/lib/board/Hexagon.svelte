@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Hex, Point, Layout } from "$lib/hexagons/HexLib";
+    import { Hex, Point } from "$lib/hexagons/HexLib";
     import type { BoardData } from "$lib/state/BoardData";
     import { boardData, defaultBoard } from "$lib/state/stateStore";
 

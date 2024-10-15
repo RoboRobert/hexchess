@@ -16,6 +16,12 @@ body {
     /* font-family: courier; */
 }
 
+select {
+    font-size: 25px;
+    margin:10px;
+    margin-bottom: 20px;
+}
+
 .piece {
     user-select: none;
 }

@@ -1,5 +1,4 @@
 import { Theme } from "$lib/board/ColorPicker";
-import { Layout, Point } from "$lib/hexagons/HexLib";
 import { PieceData, PieceEnum } from "$lib/pieces/PieceData";
 import { writable } from "svelte/store";
 import { BoardData, flatLayout } from "./BoardData";
