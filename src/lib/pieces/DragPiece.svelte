@@ -59,7 +59,7 @@
         );
     }
 
-    function handlePointerUp(e: PointerEvent) {
+    function handlePointerUp(e: any) {
         div.style.cursor = "";
         div.style.zIndex = "";
 
@@ -93,7 +93,7 @@
         }
     }
 
-    function handlePointerDown(e: PointerEvent) {
+    function handlePointerDown(e: any) {
         dragging = true;
 
         startX = div.style.left;
@@ -127,13 +127,13 @@
         div.style.zIndex = "100";
     }
 
-    function handlePointerMove(e: PointerEvent) {
+    function handlePointerMove(e: any) {
         if (dragging) {
             handleMove(e);
         }
     }
 
-    function handleMove(e: PointerEvent) {
+    function handleMove(e: any) {
         let x = e.clientX - width / 2 - pOffsetX;
         let y = e.clientY - height / 2 - pOffsetY;
         div.style.left = `${x}px`;
@@ -176,10 +176,12 @@
 <svelte:window
     on:pointermove={handlePointerMove}
     on:pointerup={handlePointerUp}
+    on:touchmove={handlePointerMove}
+    on:touchend={handlePointerUp}
 />
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown}>
+<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown} on:touchstart={handlePointerDown}>
     <slot></slot>
 </div>
 
