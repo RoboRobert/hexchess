@@ -121,7 +121,7 @@
         hexMoves.forEach((e) => e.classList.add("possible"));
         hexCaptures.forEach((e) => e.classList.add("attack"));
 
-        handleMove(e);
+        handleMove(e.clientX, e.clientY);
 
         div.style.cursor = "grabbing";
         div.style.zIndex = "100";
@@ -129,17 +129,25 @@
 
     function handlePointerMove(e: any) {
         if (dragging) {
-            handleMove(e);
+            handleMove(e.clientX, e.clientY);
         }
     }
 
-    function handleMove(e: any) {
-        let x = e.clientX - width / 2 - pOffsetX;
-        let y = e.clientY - height / 2 - pOffsetY;
+    function handleTouchMove(e: TouchEvent) {
+        if (dragging) {
+            handleMove(e.touches[0].clientX, e.touches[0].clientY);
+        }
+        return true;
+    }
+
+    function handleMove(clientX: number, clientY: number) {
+        let x = clientX - width / 2 - pOffsetX;
+        let y = clientY - height / 2 - pOffsetY;
         div.style.left = `${x}px`;
         div.style.top = `${y}px`;
 
-        dropList = document.elementsFromPoint(e.clientX, e.clientY);
+        console.log(clientX, clientY)
+        dropList = document.elementsFromPoint(clientX, clientY);
 
         if (dropTarget != undefined) {
             dropTarget.classList.remove("selection");
@@ -176,17 +184,18 @@
 <svelte:window
     on:pointermove={handlePointerMove}
     on:pointerup={handlePointerUp}
-    on:touchmove={handlePointerMove}
     on:touchend={handlePointerUp}
+    on:touchmove={handleTouchMove}
 />
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown} on:touchstart={handlePointerDown}>
+<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown}>
     <slot></slot>
 </div>
 
 <style>
     .draggable {
+        touch-action: none;
         cursor: grab;
         position: absolute;
     }
