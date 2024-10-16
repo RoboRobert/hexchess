@@ -15,7 +15,9 @@
     export let currentPiece: PieceData;
 
     let pieceSelection: PieceData | undefined;
-    selectedPiece.subscribe((piece) => {pieceSelection = piece;});
+    selectedPiece.subscribe((piece) => {
+        pieceSelection = piece;
+    });
 
     let boardMeta: BoardData = defaultBoard;
     boardData.subscribe((data) => {
@@ -37,13 +39,13 @@
     let dropList: Element[] = [];
 
     let previousHex: Hex | undefined;
-    
+
     let legal: Hex[] = [];
     let attacks: Hex[] = [];
     let selections: Hex[] = [];
 
     let previous: Hex[] = [];
-    effectStore.subscribe((data) => previous = data.previous);
+    effectStore.subscribe((data) => (previous = data.previous));
 
     let dragging = false;
     let snapBack = true;
@@ -84,15 +86,15 @@
             // Otherwise define it
             let moveSuccess = currentPiece.movePiece(selections[0]);
             // If the move was successful set the previous move and update the board state
-            if(moveSuccess) {
+            if (moveSuccess) {
                 // If there's already a selected piece, set it to be undefined.
-                if(pieceSelection) {
+                if (pieceSelection) {
                     selectedPiece.set(undefined);
                 }
 
                 attacks = [];
                 legal = [];
-                
+
                 previous = [previousHex as Hex, selections[0]];
 
                 // If the move was successful, reset the previous hex
@@ -100,15 +102,17 @@
                 updatePos();
             }
             // If the move was a fail, determine if it was on top of the current piece's square.
-            else if(!moveSuccess) {
-                if(pieceSelection && PieceData.equals(pieceSelection.hex, selections[0])) {
+            else if (!moveSuccess) {
+                if (
+                    pieceSelection &&
+                    PieceData.equals(pieceSelection.hex, selections[0])
+                ) {
                     selectedPiece.set(undefined);
 
                     previousHex = undefined;
                     attacks = [];
-                    legal = []; 
-                }
-                else if(!pieceSelection || pieceSelection != currentPiece)
+                    legal = [];
+                } else if (!pieceSelection || pieceSelection != currentPiece)
                     selectedPiece.set(currentPiece);
             }
         }
@@ -120,7 +124,7 @@
         }
 
         selections = [];
-        
+
         // Update the global effects state
         updateState();
 
@@ -155,22 +159,21 @@
     // Handles any clicks on hexagons
     function clickHex(e: any) {
         let clicked: Hex | undefined = hexFromPoint(e.clientX, e.clientY);
-        if(!clicked || dragging)
-            return;
-
+        if (!clicked || dragging) return;
+        
         // If the current piece matches the selected piece, then try to move it to the selected square.
-        if(pieceSelection == currentPiece) {
+        if (pieceSelection == currentPiece) {
             let moveSuccess = currentPiece.movePiece(clicked);
             // If the move was successful set the previous move and update the board state
-            if(moveSuccess) {
+            if (moveSuccess) {
                 // If there's already a selected piece, set it to be undefined.
-                if(pieceSelection) {
+                if (pieceSelection) {
                     selectedPiece.set(undefined);
                 }
 
                 attacks = [];
                 legal = [];
-                
+
                 previous = [previousHex as Hex, clicked];
 
                 // If the move was successful, reset the previous hex
@@ -180,9 +183,9 @@
             // If the move was unsuccessful, clear all effects except the previous move display and remove the selected piece
             else {
                 selectedPiece.set(undefined);
-                    previousHex = undefined;
-                    attacks = [];
-                    legal = []; 
+                previousHex = undefined;
+                attacks = [];
+                legal = [];
             }
 
             updateState();
@@ -207,9 +210,11 @@
         div.style.top = `${y}px`;
 
         let pointHex: Hex | undefined = hexFromPoint(clientX, clientY);
-        if(pointHex) {
+        if (pointHex) {
             selections[0] = pointHex;
-        } else selections = [];
+        } else {
+            selections = [];
+        }
 
         updateState();
     }
@@ -226,7 +231,7 @@
             let q = parseInt(dropElement.getAttribute("data-q") as string);
             let r = parseInt(dropElement.getAttribute("data-r") as string);
 
-            return new Hex(q,r);
+            return new Hex(q, r);
         }
 
         return undefined;
