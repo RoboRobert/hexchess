@@ -2,10 +2,10 @@ import type { Hex } from "$lib/hexagons/HexLib";
 
 export enum Effects {
     CURRENT = "#57ff00",
-    SELECTED = "#fff700",
-    // LEGAL = "#ffb400",
+    SELECTED = "#ffb400",
     LEGAL = "#525252",
     ATTACK = "#ff0000",
+    PREVIOUS = "#fff700",
 }
 
 // Used for constructing a representation of some of the important global game state variables

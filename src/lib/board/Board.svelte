@@ -85,23 +85,34 @@
                 <Hexagon {q} {r} {color}></Hexagon>
             {/each}
 
-            <!-- All board effects. The order of these blocks matters as it determines z-positioning -->
+            <!-- All board effects. The last #each block will render on top of the ones closer to the top
+             of the file. -->
             {#key effects}
                 <!-- Previous move -->
                 {#each effects.previous as i}
-                    <HexEffect q={i.q} r={i.r} color={Effects.SELECTED}
+                    <HexEffect q={i.q} r={i.r} color={Effects.PREVIOUS}
                     ></HexEffect>
                 {/each}
 
                 <!-- Legal moves -->
                 {#each effects.legal as i}
-                    <CircleEffect q={i.q} r={i.r} size={boardMeta.hexSize/5} color={Effects.LEGAL} fill={true}
+                    <CircleEffect
+                        q={i.q}
+                        r={i.r}
+                        size={boardMeta.hexSize / 5}
+                        color={Effects.LEGAL}
+                        fill={true}
                     ></CircleEffect>
                 {/each}
 
                 <!-- Attack effects -->
                 {#each effects.attacks as i}
-                    <CircleEffect q={i.q} r={i.r} size={boardMeta.hexSize/1.5} color={Effects.ATTACK} fill={false}
+                    <CircleEffect
+                        q={i.q}
+                        r={i.r}
+                        size={boardMeta.hexSize / 1.5}
+                        color={Effects.ATTACK}
+                        fill={false}
                     ></CircleEffect>
                 {/each}
 
@@ -116,7 +127,12 @@
 
                 <!-- Selections -->
                 {#each effects.selections as i}
-                    <CircleEffect q={i.q} r={i.r} size={boardMeta.hexSize/1.5} color={Effects.SELECTED} fill={false}
+                    <CircleEffect
+                        q={i.q}
+                        r={i.r}
+                        size={boardMeta.hexSize / 1.5}
+                        color={Effects.SELECTED}
+                        fill={false}
                     ></CircleEffect>
                 {/each}
             {/key}

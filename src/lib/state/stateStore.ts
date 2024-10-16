@@ -4,12 +4,15 @@ import { writable } from "svelte/store";
 import { BoardData, flatLayout } from "./BoardData";
 import { GameState } from "./GameState";
 import { BoardEffects } from "./BoardEffects";
+import type { Hex } from "$lib/hexagons/HexLib";
 
 export const defaultBoard = new BoardData(flatLayout, Theme.GRAYSCALE, 5, 50);
 export const boardData = writable(defaultBoard);
 
 export const defaultState = new GameState(true, "WHITE", false)
 export const gameState = writable(defaultState);
+
+export const selectedPiece = writable();
 
 let pieceArray: PieceData[] = [
     // Black bishops

@@ -4,6 +4,7 @@
         boardData,
         defaultBoard,
         effectStore,
+        selectedPiece,
     } from "$lib/state/stateStore";
     import { onMount } from "svelte";
     import { PieceData } from "./PieceData";
@@ -11,6 +12,9 @@
     import { BoardEffects } from "$lib/state/BoardEffects";
 
     export let currentPiece: PieceData;
+
+    let pieceSelection: PieceData | undefined;
+    // selectedPiece.subscribe((piece) => pieceSelection = piece);
 
     let boardMeta: BoardData = defaultBoard;
     boardData.subscribe((data) => {
@@ -81,9 +85,8 @@
             // If the move was successful set the previous move and update the board state
             if(currentHex && currentPiece.movePiece(selections[0])) {
                 previous = [currentHex, selections[0]];
+                updatePos();
             }
-
-            updatePos();
         }
 
         if (snapBack) {
@@ -101,6 +104,13 @@
     }
 
     function handlePointerDown(e: any) {
+        // If there's already a selected piece, set it to be undefined.
+        if(pieceSelection) {
+            selectedPiece.set(undefined);
+        }
+        else {
+            selectedPiece.set(currentPiece);
+        }
         dragging = true;
 
         div.style.zIndex = "100";
