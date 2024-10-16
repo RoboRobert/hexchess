@@ -61,7 +61,7 @@
 </select>
 
 <!-- <h2 >Game Running: {currentState.running}</h2> -->
-<h2 style="margin-bottom: 20px">{currentState.currentColor} TO MOVE</h2>
+<!-- <h2 style="margin-bottom: 20px">{currentState.currentColor} TO MOVE</h2> -->
 
 {#if currentState.checkmate}
     <Popup

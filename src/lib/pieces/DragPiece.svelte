@@ -104,6 +104,7 @@
         dragging = true;
 
         div.style.zIndex = "100";
+        div.style.cursor = "grabbing";
 
         startX = div.style.left;
         startY = div.style.top;
@@ -122,8 +123,6 @@
             .map((e) => e.to);
 
         handleMove(e.clientX, e.clientY);
-
-        div.style.cursor = "grabbing";
     }
 
     function handlePointerMove(e: PointerEvent) {
