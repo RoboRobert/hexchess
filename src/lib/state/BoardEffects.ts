@@ -3,7 +3,8 @@ import type { Hex } from "$lib/hexagons/HexLib";
 export enum Effects {
     CURRENT = "#57ff00",
     SELECTED = "#fff700",
-    LEGAL = "#ffb400",
+    // LEGAL = "#ffb400",
+    LEGAL = "#525252",
     ATTACK = "#ff0000",
 }
 

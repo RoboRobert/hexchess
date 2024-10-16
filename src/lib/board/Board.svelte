@@ -11,6 +11,7 @@
         effectStore,
         pieceStore,
     } from "$lib/state/stateStore";
+    import CircleEffect from "$lib/ui/CircleEffect.svelte";
     import HexEffect from "$lib/ui/HexEffect.svelte";
     import { ColorPicker } from "./ColorPicker";
     import Coordinate from "./Coordinate.svelte";
@@ -94,14 +95,14 @@
 
                 <!-- Legal moves -->
                 {#each effects.legal as i}
-                    <HexEffect q={i.q} r={i.r} color={Effects.LEGAL}
-                    ></HexEffect>
+                    <CircleEffect q={i.q} r={i.r} size={boardMeta.hexSize/5} color={Effects.LEGAL} fill={true}
+                    ></CircleEffect>
                 {/each}
 
                 <!-- Attack effects -->
                 {#each effects.attacks as i}
-                    <HexEffect q={i.q} r={i.r} color={Effects.ATTACK}
-                    ></HexEffect>
+                    <CircleEffect q={i.q} r={i.r} size={boardMeta.hexSize/1.5} color={Effects.ATTACK} fill={false}
+                    ></CircleEffect>
                 {/each}
 
                 <!-- The square of the currently selected piece -->
@@ -115,8 +116,8 @@
 
                 <!-- Selections -->
                 {#each effects.selections as i}
-                    <HexEffect q={i.q} r={i.r} color={Effects.SELECTED}
-                    ></HexEffect>
+                    <CircleEffect q={i.q} r={i.r} size={boardMeta.hexSize/1.5} color={Effects.SELECTED} fill={false}
+                    ></CircleEffect>
                 {/each}
             {/key}
 
