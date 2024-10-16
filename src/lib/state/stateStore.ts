@@ -12,7 +12,9 @@ export const boardData = writable(defaultBoard);
 export const defaultState = new GameState(true, "WHITE", false)
 export const gameState = writable(defaultState);
 
-export const selectedPiece = writable();
+// Writable that stores the currently selected piece.
+let anyType: any = undefined;
+export const selectedPiece = writable(anyType);
 
 let pieceArray: PieceData[] = [
     // Black bishops

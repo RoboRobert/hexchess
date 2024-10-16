@@ -74,7 +74,7 @@ export class PieceData {
         boardData.subscribe((data) => { this.boardMeta = data });
     }
 
-    private static equals(hex1: Hex, hex2: Hex): boolean {
+    public static equals(hex1: Hex, hex2: Hex): boolean {
         if (hex1.q === hex2.q && hex1.r === hex2.r)
             return true;
         return false;

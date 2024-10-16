@@ -10,11 +10,12 @@
     import { PieceData } from "./PieceData";
     import { Hex } from "$lib/hexagons/HexLib";
     import { BoardEffects } from "$lib/state/BoardEffects";
+    import HexEffect from "$lib/ui/HexEffect.svelte";
 
     export let currentPiece: PieceData;
 
     let pieceSelection: PieceData | undefined;
-    // selectedPiece.subscribe((piece) => pieceSelection = piece);
+    selectedPiece.subscribe((piece) => {pieceSelection = piece;});
 
     let boardMeta: BoardData = defaultBoard;
     boardData.subscribe((data) => {
@@ -35,7 +36,7 @@
 
     let dropList: Element[] = [];
 
-    let currentHex: Hex | undefined;
+    let previousHex: Hex | undefined;
     
     let legal: Hex[] = [];
     let attacks: Hex[] = [];
@@ -74,43 +75,59 @@
     function handlePointerUp(e: any) {
         div.style.cursor = "";
         div.style.zIndex = "";
-        attacks = [];
-        legal = [];
 
         if (!dragging) return;
 
         dragging = false;
 
         if (selections.length > 0) {
+            // Otherwise define it
+            let moveSuccess = currentPiece.movePiece(selections[0]);
             // If the move was successful set the previous move and update the board state
-            if(currentHex && currentPiece.movePiece(selections[0])) {
-                previous = [currentHex, selections[0]];
+            if(moveSuccess) {
+                // If there's already a selected piece, set it to be undefined.
+                if(pieceSelection) {
+                    selectedPiece.set(undefined);
+                }
+
+                attacks = [];
+                legal = [];
+                
+                previous = [previousHex as Hex, selections[0]];
+
+                // If the move was successful, reset the previous hex
+                previousHex = undefined;
                 updatePos();
+            }
+            // If the move was a fail, determine if it was on top of the current piece's square.
+            else if(!moveSuccess) {
+                if(pieceSelection && PieceData.equals(pieceSelection.hex, selections[0])) {
+                    selectedPiece.set(undefined);
+
+                    previousHex = undefined;
+                    attacks = [];
+                    legal = []; 
+                }
+                else if(!pieceSelection || pieceSelection != currentPiece)
+                    selectedPiece.set(currentPiece);
             }
         }
 
+        // If piece snapback is enabled, snap the piece back to its starting position
         if (snapBack) {
             div.style.left = startX;
             div.style.top = startY;
         }
 
-        currentHex = undefined;
         selections = [];
-
+        
         // Update the global effects state
         updateState();
 
         return true;
     }
 
-    function handlePointerDown(e: any) {
-        // If there's already a selected piece, set it to be undefined.
-        if(pieceSelection) {
-            selectedPiece.set(undefined);
-        }
-        else {
-            selectedPiece.set(currentPiece);
-        }
+    function pickupPiece(e: any) {
         dragging = true;
 
         div.style.zIndex = "100";
@@ -124,7 +141,7 @@
 
         let legalMoves = currentPiece.getLegalMoves(false);
 
-        currentHex = currentPiece.hex;
+        previousHex = currentPiece.hex;
         attacks = legalMoves
             .filter((e) => PieceData.pieceOn(e.attacking))
             .map((e) => e.to);
@@ -133,6 +150,43 @@
             .map((e) => e.to);
 
         handleMove(e.clientX, e.clientY);
+    }
+
+    // Handles any clicks on hexagons
+    function clickHex(e: any) {
+        let clicked: Hex | undefined = hexFromPoint(e.clientX, e.clientY);
+        if(!clicked || dragging)
+            return;
+
+        // If the current piece matches the selected piece, then try to move it to the selected square.
+        if(pieceSelection == currentPiece) {
+            let moveSuccess = currentPiece.movePiece(clicked);
+            // If the move was successful set the previous move and update the board state
+            if(moveSuccess) {
+                // If there's already a selected piece, set it to be undefined.
+                if(pieceSelection) {
+                    selectedPiece.set(undefined);
+                }
+
+                attacks = [];
+                legal = [];
+                
+                previous = [previousHex as Hex, clicked];
+
+                // If the move was successful, reset the previous hex
+                previousHex = undefined;
+                updatePos();
+            }
+            // If the move was unsuccessful, clear all effects except the previous move display and remove the selected piece
+            else {
+                selectedPiece.set(undefined);
+                    previousHex = undefined;
+                    attacks = [];
+                    legal = []; 
+            }
+
+            updateState();
+        }
     }
 
     function handlePointerMove(e: PointerEvent) {
@@ -152,7 +206,16 @@
         div.style.left = `${x}px`;
         div.style.top = `${y}px`;
 
-        dropList = document.elementsFromPoint(clientX, clientY);
+        let pointHex: Hex | undefined = hexFromPoint(clientX, clientY);
+        if(pointHex) {
+            selections[0] = pointHex;
+        } else selections = [];
+
+        updateState();
+    }
+
+    function hexFromPoint(x: number, y: number): Hex | undefined {
+        dropList = document.elementsFromPoint(x, y);
 
         // Finds the first droppable target, or undefined if none
         let dropElement: HTMLElement | undefined = dropList.find((e) =>
@@ -163,15 +226,15 @@
             let q = parseInt(dropElement.getAttribute("data-q") as string);
             let r = parseInt(dropElement.getAttribute("data-r") as string);
 
-            selections = [new Hex(q, r)];
-        } else selections = [];
+            return new Hex(q,r);
+        }
 
-        updateState();
+        return undefined;
     }
 
     function updateState() {
         effectStore.set(
-            new BoardEffects(currentHex, selections, legal, attacks, previous),
+            new BoardEffects(previousHex, selections, legal, attacks, previous),
         );
     }
 </script>
@@ -181,13 +244,14 @@
     on:pointerup={handlePointerUp}
     on:touchend={handlePointerUp}
     on:touchmove={handleTouchMove}
+    on:pointerdown={clickHex}
 />
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
     class="draggable"
     bind:this={div}
-    on:pointerdown={handlePointerDown}
+    on:pointerdown={pickupPiece}
     on:contextmenu={function (e) {
         e.preventDefault();
     }}
