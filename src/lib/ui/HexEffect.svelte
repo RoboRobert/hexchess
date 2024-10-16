@@ -38,7 +38,7 @@
         data-r="{r},"
         class="hexagon droppable"
         points={pointString}
-        style="fill: {color}; z-index: 100;"
+        style="fill: {color}; z-index: 50;"
         opacity="0.4"
     />
 </g>

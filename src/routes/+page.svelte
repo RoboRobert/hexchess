@@ -63,8 +63,6 @@
 <!-- <h2 >Game Running: {currentState.running}</h2> -->
 <h2 style="margin-bottom: 20px">{currentState.currentColor} TO MOVE</h2>
 
-<Board></Board>
-
 {#if currentState.checkmate}
     <Popup
         text={currentState.checkmate[0] +
@@ -76,3 +74,5 @@
 {#if currentState.stalemate}
     <Popup text="Stalemate!"></Popup>
 {/if}
+
+<Board></Board>

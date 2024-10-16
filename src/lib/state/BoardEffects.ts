@@ -13,12 +13,14 @@ export class BoardEffects {
     selections: Hex[];
     legal: Hex[];
     attacks: Hex[];
+    previous: Hex[];
     // arrows: Arrow[];
 
-    constructor(current: Hex | undefined, selections: Hex[], legal: Hex[], attacks: Hex[]) {
+    constructor(current: Hex | undefined, selections: Hex[], legal: Hex[], attacks: Hex[], previous: Hex[]) {
         this.current = current;
         this.selections = selections;
         this.legal = legal;
         this.attacks = attacks;
+        this.previous = previous;
     }
 }

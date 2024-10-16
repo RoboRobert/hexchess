@@ -1,6 +1,10 @@
 <script lang="ts">
     import type { BoardData } from "$lib/state/BoardData";
-    import { boardData, defaultBoard, effectStore } from "$lib/state/stateStore";
+    import {
+        boardData,
+        defaultBoard,
+        effectStore,
+    } from "$lib/state/stateStore";
     import { onMount } from "svelte";
     import { PieceData } from "./PieceData";
     import { Hex } from "$lib/hexagons/HexLib";
@@ -28,9 +32,13 @@
     let dropList: Element[] = [];
 
     let currentHex: Hex | undefined;
+    
     let legal: Hex[] = [];
     let attacks: Hex[] = [];
     let selections: Hex[] = [];
+
+    let previous: Hex[] = [];
+    effectStore.subscribe((data) => previous = data.previous);
 
     let dragging = false;
     let snapBack = true;
@@ -61,7 +69,7 @@
 
     function handlePointerUp(e: any) {
         div.style.cursor = "";
-        currentHex = undefined;
+        div.style.zIndex = "";
         attacks = [];
         legal = [];
 
@@ -70,8 +78,10 @@
         dragging = false;
 
         if (selections.length > 0) {
-            // If the move was successful, then update the board's state
-            currentPiece.movePiece(selections[0]);
+            // If the move was successful set the previous move and update the board state
+            if(currentHex && currentPiece.movePiece(selections[0])) {
+                previous = [currentHex, selections[0]];
+            }
 
             updatePos();
         }
@@ -81,6 +91,7 @@
             div.style.top = startY;
         }
 
+        currentHex = undefined;
         selections = [];
 
         // Update the global effects state
@@ -92,6 +103,8 @@
     function handlePointerDown(e: any) {
         dragging = true;
 
+        div.style.zIndex = "100";
+
         startX = div.style.left;
         startY = div.style.top;
 
@@ -101,8 +114,12 @@
         let legalMoves = currentPiece.getLegalMoves(false);
 
         currentHex = currentPiece.hex;
-        attacks = legalMoves.filter((e) => PieceData.pieceOn(e.attacking)).map((e) => e.to);
-        legal = legalMoves.filter((e) => !PieceData.pieceOn(e.attacking)).map((e) => e.to);
+        attacks = legalMoves
+            .filter((e) => PieceData.pieceOn(e.attacking))
+            .map((e) => e.to);
+        legal = legalMoves
+            .filter((e) => !PieceData.pieceOn(e.attacking))
+            .map((e) => e.to);
 
         handleMove(e.clientX, e.clientY);
 
@@ -110,19 +127,17 @@
     }
 
     function handlePointerMove(e: PointerEvent) {
-        if (dragging) {
-            handleMove(e.clientX, e.clientY);
-        }
+        handleMove(e.clientX, e.clientY);
     }
 
     function handleTouchMove(e: TouchEvent) {
-        if (dragging) {
-            handleMove(e.touches[0].clientX, e.touches[0].clientY);
-        }
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
         return true;
     }
 
     function handleMove(clientX: number, clientY: number) {
+        if (!dragging) return;
+
         let x = clientX - width / 2 - pOffsetX;
         let y = clientY - height / 2 - pOffsetY;
         div.style.left = `${x}px`;
@@ -131,21 +146,24 @@
         dropList = document.elementsFromPoint(clientX, clientY);
 
         // Finds the first droppable target, or undefined if none
-        let dropElement: HTMLElement | undefined = dropList.find((e) => e.classList.contains("droppable")) as HTMLElement | undefined;
+        let dropElement: HTMLElement | undefined = dropList.find((e) =>
+            e.classList.contains("droppable"),
+        ) as HTMLElement | undefined;
 
-        if(dropElement) {
+        if (dropElement) {
             let q = parseInt(dropElement.getAttribute("data-q") as string);
             let r = parseInt(dropElement.getAttribute("data-r") as string);
 
-            selections = [new Hex(q,r)];
-        }
-        else selections = [];
+            selections = [new Hex(q, r)];
+        } else selections = [];
 
         updateState();
     }
 
     function updateState() {
-        effectStore.set(new BoardEffects(currentHex, selections, legal, attacks));
+        effectStore.set(
+            new BoardEffects(currentHex, selections, legal, attacks, previous),
+        );
     }
 </script>
 

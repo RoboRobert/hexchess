@@ -26,7 +26,7 @@
 
     var hexArray: HexData[] = [];
 
-    var effects: BoardEffects = new BoardEffects(undefined, [], [], []);
+    var effects: BoardEffects = new BoardEffects(undefined, [], [], [], []);
     effectStore.subscribe((store) => (effects = store));
 
     var pieceArr: PieceData[] = [];
@@ -109,6 +109,12 @@
                 <!-- Attack effects -->
                 {#each effects.attacks as i}
                     <HexEffect q={i.q} r={i.r} color={Effects.ATTACK}
+                    ></HexEffect>
+                {/each}
+
+                <!-- Previous move -->
+                {#each effects.previous as i}
+                    <HexEffect q={i.q} r={i.r} color={Effects.SELECTED}
                     ></HexEffect>
                 {/each}
             {/key}

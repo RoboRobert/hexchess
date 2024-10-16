@@ -86,4 +86,4 @@ let pieceArray: PieceData[] = [
 
 export const pieceStore = writable(pieceArray);
 
-export const effectStore = writable(new BoardEffects(undefined, [],[],[]));
+export const effectStore = writable(new BoardEffects(undefined, [], [], [], []));
