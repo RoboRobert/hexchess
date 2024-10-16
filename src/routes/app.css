@@ -34,17 +34,6 @@ select {
     user-select: none;
 }
 
-.selection {
-    fill: yellow !important;
-    stroke: black;
-}
-
-.possible {
-    fill: orange !important;
-    stroke: black;
-}
-
-.attack {
-    fill: red !important;
-    stroke: black;
+.hexagon {
+    user-select: none;
 }

@@ -14,7 +14,6 @@
 
     export let q: number;
     export let r: number;
-    let s = -q - r;
     export let color: string;
 
     let boardMeta: BoardData = defaultBoard;
@@ -33,26 +32,13 @@
 </script>
 
 <g transform="translate({originOffset.x}, {originOffset.y})">
-    <!-- <polygon
-        id="{q},{r}"
-        data-q="{q},"
-        data-r="{r},"
-        class="hexagon droppable"
-        points={pointString}
-        style="fill: {color};"
-    /> -->
-
     <polygon
         id="{q},{r}"
         data-q="{q},"
         data-r="{r},"
         class="hexagon droppable"
         points={pointString}
-        style="fill: {color}; stroke: black; stroke-width: 2px;"
+        style="fill: {color}; z-index: 100;"
+        opacity="0.4"
     />
-
-    <!-- Optional rendering of cube coordinates for debugging -->
-    <!-- <text x={-5} y={-size/2} class="small">{q}</text>
-    <text x={size/2} y={size/2} class="small">{r}</text>
-    <text x={-size/2} y={size/2} class="small">{s}</text> -->
 </g>

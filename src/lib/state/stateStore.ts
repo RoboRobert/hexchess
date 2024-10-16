@@ -3,6 +3,7 @@ import { PieceData, PieceEnum } from "$lib/pieces/PieceData";
 import { writable } from "svelte/store";
 import { BoardData, flatLayout } from "./BoardData";
 import { GameState } from "./GameState";
+import { BoardEffects } from "./BoardEffects";
 
 export const defaultBoard = new BoardData(flatLayout, Theme.GRAYSCALE, 5, 50);
 export const boardData = writable(defaultBoard);
@@ -84,3 +85,5 @@ let pieceArray: PieceData[] = [
 ]
 
 export const pieceStore = writable(pieceArray);
+
+export const effectStore = writable(new BoardEffects(undefined, [],[],[]));

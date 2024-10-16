@@ -4,7 +4,14 @@
     import Piece from "$lib/pieces/Piece.svelte";
     import { PieceData } from "$lib/pieces/PieceData";
     import type { BoardData } from "$lib/state/BoardData";
-    import { boardData, defaultBoard, pieceStore } from "$lib/state/stateStore";
+    import { BoardEffects, Effects } from "$lib/state/BoardEffects";
+    import {
+        boardData,
+        defaultBoard,
+        effectStore,
+        pieceStore,
+    } from "$lib/state/stateStore";
+    import HexEffect from "$lib/ui/HexEffect.svelte";
     import { ColorPicker } from "./ColorPicker";
     import Coordinate from "./Coordinate.svelte";
     import Hexagon from "./Hexagon.svelte";
@@ -18,6 +25,9 @@
     const gridLength = boardMeta.radius * 2 + 1;
 
     var hexArray: HexData[] = [];
+
+    var effects: BoardEffects = new BoardEffects(undefined, [], [], []);
+    effectStore.subscribe((store) => (effects = store));
 
     var pieceArr: PieceData[] = [];
     pieceStore.subscribe((array) => {
@@ -73,6 +83,35 @@
             {#each hexArray as { q, r, color }}
                 <Hexagon {q} {r} {color}></Hexagon>
             {/each}
+
+            {#key effects}
+                <!-- The square of the currently selected piece -->
+                {#if effects.current}
+                    <HexEffect
+                        q={effects.current.q}
+                        r={effects.current.r}
+                        color={Effects.CURRENT}
+                    ></HexEffect>
+                {/if}
+
+                <!-- Selections -->
+                {#each effects.selections as i}
+                    <HexEffect q={i.q} r={i.r} color={Effects.SELECTED}
+                    ></HexEffect>
+                {/each}
+
+                <!-- Legal moves -->
+                {#each effects.legal as i}
+                    <HexEffect q={i.q} r={i.r} color={Effects.LEGAL}
+                    ></HexEffect>
+                {/each}
+
+                <!-- Attack effects -->
+                {#each effects.attacks as i}
+                    <HexEffect q={i.q} r={i.r} color={Effects.ATTACK}
+                    ></HexEffect>
+                {/each}
+            {/key}
 
             <!-- Board coordinates -->
             <!-- Alphabetical -->

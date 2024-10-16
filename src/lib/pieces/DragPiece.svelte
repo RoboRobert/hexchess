@@ -1,9 +1,10 @@
 <script lang="ts">
     import type { BoardData } from "$lib/state/BoardData";
-    import { boardData, defaultBoard } from "$lib/state/stateStore";
+    import { boardData, defaultBoard, effectStore } from "$lib/state/stateStore";
     import { onMount } from "svelte";
     import { PieceData } from "./PieceData";
     import { Hex } from "$lib/hexagons/HexLib";
+    import { BoardEffects } from "$lib/state/BoardEffects";
 
     export let currentPiece: PieceData;
 
@@ -26,11 +27,10 @@
 
     let dropList: Element[] = [];
 
-    let hexMoves: HTMLElement[] = [];
-    let hexCaptures: HTMLElement[] = [];
-
-    let previousClass: string | undefined;
-    let dropTarget: HTMLElement | undefined;
+    let currentHex: Hex | undefined;
+    let legal: Hex[] = [];
+    let attacks: Hex[] = [];
+    let selections: Hex[] = [];
 
     let dragging = false;
     let snapBack = true;
@@ -61,35 +61,30 @@
 
     function handlePointerUp(e: any) {
         div.style.cursor = "";
-        div.style.zIndex = "";
-
-        hexMoves.forEach((e) => e.classList.remove("possible"));
-        hexCaptures.forEach((e) => e.classList.remove("attack"));
+        currentHex = undefined;
+        attacks = [];
+        legal = [];
 
         if (!dragging) return;
 
         dragging = false;
 
-        if (dropTarget != undefined) {
-            dropTarget.classList.remove("selection");
-
-            // Get the coordinates from the drop target's attributes
-            let q = parseInt(dropTarget.getAttribute("data-q") as string);
-            let r = parseInt(dropTarget.getAttribute("data-r") as string);
-
+        if (selections.length > 0) {
             // If the move was successful, then update the board's state
-            currentPiece.movePiece(new Hex(q, r));
+            currentPiece.movePiece(selections[0]);
 
             updatePos();
-
-            dropTarget = undefined;
-            return true;
         }
 
         if (snapBack) {
             div.style.left = startX;
             div.style.top = startY;
         }
+
+        selections = [];
+
+        // Update the global effects state
+        updateState();
 
         return true;
     }
@@ -105,27 +100,13 @@
 
         let legalMoves = currentPiece.getLegalMoves(false);
 
-        let captures = legalMoves.filter((e) => PieceData.pieceOn(e.attacking));
-        captures.forEach((e) =>
-            hexCaptures.push(
-                document.getElementById(`${e.to.q},${e.to.r}`) as HTMLElement,
-            ),
-        );
-
-        let moves = legalMoves.filter((e) => !PieceData.pieceOn(e.attacking));
-        moves.forEach((e) =>
-            hexMoves.push(
-                document.getElementById(`${e.to.q},${e.to.r}`) as HTMLElement,
-            ),
-        );
-
-        hexMoves.forEach((e) => e.classList.add("possible"));
-        hexCaptures.forEach((e) => e.classList.add("attack"));
+        currentHex = currentPiece.hex;
+        attacks = legalMoves.filter((e) => PieceData.pieceOn(e.attacking)).map((e) => e.to);
+        legal = legalMoves.filter((e) => !PieceData.pieceOn(e.attacking)).map((e) => e.to);
 
         handleMove(e.clientX, e.clientY);
 
         div.style.cursor = "grabbing";
-        div.style.zIndex = "100";
     }
 
     function handlePointerMove(e: PointerEvent) {
@@ -149,31 +130,22 @@
 
         dropList = document.elementsFromPoint(clientX, clientY);
 
-        if (dropTarget != undefined) {
-            dropTarget.classList.remove("selection");
-            if (previousClass) dropTarget.classList.add(previousClass);
-
-            dropTarget = undefined;
-        }
-
         // Finds the first droppable target, or undefined if none
-        dropTarget = dropList.find((e) => e.classList.contains("droppable")) as
-            | HTMLElement
-            | undefined;
+        let dropElement: HTMLElement | undefined = dropList.find((e) => e.classList.contains("droppable")) as HTMLElement | undefined;
 
-        if (dropTarget != undefined) {
-            previousClass = getPrevious(dropTarget);
-            if (previousClass) dropTarget.classList.remove(previousClass);
-            dropTarget.classList.add("selection");
+        if(dropElement) {
+            let q = parseInt(dropElement.getAttribute("data-q") as string);
+            let r = parseInt(dropElement.getAttribute("data-r") as string);
+
+            selections = [new Hex(q,r)];
         }
+        else selections = [];
+
+        updateState();
     }
 
-    // Gets the previous effect style that was removed.
-    function getPrevious(element: HTMLElement): string | undefined {
-        if (element.classList.contains("possible")) return "possible";
-        if (element.classList.contains("attack")) return "attack";
-
-        return undefined;
+    function updateState() {
+        effectStore.set(new BoardEffects(currentHex, selections, legal, attacks));
     }
 </script>
 
@@ -185,7 +157,14 @@
 />
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="draggable" bind:this={div} on:pointerdown={handlePointerDown} on:contextmenu={function(e) {e.preventDefault()}}>
+<div
+    class="draggable"
+    bind:this={div}
+    on:pointerdown={handlePointerDown}
+    on:contextmenu={function (e) {
+        e.preventDefault();
+    }}
+>
     <slot></slot>
 </div>
 

@@ -7,7 +7,7 @@
 
 <DragPiece currentPiece={piece}>
     <!-- svelte-ignore a11y-missing-attribute -->
-    <img class="piece" draggable=false src="{piece.pieceImage}">
+    <img style="z-index:100;" class="piece" draggable=false src="{piece.pieceImage}">
 </DragPiece>
 
 <style>
