@@ -85,21 +85,6 @@
             {/each}
 
             {#key effects}
-                <!-- The square of the currently selected piece -->
-                {#if effects.current}
-                    <HexEffect
-                        q={effects.current.q}
-                        r={effects.current.r}
-                        color={Effects.CURRENT}
-                    ></HexEffect>
-                {/if}
-
-                <!-- Selections -->
-                {#each effects.selections as i}
-                    <HexEffect q={i.q} r={i.r} color={Effects.SELECTED}
-                    ></HexEffect>
-                {/each}
-
                 <!-- Legal moves -->
                 {#each effects.legal as i}
                     <HexEffect q={i.q} r={i.r} color={Effects.LEGAL}
@@ -114,6 +99,21 @@
 
                 <!-- Previous move -->
                 {#each effects.previous as i}
+                    <HexEffect q={i.q} r={i.r} color={Effects.SELECTED}
+                    ></HexEffect>
+                {/each}
+
+                <!-- The square of the currently selected piece -->
+                {#if effects.current}
+                    <HexEffect
+                        q={effects.current.q}
+                        r={effects.current.r}
+                        color={Effects.CURRENT}
+                    ></HexEffect>
+                {/if}
+
+                <!-- Selections -->
+                {#each effects.selections as i}
                     <HexEffect q={i.q} r={i.r} color={Effects.SELECTED}
                     ></HexEffect>
                 {/each}

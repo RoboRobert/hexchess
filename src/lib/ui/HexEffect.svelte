@@ -32,13 +32,22 @@
 </script>
 
 <g transform="translate({originOffset.x}, {originOffset.y})">
+    <!-- <polygon
+        id="{q},{r}"
+        data-q="{q},"
+        data-r="{r},"
+        class="hexagon droppable"
+        points={pointString}
+        style="fill: {color}; z-index: 50; stroke: yellow; stroke-width: 2px;"
+        opacity="0.4"
+    /> -->
+
     <polygon
         id="{q},{r}"
         data-q="{q},"
         data-r="{r},"
         class="hexagon droppable"
         points={pointString}
-        style="fill: {color}; z-index: 50;"
-        opacity="0.4"
+        style="fill:none; z-index: 50; stroke: {color}; stroke-width: 4px;"
     />
 </g>
