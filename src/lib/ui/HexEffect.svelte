@@ -42,7 +42,17 @@
         opacity="0.4"
     /> -->
 
-    <polygon
+    <!-- <polygon
+        id="{q},{r}"
+        data-q="{q},"
+        data-r="{r},"
+        class="hexagon droppable"
+        points={pointString}
+        style="fill:none; z-index: 50; stroke: {color}; stroke-width: 4px;"
+    /> -->
+
+    <circle
+        r={size/2}
         id="{q},{r}"
         data-q="{q},"
         data-r="{r},"

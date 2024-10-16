@@ -84,7 +84,14 @@
                 <Hexagon {q} {r} {color}></Hexagon>
             {/each}
 
+            <!-- All board effects. The order of these blocks matters as it determines z-positioning -->
             {#key effects}
+                <!-- Previous move -->
+                {#each effects.previous as i}
+                    <HexEffect q={i.q} r={i.r} color={Effects.SELECTED}
+                    ></HexEffect>
+                {/each}
+
                 <!-- Legal moves -->
                 {#each effects.legal as i}
                     <HexEffect q={i.q} r={i.r} color={Effects.LEGAL}
@@ -94,12 +101,6 @@
                 <!-- Attack effects -->
                 {#each effects.attacks as i}
                     <HexEffect q={i.q} r={i.r} color={Effects.ATTACK}
-                    ></HexEffect>
-                {/each}
-
-                <!-- Previous move -->
-                {#each effects.previous as i}
-                    <HexEffect q={i.q} r={i.r} color={Effects.SELECTED}
                     ></HexEffect>
                 {/each}
 
