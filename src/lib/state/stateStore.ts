@@ -5,7 +5,7 @@ import { BoardData, LayoutEnum } from "./BoardData";
 import { GameState } from "./GameState";
 import { BoardEffects } from "./BoardEffects";
 
-export const defaultBoard = new BoardData(LayoutEnum.DEFAULT, Theme.GRAYSCALE, 5, 10);
+export const defaultBoard = new BoardData(LayoutEnum.DEFAULT, Theme.GRAYSCALE, 5, 40);
 export const boardData = writable(defaultBoard);
 
 export const defaultState = new GameState(true, "WHITE", false)

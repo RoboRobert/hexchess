@@ -5,6 +5,7 @@
     import type { GameState } from "$lib/state/GameState";
     import { boardData, gameState } from "$lib/state/stateStore";
     import Popup from "$lib/ui/Popup.svelte";
+    import Slider from "$lib/ui/Slider.svelte";
 
     $: selectedTheme = Theme.GRAYSCALE;
     $: selectedLayout = 0;
@@ -28,7 +29,6 @@
 
         boardData.update((old) => {
             let newData = old;
-            console.log(old);
             newData.layout = old.getLayout(newLayout);
             return newData;
         });
@@ -60,6 +60,7 @@
     <option value={1}>Flipped</option>
 </select>
 
+<!-- <Slider></Slider> -->
 
 <!-- <button on:pointerup={function() {boardData.update((data) => {let newData = data; newData.flipped = !newData.flipped; return newData})}}>Flip Board</button> -->
 

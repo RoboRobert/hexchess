@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { HexData } from "$lib/hexagons/HexData";
     import { Hex, Point } from "$lib/hexagons/HexLib";
     import Piece from "$lib/pieces/Piece.svelte";
     import { PieceData } from "$lib/pieces/PieceData";
@@ -16,6 +15,15 @@
     import { ColorPicker } from "./ColorPicker";
     import Coordinate from "./Coordinate.svelte";
     import Hexagon from "./Hexagon.svelte";
+
+    class HexData {
+        constructor(
+            public q: number,
+            public r: number,
+            public size: number,
+            public color: string,
+        ) {}
+    }
 
     let boardMeta: BoardData = defaultBoard;
     boardData.subscribe((data) => {
@@ -69,15 +77,13 @@
     // Calculates the height and width of the array of hexagons
     const widthHeight: Point = new Point(
         boardMeta.hexSize * (3 / 2) * (gridLength + 2),
-        boardMeta.hexSize * Math.sqrt(3) * (gridLength),
+        boardMeta.hexSize * Math.sqrt(3) * (gridLength + 1),
     );
     const viewBoxString = `${widthHeight.x / -2} ${widthHeight.y / -2} ${widthHeight.x} ${widthHeight.y}`;
-
-    let div: HTMLElement;
 </script>
 
 {#key [boardMeta.theme, pieceArr]}
-    <div class="board" bind:this={div}>
+    <div class="board">
         <!-- Board -->
         <svg
             overflow="visible"
@@ -90,8 +96,7 @@
                 <Hexagon {q} {r} {color}></Hexagon>
             {/each}
 
-            <!-- All board effects. The last #each block will render on top of the ones closer to the top
-             of the file. -->
+            <!-- All board effects. The last #each block will render on top of the ones closer to the top of the file. -->
             {#key effects}
                 <!-- Previous move -->
                 {#each effects.previous as i}
