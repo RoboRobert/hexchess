@@ -6,7 +6,7 @@ import { GameState } from "./GameState";
 import { BoardEffects } from "./BoardEffects";
 import type { Hex } from "$lib/hexagons/HexLib";
 
-export const defaultBoard = new BoardData(flatLayout, Theme.GRAYSCALE, 5, 50);
+export const defaultBoard = new BoardData(flatLayout, Theme.GRAYSCALE, 5, 50, false);
 export const boardData = writable(defaultBoard);
 
 export const defaultState = new GameState(true, "WHITE", false)

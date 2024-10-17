@@ -6,12 +6,14 @@ export class BoardData {
     theme: Theme;
     radius: number;
     hexSize: number;
+    flipped: boolean;
 
-    constructor(layout: Layout, theme: Theme, radius: number, hexSize: number) {
+    constructor(layout: Layout, theme: Theme, radius: number, hexSize: number, flipped: boolean) {
         this.layout = layout;
         this.theme = theme;
         this.radius = radius;
         this.hexSize = hexSize;
+        this.flipped = flipped;
     }
 }
 

@@ -60,7 +60,10 @@
     <option value={1}>Pointy</option>
 </select>
 
-<!-- <h2 >Game Running: {currentState.running}</h2> -->
+
+
+<!-- <button on:pointerup={function() {boardData.update((data) => {let newData = data; newData.flipped = !newData.flipped; return newData})}}>Flip Board</button> -->
+
 <!-- <h2 style="margin-bottom: 20px">{currentState.currentColor} TO MOVE</h2> -->
 
 {#if currentState.checkmate}

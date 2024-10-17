@@ -13,6 +13,7 @@
     } from "$lib/state/stateStore";
     import CircleEffect from "$lib/ui/CircleEffect.svelte";
     import HexEffect from "$lib/ui/HexEffect.svelte";
+    import { NewLineKind } from "typescript";
     import { ColorPicker } from "./ColorPicker";
     import Coordinate from "./Coordinate.svelte";
     import Hexagon from "./Hexagon.svelte";
@@ -46,11 +47,16 @@
                 pickerStart.theme,
             );
             for (let r = boardMeta.radius; r >= boardMeta.radius * -1; r--) {
-                let s = q * -1 + r * -1;
-                let newHex = new Hex(q, r);
+                let newHex: Hex;
+                newHex = new Hex(q, r);
                 if (newHex.inRadius(boardMeta.radius)) {
                     hexArray.push(
-                        new HexData(q, r, boardMeta.hexSize, picker.next()),
+                        new HexData(
+                            newHex.q,
+                            newHex.r,
+                            boardMeta.hexSize,
+                            picker.next(),
+                        ),
                     );
                 }
             }
@@ -62,11 +68,11 @@
     createHexArray();
 
     // Calculates the height and width of the array of hexagons
-    const heightWidth: Point = new Point(
-        boardMeta.hexSize * (3 / 2) * gridLength,
-        boardMeta.hexSize * Math.sqrt(3) * (gridLength + 1),
+    const widthHeight: Point = new Point(
+        boardMeta.hexSize * (3 / 2) * (gridLength + 2),
+        boardMeta.hexSize * Math.sqrt(3) * (gridLength),
     );
-    const viewBoxString = `${heightWidth.x / -2} ${heightWidth.y / -2} ${heightWidth.x} ${heightWidth.y}`;
+    const viewBoxString = `${widthHeight.x / -2} ${widthHeight.y / -2} ${widthHeight.x} ${widthHeight.y}`;
 
     let div: HTMLElement;
 </script>
@@ -77,8 +83,8 @@
         <svg
             overflow="visible"
             viewBox={viewBoxString}
-            width={heightWidth.x}
-            height={heightWidth.y}
+            width={widthHeight.x}
+            height={widthHeight.y}
         >
             <!-- Hexagons -->
             {#each hexArray as { q, r, color }}
@@ -188,6 +194,9 @@
 
 <style>
     .board {
-        position: relative;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Adjust to center */
     }
 </style>

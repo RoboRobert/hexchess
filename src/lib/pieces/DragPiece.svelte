@@ -160,7 +160,7 @@
     function clickHex(e: any) {
         let clicked: Hex | undefined = hexFromPoint(e.clientX, e.clientY);
         if (!clicked || dragging) return;
-        
+
         // If the current piece matches the selected piece, then try to move it to the selected square.
         if (pieceSelection == currentPiece) {
             let moveSuccess = currentPiece.movePiece(clicked);
