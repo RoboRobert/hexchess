@@ -1,8 +1,7 @@
 <script lang="ts">
     import Board from "$lib/board/Board.svelte";
     import { Theme } from "$lib/board/ColorPicker";
-    import { Layout } from "$lib/hexagons/HexLib";
-    import { pointyLayout, flatLayout } from "$lib/state/BoardData";
+    import { LayoutEnum } from "$lib/state/BoardData";
     import type { GameState } from "$lib/state/GameState";
     import { boardData, gameState } from "$lib/state/stateStore";
     import Popup from "$lib/ui/Popup.svelte";
@@ -14,22 +13,23 @@
     gameState.subscribe((data) => (currentState = data));
 
     function updateLayout(id: number) {
-        let newLayout: Layout = flatLayout;
+        let newLayout: LayoutEnum = LayoutEnum.DEFAULT;
         switch (id) {
             case 0: {
-                newLayout = flatLayout;
+                newLayout = LayoutEnum.DEFAULT;
                 break;
             }
 
             case 1: {
-                newLayout = pointyLayout;
+                newLayout = LayoutEnum.FLIPPED;
                 break;
             }
         }
 
         boardData.update((old) => {
             let newData = old;
-            newData.layout = newLayout;
+            console.log(old);
+            newData.layout = old.getLayout(newLayout);
             return newData;
         });
     }
@@ -56,10 +56,9 @@
         updateLayout(selectedLayout);
     }}
 >
-    <option value={0} selected>Flat</option>
-    <option value={1}>Pointy</option>
+    <option value={0} selected>Default</option>
+    <option value={1}>Flipped</option>
 </select>
-
 
 
 <!-- <button on:pointerup={function() {boardData.update((data) => {let newData = data; newData.flipped = !newData.flipped; return newData})}}>Flip Board</button> -->

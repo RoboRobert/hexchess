@@ -1,6 +1,7 @@
 :root {
     background-color: rgb(48, 48, 48);
     color: white;
+    overflow: hidden; /* Hide scrollbars */
 }
 
 body {
@@ -31,7 +32,7 @@ button {
 .coordinate {
     fill: white;
     stroke: white;
-    font: 25px monospace;
+    font-family: monospace;
     pointer-events: none;
     user-select: none;
 }

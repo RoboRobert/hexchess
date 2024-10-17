@@ -25,12 +25,16 @@
     const size = boardMeta.layout.size.x;
 </script>
 
-<g transform="translate({originOffset.x}, {originOffset.y})">
-    <text x={-15 * xNormalized - 12} y={-15 * yNormalized} class="coordinate"
-        >{text}</text
-    >
+<g style="font: {size/2}px monospace" transform="translate({originOffset.x}, {originOffset.y})">
+    <text
+        x={(-size / 3.3) * xNormalized - (size / 4)}
+        y={-(size / 3.3) * yNormalized}
+        stroke-width={size/50}
+        class="coordinate">
+        
+        {text}
+    </text>
 </g>
 
 <style>
-    
 </style>

@@ -35,16 +35,7 @@
     <polygon
         class="hexagon"
         points={pointString}
-        style="fill: {color}; z-index: 50; stroke: black; stroke-width: 2px;"
+        style="fill: {color}; z-index: 50; stroke: black; stroke-width: {size/25}px;"
         opacity="0.3"
     />
-
-    <!-- <polygon
-        id="{q},{r}"
-        data-q="{q},"
-        data-r="{r},"
-        class="hexagon droppable"
-        points={pointString}
-        style="fill:none; z-index: 50; stroke: {color}; stroke-width: 4px;"
-    /> -->
 </g>

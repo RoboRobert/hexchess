@@ -192,6 +192,17 @@ export class Layout {
         Math.sqrt(3.0) / 3.0,
         0.0,
     );
+    public static FLIPPED: Orientation = new Orientation(
+        -3.0 / 2.0,
+        0.0,
+        -Math.sqrt(3.0) / 2.0,
+        -Math.sqrt(3.0),
+        -2.0 / 3.0,
+        0.0,
+        1.0 / 3.0,
+        -Math.sqrt(3.0) / 3.0,
+        0.0,
+    );
 
     public hexToPixel(h: Hex): Point {
         var M: Orientation = this.orientation;

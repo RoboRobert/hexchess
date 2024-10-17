@@ -33,22 +33,13 @@
 </script>
 
 <g transform="translate({originOffset.x}, {originOffset.y})">
-    <!-- <polygon
-        id="{q},{r}"
-        data-q="{q},"
-        data-r="{r},"
-        class="hexagon droppable"
-        points={pointString}
-        style="fill: {color};"
-    /> -->
-
     <polygon
         id="{q},{r}"
         data-q="{q},"
         data-r="{r},"
         class="hexagon droppable"
         points={pointString}
-        style="fill: {color}; stroke: black; stroke-width: 2px;"
+        style="fill: {color}; stroke: black; stroke-width: {size/25}px;"
     />
 
     <!-- Optional rendering of cube coordinates for debugging -->

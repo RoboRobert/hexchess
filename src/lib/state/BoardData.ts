@@ -1,29 +1,37 @@
 import { Theme } from "$lib/board/ColorPicker";
 import { Layout, Point } from "$lib/hexagons/HexLib";
 
+export enum LayoutEnum {
+    DEFAULT,
+    FLIPPED,
+}
+
 export class BoardData {
     layout: Layout;
     theme: Theme;
     radius: number;
     hexSize: number;
-    flipped: boolean;
 
-    constructor(layout: Layout, theme: Theme, radius: number, hexSize: number, flipped: boolean) {
-        this.layout = layout;
+    constructor(layout: LayoutEnum, theme: Theme, radius: number, hexSize: number) {
         this.theme = theme;
         this.radius = radius;
         this.hexSize = hexSize;
-        this.flipped = flipped;
+        this.layout = this.getLayout(layout);
+    }
+
+    public getLayout(layout: LayoutEnum): Layout {
+        if(layout == LayoutEnum.FLIPPED) {
+            return new Layout(
+                Layout.FLIPPED,
+                new Point(this.hexSize, this.hexSize),
+                new Point(0, 0),
+            );
+        }
+
+        return new Layout(
+            Layout.FLAT,
+            new Point(this.hexSize, this.hexSize),
+            new Point(0, 0),
+        );
     }
 }
-
-export const flatLayout = new Layout(
-    Layout.FLAT,
-    new Point(50, 50),
-    new Point(0, 0),
-);
-export const pointyLayout = new Layout(
-    Layout.POINTY,
-    new Point(50, 50),
-    new Point(0, 0),
-);

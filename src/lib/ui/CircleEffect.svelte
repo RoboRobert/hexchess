@@ -24,27 +24,22 @@
     });
 
     const originHex: Hex = new Hex(0, 0);
-    const points: Point[] = boardMeta.layout.polygonCorners(originHex);
 
     const hex: Hex = new Hex(q, r);
     const originOffset: Point = boardMeta.layout.hexToPixel(hex);
-
-    const pointString = pointsToString(points);
 </script>
 
 <g transform="translate({originOffset.x}, {originOffset.y})">
     {#if fill}
         <circle
             r={size}
-            points={pointString}
-            style="fill:{color}; z-index: 50; stroke: {color}; stroke-width: 4px;"
+            style="fill:{color}; z-index: 50; stroke: {color}; stroke-width: {size/10};"
         />
     {/if}
     {#if !fill}
         <circle
             r={size}
-            points={pointString}
-            style="fill:none; z-index: 50; stroke: {color}; stroke-width: 4px;"
+            style="fill:none; z-index: 50; stroke: {color}; stroke-width: {size/10}px;"
         />
     {/if}
 </g>

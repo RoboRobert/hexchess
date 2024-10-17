@@ -1,12 +1,11 @@
 import { Theme } from "$lib/board/ColorPicker";
 import { PieceData, PieceEnum } from "$lib/pieces/PieceData";
 import { writable } from "svelte/store";
-import { BoardData, flatLayout } from "./BoardData";
+import { BoardData, LayoutEnum } from "./BoardData";
 import { GameState } from "./GameState";
 import { BoardEffects } from "./BoardEffects";
-import type { Hex } from "$lib/hexagons/HexLib";
 
-export const defaultBoard = new BoardData(flatLayout, Theme.GRAYSCALE, 5, 50, false);
+export const defaultBoard = new BoardData(LayoutEnum.DEFAULT, Theme.GRAYSCALE, 5, 10);
 export const boardData = writable(defaultBoard);
 
 export const defaultState = new GameState(true, "WHITE", false)

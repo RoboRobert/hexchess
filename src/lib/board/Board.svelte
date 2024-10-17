@@ -13,7 +13,6 @@
     } from "$lib/state/stateStore";
     import CircleEffect from "$lib/ui/CircleEffect.svelte";
     import HexEffect from "$lib/ui/HexEffect.svelte";
-    import { NewLineKind } from "typescript";
     import { ColorPicker } from "./ColorPicker";
     import Coordinate from "./Coordinate.svelte";
     import Hexagon from "./Hexagon.svelte";
