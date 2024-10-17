@@ -72,13 +72,13 @@ let pieceArray: PieceData[] = [
     new PieceData([1, -5], PieceEnum.BLACK_KING),
     new PieceData([1, 4], PieceEnum.WHITE_KING),
 
-    // Testing checkmate
+    // // Testing checkmate
     // new PieceData([3,-2], PieceEnum.WHITE_QUEEN),
 
     // new PieceData([5,-5], PieceEnum.BLACK_KING),
     // new PieceData([5,-3], PieceEnum.WHITE_KING),
 
-    // Testing promotion
+    // // Testing promotion
     // new PieceData([-4,4], PieceEnum.BLACK_PAWN),
     // new PieceData([4,0], PieceEnum.BLACK_PAWN),
 

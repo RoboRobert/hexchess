@@ -1,4 +1,5 @@
 import { Hex } from "$lib/hexagons/HexLib";
+import { Notation } from "$lib/notation/NotationLib";
 import type { BoardData } from "$lib/state/BoardData";
 import { GameState } from "$lib/state/GameState";
 import { pieceStore, boardData, defaultBoard, gameState, defaultState } from "$lib/state/stateStore";
@@ -122,6 +123,8 @@ export class PieceData {
         if (legalMove == undefined) {
             return false;
         }
+
+        console.log(Notation.moveToNotation(legalMove, this, boardState));
 
         // Remove en-passantable from any existing pawns.
         boardState = boardState.map((e) => {e.enPassantable = false; return e;});
@@ -426,7 +429,7 @@ export class PieceData {
     }
 }
 
-class MoveData {
+export class MoveData {
     from: Hex;
     to: Hex;
     attacking: Hex;

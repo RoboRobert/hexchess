@@ -11,6 +11,7 @@
     import { Hex } from "$lib/hexagons/HexLib";
     import { BoardEffects } from "$lib/state/BoardEffects";
     import HexEffect from "$lib/ui/HexEffect.svelte";
+    import { Notation } from "$lib/notation/NotationLib";
 
     export let currentPiece: PieceData;
 
@@ -160,7 +161,8 @@
     function clickHex(e: any) {
         let clicked: Hex | undefined = hexFromPoint(e.clientX, e.clientY);
         if (!clicked || dragging) return;
-
+        
+        // console.log(Notation.hexToNotation(clicked));
         // If the current piece matches the selected piece, then try to move it to the selected square.
         if (pieceSelection == currentPiece) {
             let moveSuccess = currentPiece.movePiece(clicked);
