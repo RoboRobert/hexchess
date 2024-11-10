@@ -82,128 +82,130 @@
     const viewBoxString = `${widthHeight.x / -2} ${widthHeight.y / -2} ${widthHeight.x} ${widthHeight.y}`;
 </script>
 
-{#key [boardMeta.theme, pieceArr]}
-    <div class="board" style="">
-        <!-- Board -->
-        <svg class="test"
-            overflow="visible"
-            viewBox={viewBoxString}
-            width={widthHeight.x}
-            height={widthHeight.y}
-        >
-            <!-- Hexagons -->
-            {#each hexArray as { q, r, color }}
-                <Hexagon {q} {r} {color}></Hexagon>
+<div
+    class="boardWrapper"
+    style="width: {widthHeight.x}px; height:{widthHeight.y}px;"
+>
+    {#key [boardMeta.theme, pieceArr]}
+        <div style="position: fixed;">
+            <!-- Board -->
+            <svg
+                overflow="visible"
+                viewBox={viewBoxString}
+                width={widthHeight.x}
+                height={widthHeight.y}
+            >
+                <!-- Hexagons -->
+                {#each hexArray as { q, r, color }}
+                    <Hexagon {q} {r} {color}></Hexagon>
+                {/each}
+
+                <!-- All board effects. The last #each block will render on top of the ones closer to the top of the file. -->
+                {#key effects}
+                    <!-- Previous move -->
+                    {#each effects.previous as i}
+                        <HexEffect q={i.q} r={i.r} color={Effects.PREVIOUS}
+                        ></HexEffect>
+                    {/each}
+
+                    <!-- Legal moves -->
+                    {#each effects.legal as i}
+                        <CircleEffect
+                            q={i.q}
+                            r={i.r}
+                            size={boardMeta.hexSize / 5}
+                            color={Effects.LEGAL}
+                            fill={true}
+                        ></CircleEffect>
+                    {/each}
+
+                    <!-- Attack effects -->
+                    {#each effects.attacks as i}
+                        <CircleEffect
+                            q={i.q}
+                            r={i.r}
+                            size={boardMeta.hexSize / 1.5}
+                            color={Effects.ATTACK}
+                            fill={false}
+                        ></CircleEffect>
+                    {/each}
+
+                    <!-- The square of the currently selected piece -->
+                    {#if effects.current}
+                        <HexEffect
+                            q={effects.current.q}
+                            r={effects.current.r}
+                            color={Effects.CURRENT}
+                        ></HexEffect>
+                    {/if}
+
+                    <!-- Selections -->
+                    {#each effects.selections as i}
+                        <CircleEffect
+                            q={i.q}
+                            r={i.r}
+                            size={boardMeta.hexSize / 1.5}
+                            color={Effects.SELECTED}
+                            fill={false}
+                        ></CircleEffect>
+                    {/each}
+                {/key}
+
+                <!-- Board coordinates -->
+                <!-- Alphabetical -->
+                <Coordinate q={-5} r={6} text={"a"}></Coordinate>
+                <Coordinate q={-4} r={6} text={"b"}></Coordinate>
+                <Coordinate q={-3} r={6} text={"c"}></Coordinate>
+                <Coordinate q={-2} r={6} text={"d"}></Coordinate>
+                <Coordinate q={-1} r={6} text={"e"}></Coordinate>
+                <Coordinate q={0} r={6} text={"f"}></Coordinate>
+                <Coordinate q={1} r={5} text={"g"}></Coordinate>
+                <Coordinate q={2} r={4} text={"h"}></Coordinate>
+                <Coordinate q={3} r={3} text={"i"}></Coordinate>
+                <Coordinate q={4} r={2} text={"k"}></Coordinate>
+                <Coordinate q={5} r={1} text={"l"}></Coordinate>
+
+                <!-- Numerical -->
+                <!-- Left side -->
+                <Coordinate q={-6} r={5} text={"1"}></Coordinate>
+                <Coordinate q={-6} r={4} text={"2"}></Coordinate>
+                <Coordinate q={-6} r={3} text={"3"}></Coordinate>
+                <Coordinate q={-6} r={2} text={"4"}></Coordinate>
+                <Coordinate q={-6} r={1} text={"5"}></Coordinate>
+                <Coordinate q={-6} r={0} text={"6"}></Coordinate>
+                <Coordinate q={-5} r={-1} text={"7"}></Coordinate>
+                <Coordinate q={-4} r={-2} text={"8"}></Coordinate>
+                <Coordinate q={-3} r={-3} text={"9"}></Coordinate>
+                <Coordinate q={-2} r={-4} text={"10"}></Coordinate>
+                <Coordinate q={-1} r={-5} text={"11"}></Coordinate>
+
+                <!-- Right side -->
+                <Coordinate q={6} r={-1} text={"1"}></Coordinate>
+                <Coordinate q={6} r={-2} text={"2"}></Coordinate>
+                <Coordinate q={6} r={-3} text={"3"}></Coordinate>
+                <Coordinate q={6} r={-4} text={"4"}></Coordinate>
+                <Coordinate q={6} r={-5} text={"5"}></Coordinate>
+                <Coordinate q={6} r={-6} text={"6"}></Coordinate>
+                <Coordinate q={5} r={-6} text={"7"}></Coordinate>
+                <Coordinate q={4} r={-6} text={"8"}></Coordinate>
+                <Coordinate q={3} r={-6} text={"9"}></Coordinate>
+                <Coordinate q={2} r={-6} text={"10"}></Coordinate>
+                <Coordinate q={1} r={-6} text={"11"}></Coordinate>
+            </svg>
+
+            <!-- All pieces -->
+            {#each pieceArr as data}
+                <Piece piece={data}></Piece>
             {/each}
-
-            <!-- All board effects. The last #each block will render on top of the ones closer to the top of the file. -->
-            {#key effects}
-                <!-- Previous move -->
-                {#each effects.previous as i}
-                    <HexEffect q={i.q} r={i.r} color={Effects.PREVIOUS}
-                    ></HexEffect>
-                {/each}
-
-                <!-- Legal moves -->
-                {#each effects.legal as i}
-                    <CircleEffect
-                        q={i.q}
-                        r={i.r}
-                        size={boardMeta.hexSize / 5}
-                        color={Effects.LEGAL}
-                        fill={true}
-                    ></CircleEffect>
-                {/each}
-
-                <!-- Attack effects -->
-                {#each effects.attacks as i}
-                    <CircleEffect
-                        q={i.q}
-                        r={i.r}
-                        size={boardMeta.hexSize / 1.5}
-                        color={Effects.ATTACK}
-                        fill={false}
-                    ></CircleEffect>
-                {/each}
-
-                <!-- The square of the currently selected piece -->
-                {#if effects.current}
-                    <HexEffect
-                        q={effects.current.q}
-                        r={effects.current.r}
-                        color={Effects.CURRENT}
-                    ></HexEffect>
-                {/if}
-
-                <!-- Selections -->
-                {#each effects.selections as i}
-                    <CircleEffect
-                        q={i.q}
-                        r={i.r}
-                        size={boardMeta.hexSize / 1.5}
-                        color={Effects.SELECTED}
-                        fill={false}
-                    ></CircleEffect>
-                {/each}
-            {/key}
-
-            <!-- Board coordinates -->
-            <!-- Alphabetical -->
-            <Coordinate q={-5} r={6} text={"a"}></Coordinate>
-            <Coordinate q={-4} r={6} text={"b"}></Coordinate>
-            <Coordinate q={-3} r={6} text={"c"}></Coordinate>
-            <Coordinate q={-2} r={6} text={"d"}></Coordinate>
-            <Coordinate q={-1} r={6} text={"e"}></Coordinate>
-            <Coordinate q={0} r={6} text={"f"}></Coordinate>
-            <Coordinate q={1} r={5} text={"g"}></Coordinate>
-            <Coordinate q={2} r={4} text={"h"}></Coordinate>
-            <Coordinate q={3} r={3} text={"i"}></Coordinate>
-            <Coordinate q={4} r={2} text={"k"}></Coordinate>
-            <Coordinate q={5} r={1} text={"l"}></Coordinate>
-
-            <!-- Numerical -->
-            <!-- Left side -->
-            <Coordinate q={-6} r={5} text={"1"}></Coordinate>
-            <Coordinate q={-6} r={4} text={"2"}></Coordinate>
-            <Coordinate q={-6} r={3} text={"3"}></Coordinate>
-            <Coordinate q={-6} r={2} text={"4"}></Coordinate>
-            <Coordinate q={-6} r={1} text={"5"}></Coordinate>
-            <Coordinate q={-6} r={0} text={"6"}></Coordinate>
-            <Coordinate q={-5} r={-1} text={"7"}></Coordinate>
-            <Coordinate q={-4} r={-2} text={"8"}></Coordinate>
-            <Coordinate q={-3} r={-3} text={"9"}></Coordinate>
-            <Coordinate q={-2} r={-4} text={"10"}></Coordinate>
-            <Coordinate q={-1} r={-5} text={"11"}></Coordinate>
-
-            <!-- Right side -->
-            <Coordinate q={6} r={-1} text={"1"}></Coordinate>
-            <Coordinate q={6} r={-2} text={"2"}></Coordinate>
-            <Coordinate q={6} r={-3} text={"3"}></Coordinate>
-            <Coordinate q={6} r={-4} text={"4"}></Coordinate>
-            <Coordinate q={6} r={-5} text={"5"}></Coordinate>
-            <Coordinate q={6} r={-6} text={"6"}></Coordinate>
-            <Coordinate q={5} r={-6} text={"7"}></Coordinate>
-            <Coordinate q={4} r={-6} text={"8"}></Coordinate>
-            <Coordinate q={3} r={-6} text={"9"}></Coordinate>
-            <Coordinate q={2} r={-6} text={"10"}></Coordinate>
-            <Coordinate q={1} r={-6} text={"11"}></Coordinate>
-        </svg>
-
-        <!-- All pieces -->
-        {#each pieceArr as data}
-            <Piece piece={data}></Piece>
-        {/each}
-    </div>
-{/key}
+        </div>
+    {/key}
+</div>
 
 <style>
-    .board {
-        position:fixed;
-    }
-
-    .test {
-        /* max-width:100%; */
-        z-index: 0;
-        top:100px;
+    .boardWrapper {
+        top: 100px;
+        left: 0px;
+        /* max-width: 100%; */
+        display: flex;
     }
 </style>
