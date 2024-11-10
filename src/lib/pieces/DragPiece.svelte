@@ -9,8 +9,7 @@
         selectedPiece,
     } from "$lib/state/stateStore";
     import { onMount } from "svelte";
-    import { ColorEnum, PieceData, PieceEnum } from "./PieceData";
-    import Piece from "./Piece.svelte";
+    import { PieceData } from "./PieceData";
 
     export let currentPiece: PieceData;
 
