@@ -73,11 +73,13 @@
         );
     }
 
-    function handlePointerUp() {
+    function handlePointerUp(e: any) {
+        e.stopPropagation();
         div.style.cursor = "";
         div.style.zIndex = "";
-
+        
         if (!dragging) {
+            console.log("I'm not dragging")
             // If the user clicked anywhere besides a piece, then reset all selected piece states
             if (pieceSelection == currentPiece) {
                 selectedPiece.set(undefined);
@@ -254,7 +256,6 @@
 <svelte:window
     on:pointermove={handlePointerMove}
     on:pointerup={handlePointerUp}
-    on:touchend={handlePointerUp}
     on:touchmove={handleTouchMove}
     on:pointerdown={clickHex}
 />
