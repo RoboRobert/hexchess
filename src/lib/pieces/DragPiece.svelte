@@ -1,5 +1,7 @@
 <script lang="ts">
+    import { Hex } from "$lib/hexagons/HexLib";
     import type { BoardData } from "$lib/state/BoardData";
+    import { BoardEffects } from "$lib/state/BoardEffects";
     import {
         boardData,
         defaultBoard,
@@ -7,11 +9,8 @@
         selectedPiece,
     } from "$lib/state/stateStore";
     import { onMount } from "svelte";
-    import { PieceData } from "./PieceData";
-    import { Hex } from "$lib/hexagons/HexLib";
-    import { BoardEffects } from "$lib/state/BoardEffects";
-    import HexEffect from "$lib/ui/HexEffect.svelte";
-    import { Notation } from "$lib/notation/NotationLib";
+    import { ColorEnum, PieceData, PieceEnum } from "./PieceData";
+    import Piece from "./Piece.svelte";
 
     export let currentPiece: PieceData;
 
@@ -75,16 +74,29 @@
         );
     }
 
-    function handlePointerUp(e: any) {
+    function handlePointerUp() {
         div.style.cursor = "";
         div.style.zIndex = "";
 
-        if (!dragging) return;
+        if (!dragging) {
+            // If the user clicked anywhere besides a piece, then reset all selected piece states
+            if (pieceSelection == currentPiece) {
+                selectedPiece.set(undefined);
+
+                previousHex = undefined;
+                attacks = [];
+                legal = [];
+
+                updateState();
+            }
+            
+            return;
+        }
 
         dragging = false;
 
+        // If there is a potential space for dropping
         if (selections.length > 0) {
-            // Otherwise define it
             let moveSuccess = currentPiece.movePiece(selections[0]);
             // If the move was successful set the previous move and update the board state
             if (moveSuccess) {
@@ -117,6 +129,8 @@
                     selectedPiece.set(currentPiece);
             }
         }
+        // If there was no possible space for dropping, set the selected piece anyway.
+        else selectedPiece.set(currentPiece);
 
         // If piece snapback is enabled, snap the piece back to its starting position
         if (snapBack) {
@@ -160,9 +174,8 @@
     // Handles any clicks on hexagons
     function clickHex(e: any) {
         let clicked: Hex | undefined = hexFromPoint(e.clientX, e.clientY);
-        if (!clicked || dragging) return;
-        
-        // console.log(Notation.hexToNotation(clicked));
+        if (!clicked || dragging || !pieceSelection) return;
+
         // If the current piece matches the selected piece, then try to move it to the selected square.
         if (pieceSelection == currentPiece) {
             let moveSuccess = currentPiece.movePiece(clicked);
@@ -181,16 +194,9 @@
                 // If the move was successful, reset the previous hex
                 previousHex = undefined;
                 updatePos();
-            }
-            // If the move was unsuccessful, clear all effects except the previous move display and remove the selected piece
-            else {
-                selectedPiece.set(undefined);
-                previousHex = undefined;
-                attacks = [];
-                legal = [];
-            }
 
-            updateState();
+                updateState();
+            }
         }
     }
 
@@ -229,14 +235,14 @@
             e.classList.contains("droppable"),
         ) as HTMLElement | undefined;
 
-        if (dropElement) {
-            let q = parseInt(dropElement.getAttribute("data-q") as string);
-            let r = parseInt(dropElement.getAttribute("data-r") as string);
-
-            return new Hex(q, r);
+        if (!dropElement) {
+            return undefined;
         }
 
-        return undefined;
+        let q = parseInt(dropElement.getAttribute("data-q") as string);
+        let r = parseInt(dropElement.getAttribute("data-r") as string);
+
+        return new Hex(q, r);
     }
 
     function updateState() {
