@@ -24,6 +24,11 @@ button {
     margin-bottom: 20px;
 }
 
+.ui {
+    position:relative;
+    z-index: 9999;
+}
+
 .piece {
     pointer-events: none;
     user-select: none;

@@ -79,7 +79,6 @@
         div.style.zIndex = "";
         
         if (!dragging) {
-            console.log("I'm not dragging")
             // If the user clicked anywhere besides a piece, then reset all selected piece states
             if (pieceSelection == currentPiece) {
                 selectedPiece.set(undefined);

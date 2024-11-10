@@ -35,9 +35,10 @@
     }
 </script>
 
-<h1 class="header">Hexagonal Chess</h1>
+<h1 class="ui">Hexagonal Chess</h1>
 
 <select
+    class="ui"
     bind:value={selectedTheme}
     on:change={(e) =>
         boardData.update((old) => {
@@ -51,6 +52,7 @@
 </select>
 
 <select
+    class="ui"
     bind:value={selectedLayout}
     on:change={(e) => {
         updateLayout(selectedLayout);

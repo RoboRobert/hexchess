@@ -83,9 +83,9 @@
 </script>
 
 {#key [boardMeta.theme, pieceArr]}
-    <div class="board">
+    <div class="board" style="">
         <!-- Board -->
-        <svg
+        <svg class="test"
             overflow="visible"
             viewBox={viewBoxString}
             width={widthHeight.x}
@@ -198,9 +198,12 @@
 
 <style>
     .board {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%); /* Adjust to center */
+        position:fixed;
+    }
+
+    .test {
+        /* max-width:100%; */
+        z-index: 0;
+        top:100px;
     }
 </style>
