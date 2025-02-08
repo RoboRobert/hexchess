@@ -14,24 +14,27 @@
     gameState.subscribe((data) => (currentState = data));
 
     function updateLayout(id: number) {
-        let newLayout: LayoutEnum = LayoutEnum.DEFAULT;
+        let newBoard = $boardData;
         switch (id) {
             case 0: {
-                newLayout = LayoutEnum.DEFAULT;
+                newBoard.flip = false;
+                newBoard.layout = newBoard.getLayout(LayoutEnum.DEFAULT);
                 break;
             }
 
             case 1: {
-                newLayout = LayoutEnum.FLIPPED;
+                newBoard.flip = false;
+                newBoard.layout = newBoard.getLayout(LayoutEnum.FLIPPED);
+                break;
+            }
+
+            case 2: {
+                newBoard.flip = true;
                 break;
             }
         }
 
-        boardData.update((old) => {
-            let newData = old;
-            newData.layout = old.getLayout(newLayout);
-            return newData;
-        });
+        boardData.set(newBoard);
     }
 </script>
 
@@ -60,6 +63,7 @@
 >
     <option value={0} selected>Default</option>
     <option value={1}>Flipped</option>
+    <option value={2}>Pass and Play</option>
 </select>
 
 <!-- <Slider></Slider> -->

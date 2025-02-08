@@ -11,12 +11,14 @@ export class BoardData {
     theme: Theme;
     radius: number;
     hexSize: number;
+    flip: boolean;
 
-    constructor(layout: LayoutEnum, theme: Theme, radius: number, hexSize: number) {
+    constructor(layout: LayoutEnum, theme: Theme, radius: number, hexSize: number, flip: boolean) {
         this.theme = theme;
         this.radius = radius;
         this.hexSize = hexSize;
         this.layout = this.getLayout(layout);
+        this.flip = flip;
     }
 
     public getLayout(layout: LayoutEnum): Layout {
