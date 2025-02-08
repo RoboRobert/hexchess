@@ -10,8 +10,7 @@
     $: selectedTheme = Theme.GRAYSCALE;
     $: selectedLayout = 0;
 
-    let currentState: GameState;
-    gameState.subscribe((data) => (currentState = data));
+    let currentState: GameState = $gameState;
 
     function updateLayout(id: number) {
         let newBoard = $boardData;
@@ -30,6 +29,7 @@
 
             case 2: {
                 newBoard.flip = true;
+                newBoard.layout = newBoard.getLayout(LayoutEnum.DEFAULT);
                 break;
             }
         }

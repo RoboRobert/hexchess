@@ -275,6 +275,6 @@
     .draggable {
         touch-action: none;
         cursor: grab;
-        position: absolute;
+        position:absolute;
     }
 </style>
