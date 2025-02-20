@@ -90,9 +90,9 @@
             > -->
 
 {#key [boardMeta.theme, pieceArr]}
-    <div class="test">
+    <div class="board">
         <!-- Board -->
-        <svg overflow="visible" viewBox={viewBoxString} height={widthHeight.y}>
+        <svg overflow="visible" preserveAspectRatio="xMidYMid meet" viewBox={viewBoxString} width=100% height=100%>
             <!-- Hexagons -->
             {#each hexArray as { q, r, color }}
                 <Hexagon {q} {r} {color}></Hexagon>
@@ -199,7 +199,8 @@
 {/key}
 
 <style>
-    .test {
+    .board {
         position:fixed;
+        left:41%;
     }
 </style>

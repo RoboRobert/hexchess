@@ -124,7 +124,7 @@ export class PieceData {
             return false;
         }
 
-        console.log(Notation.moveToNotation(legalMove, this, boardState));
+        // console.log(Notation.moveToNotation(legalMove, this, boardState));
 
         // Remove en-passantable from any existing pawns.
         boardState = boardState.map((e) => {e.enPassantable = false; return e;});
