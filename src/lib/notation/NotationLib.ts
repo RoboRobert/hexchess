@@ -27,8 +27,8 @@ export class Notation {
       // Ignore j
       letterOffset += 1;
 
-    let letter: string = String.fromCharCode(letterOffset);
-    let number = 6 - Math.max(hex.q + hex.r, hex.r);
+    const letter: string = String.fromCharCode(letterOffset);
+    const number = 6 - Math.max(hex.q + hex.r, hex.r);
 
     return letter + `${number}`;
   }
@@ -40,7 +40,7 @@ export class Notation {
     board: PieceData[],
   ) {
     let parseResult: string = "";
-    let isPawn: boolean = piece.pieceType == PieceTypes.PAWN;
+    const isPawn: boolean = piece.pieceType == PieceTypes.PAWN;
 
     // Pawns don't get a piece type in notation
     if (!isPawn) {

@@ -89,7 +89,7 @@ export class PieceData {
   }
 
   public static cloneArray(array: PieceData[]): PieceData[] {
-    var returnArray: PieceData[] = [];
+    const returnArray: PieceData[] = [];
     array.forEach((e) => {
       returnArray.push(new PieceData([e.hex.q, e.hex.r], e.enumNumber));
     });
@@ -127,7 +127,7 @@ export class PieceData {
     // let currentPiece: PieceData = boardState
 
     // If the move is not legal, do nothing.
-    let legalMove: MoveData | undefined = this.getLegalMoves(
+    const legalMove: MoveData | undefined = this.getLegalMoves(
       false,
       boardState
     ).find((e) => PieceData.equals(e.to, newCoords));
@@ -170,9 +170,9 @@ export class PieceData {
     // Set the main board state to match the modified state.
     pieceStore.set(boardState);
 
-    let enemyColor = this.getEnemyColor();
+    const enemyColor = this.getEnemyColor();
 
-    let newState: GameState = new GameState(
+    const newState: GameState = new GameState(
       true,
       PieceData.enumToColor(enemyColor),
       false
@@ -220,12 +220,12 @@ export class PieceData {
         return [];
     }
 
-    let legalMoves: MoveData[] = [];
-    let moves = this.getMoves(boardState);
+    const legalMoves: MoveData[] = [];
+    const moves = this.getMoves(boardState);
 
     // Repeatedly tests check on different boards to determine the legal moves
     moves.forEach((e) => {
-      let newBoard: PieceData[] = PieceData.cloneArray(boardState);
+      const newBoard: PieceData[] = PieceData.cloneArray(boardState);
       if (PieceData.testMove(e, newBoard)) legalMoves.push(e);
     });
 
@@ -234,12 +234,12 @@ export class PieceData {
 
   // Used to test if a move would put the king in check
   public static testMove(data: MoveData, board: PieceData[]): boolean {
-    let piece: PieceData = board.find((e) =>
+    const piece: PieceData = board.find((e) =>
       PieceData.equals(e.hex, data.from)
     ) as PieceData;
 
     // Remove the attacked piece
-    let newBoard: PieceData[] = [];
+    const newBoard: PieceData[] = [];
     board.forEach((e) => {
       if (!PieceData.equals(e.hex, data.attacking)) newBoard.push(e);
     });
@@ -269,7 +269,7 @@ export class PieceData {
         allMoves = allMoves.concat(piece.getMoves(boardState));
     });
 
-    let captures: Hex[] = allMoves.map((e) => e.attacking);
+    const captures: Hex[] = allMoves.map((e) => e.attacking);
 
     if (
       boardState.find(
@@ -358,10 +358,10 @@ export class PieceData {
 
   // All adjacent moves
   private adjacentMoves(board: PieceData[]): MoveData[] {
-    let adjacent: MoveData[] = [];
+    const adjacent: MoveData[] = [];
     for (let i = 0; i < 6; i++) {
-      let hex = this.hex.neighbor(i);
-      let hexPiece = PieceData.pieceOn(hex, board);
+      const hex = this.hex.neighbor(i);
+      const hexPiece = PieceData.pieceOn(hex, board);
       if (
         hex.inRadius(this.boardMeta.radius) &&
         (hexPiece === undefined || hexPiece.color !== this.color)
@@ -375,7 +375,7 @@ export class PieceData {
 
   // All diagonal moves within a certain range
   private diagonalMoves(maxDistance: number, board: PieceData[]): MoveData[] {
-    let diagonals: MoveData[] = [];
+    const diagonals: MoveData[] = [];
     for (let i = 0; i < 6; i++) {
       let hex = this.hex.diagonalNeighbor(i);
       for (
@@ -383,7 +383,7 @@ export class PieceData {
         j < maxDistance && hex.inRadius(this.boardMeta.radius);
         j++
       ) {
-        let hexPiece = PieceData.pieceOn(hex, board);
+        const hexPiece = PieceData.pieceOn(hex, board);
         if (hexPiece) {
           if (hexPiece.color !== this.color)
             diagonals.push(new MoveData(this.hex, hex, hex));
@@ -399,11 +399,11 @@ export class PieceData {
 
   // All moves in the 6 hexagonal directions
   private directionalMoves(board: PieceData[]): MoveData[] {
-    let directions: MoveData[] = [];
+    const directions: MoveData[] = [];
     for (let i = 0; i < 6; i++) {
       let hex = this.hex.neighbor(i);
       while (hex.inRadius(this.boardMeta.radius)) {
-        let hexPiece = PieceData.pieceOn(hex, board);
+        const hexPiece = PieceData.pieceOn(hex, board);
         if (hexPiece) {
           if (hexPiece.color !== this.color)
             directions.push(new MoveData(this.hex, hex, hex));
@@ -419,10 +419,10 @@ export class PieceData {
 
   // Knight moves
   private knightMoves(board: PieceData[]): MoveData[] {
-    let knight: MoveData[] = [];
+    const knight: MoveData[] = [];
     for (let i = 0; i < 12; i++) {
-      let hex = this.hex.knightNeighbor(i);
-      let hexPiece = PieceData.pieceOn(hex, board);
+      const hex = this.hex.knightNeighbor(i);
+      const hexPiece = PieceData.pieceOn(hex, board);
       if (
         hex.inRadius(this.boardMeta.radius) &&
         (hexPiece === undefined || hexPiece.color !== this.color)
@@ -436,9 +436,9 @@ export class PieceData {
 
   // Pawn moves.
   private pawnMoves(board: PieceData[]): MoveData[] {
-    let pawn: MoveData[] = [];
-    let captures: MoveData[] = [];
-    let en_passant: MoveData[] = [];
+    const pawn: MoveData[] = [];
+    const captures: MoveData[] = [];
+    const en_passant: MoveData[] = [];
     let num_spaces = 1;
     if (this.firstMove == true) num_spaces = 2;
 

@@ -105,12 +105,12 @@ export class Hex {
   }
 
   public round(): Hex {
-    var qi: number = Math.round(this.q);
-    var ri: number = Math.round(this.r);
-    var si: number = Math.round(this.s);
-    var q_diff: number = Math.abs(qi - this.q);
-    var r_diff: number = Math.abs(ri - this.r);
-    var s_diff: number = Math.abs(si - this.s);
+    let qi: number = Math.round(this.q);
+    let ri: number = Math.round(this.r);
+    let si: number = Math.round(this.s);
+    const q_diff: number = Math.abs(qi - this.q);
+    const r_diff: number = Math.abs(ri - this.r);
+    const s_diff: number = Math.abs(si - this.s);
     if (q_diff > r_diff && q_diff > s_diff) {
       qi = -ri - si;
     } else if (r_diff > s_diff) {
@@ -130,12 +130,12 @@ export class Hex {
   }
 
   public linedraw(b: Hex): Hex[] {
-    var N: number = this.distance(b);
-    var a_nudge: Hex = new Hex(this.q + 1e-6, this.r + 1e-6, this.s - 2e-6);
-    var b_nudge: Hex = new Hex(b.q + 1e-6, b.r + 1e-6, b.s - 2e-6);
-    var results: Hex[] = [];
-    var step: number = 1.0 / Math.max(N, 1);
-    for (var i = 0; i <= N; i++) {
+    const N: number = this.distance(b);
+    const a_nudge: Hex = new Hex(this.q + 1e-6, this.r + 1e-6, this.s - 2e-6);
+    const b_nudge: Hex = new Hex(b.q + 1e-6, b.r + 1e-6, b.s - 2e-6);
+    const results: Hex[] = [];
+    const step: number = 1.0 / Math.max(N, 1);
+    for (let i = 0; i <= N; i++) {
       results.push(a_nudge.lerp(b_nudge, step * i).round());
     }
     return results;
@@ -197,39 +197,39 @@ export class Layout {
   );
 
   public hexToPixel(h: Hex): Point {
-    var M: Orientation = this.orientation;
-    var size: Point = this.size;
-    var origin: Point = this.origin;
-    var x: number = (M.f0 * h.q + M.f1 * h.r) * size.x;
-    var y: number = (M.f2 * h.q + M.f3 * h.r) * size.y;
+    const M: Orientation = this.orientation;
+    const size: Point = this.size;
+    const origin: Point = this.origin;
+    const x: number = (M.f0 * h.q + M.f1 * h.r) * size.x;
+    const y: number = (M.f2 * h.q + M.f3 * h.r) * size.y;
     return new Point(x + origin.x, y + origin.y);
   }
 
   public pixelToHex(p: Point): Hex {
-    var M: Orientation = this.orientation;
-    var size: Point = this.size;
-    var origin: Point = this.origin;
-    var pt: Point = new Point(
+    const M: Orientation = this.orientation;
+    const size: Point = this.size;
+    const origin: Point = this.origin;
+    const pt: Point = new Point(
       (p.x - origin.x) / size.x,
       (p.y - origin.y) / size.y,
     );
-    var q: number = M.b0 * pt.x + M.b1 * pt.y;
-    var r: number = M.b2 * pt.x + M.b3 * pt.y;
+    const q: number = M.b0 * pt.x + M.b1 * pt.y;
+    const r: number = M.b2 * pt.x + M.b3 * pt.y;
     return new Hex(q, r, -q - r);
   }
 
   public hexCornerOffset(corner: number): Point {
-    var M: Orientation = this.orientation;
-    var size: Point = this.size;
-    var angle: number = (2.0 * Math.PI * (M.start_angle - corner)) / 6.0;
+    const M: Orientation = this.orientation;
+    const size: Point = this.size;
+    const angle: number = (2.0 * Math.PI * (M.start_angle - corner)) / 6.0;
     return new Point(size.x * Math.cos(angle), size.y * Math.sin(angle));
   }
 
   public polygonCorners(h: Hex): Point[] {
-    var corners: Point[] = [];
-    var center: Point = this.hexToPixel(h);
-    for (var i = 0; i < 6; i++) {
-      var offset: Point = this.hexCornerOffset(i);
+    const corners: Point[] = [];
+    const center: Point = this.hexToPixel(h);
+    for (let i = 0; i < 6; i++) {
+      const offset: Point = this.hexCornerOffset(i);
       corners.push(new Point(center.x + offset.x, center.y + offset.y));
     }
     return corners;

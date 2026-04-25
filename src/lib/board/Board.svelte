@@ -142,44 +142,44 @@
 
             <!-- Board coordinates -->
             <!-- Alphabetical -->
-            <Coordinate q={-5} r={6} text={"a"}></Coordinate>
-            <Coordinate q={-4} r={6} text={"b"}></Coordinate>
-            <Coordinate q={-3} r={6} text={"c"}></Coordinate>
-            <Coordinate q={-2} r={6} text={"d"}></Coordinate>
-            <Coordinate q={-1} r={6} text={"e"}></Coordinate>
-            <Coordinate q={0} r={6} text={"f"}></Coordinate>
-            <Coordinate q={1} r={5} text={"g"}></Coordinate>
-            <Coordinate q={2} r={4} text={"h"}></Coordinate>
-            <Coordinate q={3} r={3} text={"i"}></Coordinate>
-            <Coordinate q={4} r={2} text={"k"}></Coordinate>
-            <Coordinate q={5} r={1} text={"l"}></Coordinate>
+            <Coordinate q={-5} r={6} text="a"></Coordinate>
+            <Coordinate q={-4} r={6} text="b"></Coordinate>
+            <Coordinate q={-3} r={6} text="c"></Coordinate>
+            <Coordinate q={-2} r={6} text="d"></Coordinate>
+            <Coordinate q={-1} r={6} text="e"></Coordinate>
+            <Coordinate q={0} r={6} text="f"></Coordinate>
+            <Coordinate q={1} r={5} text="g"></Coordinate>
+            <Coordinate q={2} r={4} text="h"></Coordinate>
+            <Coordinate q={3} r={3} text="i"></Coordinate>
+            <Coordinate q={4} r={2} text="k"></Coordinate>
+            <Coordinate q={5} r={1} text="l"></Coordinate>
 
             <!-- Numerical -->
             <!-- Left side -->
-            <Coordinate q={-6} r={5} text={"1"}></Coordinate>
-            <Coordinate q={-6} r={4} text={"2"}></Coordinate>
-            <Coordinate q={-6} r={3} text={"3"}></Coordinate>
-            <Coordinate q={-6} r={2} text={"4"}></Coordinate>
-            <Coordinate q={-6} r={1} text={"5"}></Coordinate>
-            <Coordinate q={-6} r={0} text={"6"}></Coordinate>
-            <Coordinate q={-5} r={-1} text={"7"}></Coordinate>
-            <Coordinate q={-4} r={-2} text={"8"}></Coordinate>
-            <Coordinate q={-3} r={-3} text={"9"}></Coordinate>
-            <Coordinate q={-2} r={-4} text={"10"}></Coordinate>
-            <Coordinate q={-1} r={-5} text={"11"}></Coordinate>
+            <Coordinate q={-6} r={5} text="1"></Coordinate>
+            <Coordinate q={-6} r={4} text="2"></Coordinate>
+            <Coordinate q={-6} r={3} text="3"></Coordinate>
+            <Coordinate q={-6} r={2} text="4"></Coordinate>
+            <Coordinate q={-6} r={1} text="5"></Coordinate>
+            <Coordinate q={-6} r={0} text="6"></Coordinate>
+            <Coordinate q={-5} r={-1} text="7"></Coordinate>
+            <Coordinate q={-4} r={-2} text="8"></Coordinate>
+            <Coordinate q={-3} r={-3} text="9"></Coordinate>
+            <Coordinate q={-2} r={-4} text="10"></Coordinate>
+            <Coordinate q={-1} r={-5} text="11"></Coordinate>
 
             <!-- Right side -->
-            <Coordinate q={6} r={-1} text={"1"}></Coordinate>
-            <Coordinate q={6} r={-2} text={"2"}></Coordinate>
-            <Coordinate q={6} r={-3} text={"3"}></Coordinate>
-            <Coordinate q={6} r={-4} text={"4"}></Coordinate>
-            <Coordinate q={6} r={-5} text={"5"}></Coordinate>
-            <Coordinate q={6} r={-6} text={"6"}></Coordinate>
-            <Coordinate q={5} r={-6} text={"7"}></Coordinate>
-            <Coordinate q={4} r={-6} text={"8"}></Coordinate>
-            <Coordinate q={3} r={-6} text={"9"}></Coordinate>
-            <Coordinate q={2} r={-6} text={"10"}></Coordinate>
-            <Coordinate q={1} r={-6} text={"11"}></Coordinate>
+            <Coordinate q={6} r={-1} text="1"></Coordinate>
+            <Coordinate q={6} r={-2} text="2"></Coordinate>
+            <Coordinate q={6} r={-3} text="3"></Coordinate>
+            <Coordinate q={6} r={-4} text="4"></Coordinate>
+            <Coordinate q={6} r={-5} text="5"></Coordinate>
+            <Coordinate q={6} r={-6} text="6"></Coordinate>
+            <Coordinate q={5} r={-6} text="7"></Coordinate>
+            <Coordinate q={4} r={-6} text="8"></Coordinate>
+            <Coordinate q={3} r={-6} text="9"></Coordinate>
+            <Coordinate q={2} r={-6} text="10"></Coordinate>
+            <Coordinate q={1} r={-6} text="11"></Coordinate>
         </svg>
 
         <!-- All pieces -->

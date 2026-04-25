@@ -18,7 +18,7 @@ export class ColorPicker {
   }
 
   public next(): string {
-    let returnString = this.colorArray[this.theme][this.currentIndex];
+    const returnString = this.colorArray[this.theme][this.currentIndex];
     this.currentIndex++;
     if (this.currentIndex > this.colorArray.length) this.currentIndex = 0;
 
@@ -26,7 +26,7 @@ export class ColorPicker {
   }
 
   public previous(): string {
-    let returnString = this.colorArray[this.theme][this.currentIndex];
+    const returnString = this.colorArray[this.theme][this.currentIndex];
     this.currentIndex--;
     if (this.currentIndex < 0) this.currentIndex = this.colorArray.length;
 
