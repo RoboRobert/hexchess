@@ -82,18 +82,9 @@
     const viewBoxString = `${widthHeight.x / -2} ${widthHeight.y / -2} ${widthHeight.x} ${widthHeight.y}`;
 </script>
 
-<!-- <svg
-                overflow="visible"
-                viewBox={viewBoxString}
-                width={widthHeight.x}
-                height={widthHeight.y}
-            > -->
-
 {#key [boardMeta.theme, pieceArr]}
     <div class="board">
-        <!-- Board -->
         <svg class="svgs" overflow="visible" viewBox={viewBoxString}>
-            <!-- Hexagons -->
             {#each hexArray as { q, r, color }}
                 <Hexagon {q} {r} {color}></Hexagon>
             {/each}
@@ -201,7 +192,7 @@
 <style>
     .board {
         position:fixed;
-        left:30%;
+        /* left:30%; */
         width:700px;
     }
 </style>

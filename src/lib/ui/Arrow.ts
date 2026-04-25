@@ -1,3 +1,1 @@
-export class Arrow {
-    
-}
+export class Arrow {}
