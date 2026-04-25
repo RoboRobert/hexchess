@@ -1,568 +1,529 @@
-import { Hex } from "$lib/hexagons/HexLib";
-import { Notation } from "$lib/notation/NotationLib";
-import type { BoardData } from "$lib/state/BoardData";
-import { GameState } from "$lib/state/GameState";
+import { Hex } from '$lib/hexagons/HexLib';
+import { Notation } from '$lib/notation/NotationLib';
+import type { BoardData } from '$lib/state/BoardData';
+import { GameState } from '$lib/state/GameState';
 import {
-  pieceStore,
-  boardData,
-  defaultBoard,
-  gameState,
-  defaultState,
-} from "$lib/state/stateStore";
+	pieceStore,
+	boardData,
+	defaultBoard,
+	gameState,
+	defaultState
+} from '$lib/state/stateStore';
 
 export enum ColorEnum {
-  WHITE,
-  BLACK,
+	WHITE,
+	BLACK
 }
 
 export enum PieceTypes {
-  PAWN,
-  ROOK,
-  BISHOP,
-  KNIGHT,
-  QUEEN,
-  KING,
+	PAWN,
+	ROOK,
+	BISHOP,
+	KNIGHT,
+	QUEEN,
+	KING
 }
 
 export enum PieceEnum {
-  WHITE_PAWN,
-  BLACK_PAWN,
-  WHITE_ROOK,
-  BLACK_ROOK,
-  WHITE_KNIGHT,
-  BLACK_KNIGHT,
-  WHITE_BISHOP,
-  BLACK_BISHOP,
-  WHITE_QUEEN,
-  BLACK_QUEEN,
-  WHITE_KING,
-  BLACK_KING,
+	WHITE_PAWN,
+	BLACK_PAWN,
+	WHITE_ROOK,
+	BLACK_ROOK,
+	WHITE_KNIGHT,
+	BLACK_KNIGHT,
+	WHITE_BISHOP,
+	BLACK_BISHOP,
+	WHITE_QUEEN,
+	BLACK_QUEEN,
+	WHITE_KING,
+	BLACK_KING
 }
 
 const Data: [number, number, string][] = [
-  [ColorEnum.WHITE, PieceTypes.PAWN, "svgs/Chess_plt45.svg"],
-  [ColorEnum.BLACK, PieceTypes.PAWN, "svgs/Chess_pdt45.svg"],
-  [ColorEnum.WHITE, PieceTypes.ROOK, "svgs/Chess_rlt45.svg"],
-  [ColorEnum.BLACK, PieceTypes.ROOK, "svgs/Chess_rdt45.svg"],
-  [ColorEnum.WHITE, PieceTypes.KNIGHT, "svgs/Chess_nlt45.svg"],
-  [ColorEnum.BLACK, PieceTypes.KNIGHT, "svgs/Chess_ndt45.svg"],
-  [ColorEnum.WHITE, PieceTypes.BISHOP, "svgs/Chess_blt45.svg"],
-  [ColorEnum.BLACK, PieceTypes.BISHOP, "svgs/Chess_bdt45.svg"],
-  [ColorEnum.WHITE, PieceTypes.QUEEN, "svgs/Chess_qlt45.svg"],
-  [ColorEnum.BLACK, PieceTypes.QUEEN, "svgs/Chess_qdt45.svg"],
-  [ColorEnum.WHITE, PieceTypes.KING, "svgs/Chess_klt45.svg"],
-  [ColorEnum.BLACK, PieceTypes.KING, "svgs/Chess_kdt45.svg"],
+	[ColorEnum.WHITE, PieceTypes.PAWN, 'svgs/Chess_plt45.svg'],
+	[ColorEnum.BLACK, PieceTypes.PAWN, 'svgs/Chess_pdt45.svg'],
+	[ColorEnum.WHITE, PieceTypes.ROOK, 'svgs/Chess_rlt45.svg'],
+	[ColorEnum.BLACK, PieceTypes.ROOK, 'svgs/Chess_rdt45.svg'],
+	[ColorEnum.WHITE, PieceTypes.KNIGHT, 'svgs/Chess_nlt45.svg'],
+	[ColorEnum.BLACK, PieceTypes.KNIGHT, 'svgs/Chess_ndt45.svg'],
+	[ColorEnum.WHITE, PieceTypes.BISHOP, 'svgs/Chess_blt45.svg'],
+	[ColorEnum.BLACK, PieceTypes.BISHOP, 'svgs/Chess_bdt45.svg'],
+	[ColorEnum.WHITE, PieceTypes.QUEEN, 'svgs/Chess_qlt45.svg'],
+	[ColorEnum.BLACK, PieceTypes.QUEEN, 'svgs/Chess_qdt45.svg'],
+	[ColorEnum.WHITE, PieceTypes.KING, 'svgs/Chess_klt45.svg'],
+	[ColorEnum.BLACK, PieceTypes.KING, 'svgs/Chess_kdt45.svg']
 ];
 
 export class PieceData {
-  enumNumber: number;
-  pieceType: number;
-  pieceImage: string;
-
-  hex: Hex;
-
-  private color: number;
-  public enPassantable: boolean;
-  private firstMove: boolean;
-
-  private boardMeta: BoardData = defaultBoard;
-
-  constructor(hexTuple: [number, number], enumNumber: number) {
-    this.enumNumber = enumNumber;
-    this.color = Data[enumNumber][0];
-    this.pieceType = Data[enumNumber][1];
-    this.pieceImage = Data[enumNumber][2];
-
-    this.enPassantable = false;
-    this.firstMove = true;
-
-    this.hex = new Hex(hexTuple[0], hexTuple[1]);
-
-    boardData.subscribe((data) => {
-      this.boardMeta = data;
-    });
-  }
-
-  public static equals(hex1: Hex, hex2: Hex): boolean {
-    if (hex1.q === hex2.q && hex1.r === hex2.r) return true;
-    return false;
-  }
-
-  public static cloneArray(array: PieceData[]): PieceData[] {
-    const returnArray: PieceData[] = [];
-    array.forEach((e) => {
-      returnArray.push(new PieceData([e.hex.q, e.hex.r], e.enumNumber));
-    });
-
-    return returnArray;
-  }
-
-  public static colorToEnum(color: string): number {
-    if (color.toLowerCase() == "white") return ColorEnum.WHITE;
-
-    return ColorEnum.BLACK;
-  }
-
-  public static enumToColor(color: number): string {
-    if (color == ColorEnum.WHITE) return "WHITE";
-
-    return "BLACK";
-  }
-
-  public getEnemyColor(): number {
-    if (this.color == ColorEnum.WHITE) return ColorEnum.BLACK;
-
-    return ColorEnum.WHITE;
-  }
-
-  // Updates the global board state with the new position of the pieces
-  // Returns true on success, false on fail.
-  movePiece(newCoords: Hex): boolean {
-    // Gets a clone of the global board state.
-    let boardState: PieceData[] = [];
-    pieceStore.subscribe((array) => {
-      boardState = array;
-    });
-
-    // let currentPiece: PieceData = boardState
-
-    // If the move is not legal, do nothing.
-    const legalMove: MoveData | undefined = this.getLegalMoves(
-      false,
-      boardState
-    ).find((e) => PieceData.equals(e.to, newCoords));
-    if (legalMove == undefined) {
-      return false;
-    }
-
-    // console.log(Notation.moveToNotation(legalMove, this, boardState));
-
-    // Remove en-passantable from any existing pawns.
-    boardState = boardState.map((e) => {
-      e.enPassantable = false;
-      return e;
-    });
-
-    // Set pawn to be en-passantable after moving 2 spaces
-    if (
-      this.pieceType == PieceTypes.PAWN &&
-      this.hex.distance(legalMove.to) > 1
-    )
-      this.enPassantable = true;
-
-    // Removes the attacked piece from the board.
-    boardState = boardState.filter(
-      (e) => !PieceData.equals(e.hex, legalMove.attacking)
-    );
-
-    // Update the coordinates of the current piece
-    this.firstMove = false;
-    this.hex = legalMove.to;
-
-    // Handle promotion
-    const promotion = this.getPromotion();
-    if (promotion) {
-      this.pieceImage = promotion.pieceImage;
-      this.pieceType = promotion.pieceType;
-      this.enumNumber = promotion.enumNumber;
-    }
-
-    // Set the main board state to match the modified state.
-    pieceStore.set(boardState);
-
-    const enemyColor = this.getEnemyColor();
-
-    const newState: GameState = new GameState(
-      true,
-      PieceData.enumToColor(enemyColor),
-      false
-    );
-
-    // If the next color has no legal moves, set the game state to be ended.
-    if (PieceData.getAllLegalMoves(enemyColor).length == 0) {
-      newState.running = false;
-
-      // If the enemy is in check, set game state to be checkmate.
-      if (PieceData.inCheck(enemyColor)) {
-        newState.checkmate = [
-          PieceData.enumToColor(this.color),
-          PieceData.enumToColor(enemyColor),
-        ];
-      }
-      // Otherwise it must be a stalemate
-      else newState.stalemate = true;
-    }
-
-    gameState.set(newState);
-
-    return true;
-  }
-
-  // Gets all legal moves for the current piece. Considers check
-  // Takes a boolean that is used to set whether the legal moves are being checked for a test
-  getLegalMoves(test: boolean, board?: PieceData[]): MoveData[] {
-    let boardState: PieceData[] = [];
-    if (board) boardState = board;
-    else
-      pieceStore.subscribe((array) => {
-        boardState = array;
-      });
-
-    if (!test) {
-      // Get the current board state.
-      let currentState: GameState = defaultState;
-      gameState.subscribe((data) => (currentState = data));
-
-      if (
-        !currentState.running ||
-        this.color != PieceData.colorToEnum(currentState.currentColor)
-      )
-        return [];
-    }
-
-    const legalMoves: MoveData[] = [];
-    const moves = this.getMoves(boardState);
-
-    // Repeatedly tests check on different boards to determine the legal moves
-    moves.forEach((e) => {
-      const newBoard: PieceData[] = PieceData.cloneArray(boardState);
-      if (PieceData.testMove(e, newBoard)) legalMoves.push(e);
-    });
-
-    return legalMoves;
-  }
-
-  // Used to test if a move would put the king in check
-  public static testMove(data: MoveData, board: PieceData[]): boolean {
-    const piece: PieceData = board.find((e) =>
-      PieceData.equals(e.hex, data.from)
-    ) as PieceData;
-
-    // Remove the attacked piece
-    const newBoard: PieceData[] = [];
-    board.forEach((e) => {
-      if (!PieceData.equals(e.hex, data.attacking)) newBoard.push(e);
-    });
-
-    // Update the coordinates of the current piece
-    piece.hex = data.to;
-
-    if (PieceData.inCheck(piece.color, newBoard)) {
-      return false;
-    }
-
-    return true;
-  }
-
-  // Return whether the king of specified color is in check on a specified board
-  public static inCheck(color: number, board?: PieceData[]): boolean {
-    let boardState: PieceData[] = [];
-    if (board) boardState = board;
-    else
-      pieceStore.subscribe((array) => {
-        boardState = array;
-      });
-    let allMoves: MoveData[] = [];
-
-    boardState.forEach((piece) => {
-      if (piece.color != color)
-        allMoves = allMoves.concat(piece.getMoves(boardState));
-    });
-
-    const captures: Hex[] = allMoves.map((e) => e.attacking);
-
-    if (
-      boardState.find(
-        (king) =>
-          king.color == color &&
-          king.pieceType == PieceTypes.KING &&
-          captures.find((e) => PieceData.equals(e, king.hex))
-      )
-    )
-      return true;
-
-    return false;
-  }
-
-  // Gets all the legal moves for a color on a specified board
-  public static getAllLegalMoves(color: number, board?: PieceData[]) {
-    let boardState: PieceData[] = [];
-    if (board) boardState = board;
-    else
-      pieceStore.subscribe((array) => {
-        boardState = array;
-      });
-
-    let legalMoves: MoveData[] = [];
-
-    boardState.forEach((piece) => {
-      if (piece.color === color)
-        legalMoves = legalMoves.concat(piece.getLegalMoves(true));
-    });
-
-    return legalMoves;
-  }
-
-  // Gets any potential moves for the current piece. Does not consider check.
-  getMoves(board: PieceData[]): MoveData[] {
-    let moves: MoveData[] = [];
-    switch (this.pieceType) {
-      case PieceTypes.QUEEN: {
-        moves = moves.concat(
-          this.diagonalMoves(this.boardMeta.radius, board),
-          this.adjacentMoves(board),
-          this.directionalMoves(board)
-        );
-        break;
-      }
-      case PieceTypes.KING: {
-        moves = moves.concat(
-          this.diagonalMoves(1, board),
-          this.adjacentMoves(board)
-        );
-        break;
-      }
-      case PieceTypes.BISHOP: {
-        moves = moves.concat(this.diagonalMoves(this.boardMeta.radius, board));
-        break;
-      }
-      case PieceTypes.ROOK: {
-        moves = moves.concat(this.directionalMoves(board));
-        break;
-      }
-      case PieceTypes.KNIGHT: {
-        moves = moves.concat(this.knightMoves(board));
-        break;
-      }
-      case PieceTypes.PAWN: {
-        moves = moves.concat(this.pawnMoves(board));
-        break;
-      }
-    }
-
-    return moves;
-  }
-
-  // Returns piece on a square or undefined if no piece on specified board
-  public static pieceOn(hex: Hex, board?: PieceData[]): PieceData | undefined {
-    let boardState: PieceData[] = [];
-    if (board) boardState = board;
-    else
-      pieceStore.subscribe((array) => {
-        boardState = array;
-      });
-
-    // If there's a piece on the square, return it.
-    return boardState.find((e) => PieceData.equals(e.hex, hex));
-  }
-
-  // All adjacent moves
-  private adjacentMoves(board: PieceData[]): MoveData[] {
-    const adjacent: MoveData[] = [];
-    for (let i = 0; i < 6; i++) {
-      const hex = this.hex.neighbor(i);
-      const hexPiece = PieceData.pieceOn(hex, board);
-      if (
-        hex.inRadius(this.boardMeta.radius) &&
-        (hexPiece === undefined || hexPiece.color !== this.color)
-      ) {
-        adjacent.push(new MoveData(this.hex, hex, hex));
-      }
-    }
-
-    return adjacent;
-  }
-
-  // All diagonal moves within a certain range
-  private diagonalMoves(maxDistance: number, board: PieceData[]): MoveData[] {
-    const diagonals: MoveData[] = [];
-    for (let i = 0; i < 6; i++) {
-      let hex = this.hex.diagonalNeighbor(i);
-      for (
-        let j = 0;
-        j < maxDistance && hex.inRadius(this.boardMeta.radius);
-        j++
-      ) {
-        const hexPiece = PieceData.pieceOn(hex, board);
-        if (hexPiece) {
-          if (hexPiece.color !== this.color)
-            diagonals.push(new MoveData(this.hex, hex, hex));
-          break;
-        }
-        diagonals.push(new MoveData(this.hex, hex, hex));
-        hex = hex.diagonalNeighbor(i);
-      }
-    }
-
-    return diagonals;
-  }
-
-  // All moves in the 6 hexagonal directions
-  private directionalMoves(board: PieceData[]): MoveData[] {
-    const directions: MoveData[] = [];
-    for (let i = 0; i < 6; i++) {
-      let hex = this.hex.neighbor(i);
-      while (hex.inRadius(this.boardMeta.radius)) {
-        const hexPiece = PieceData.pieceOn(hex, board);
-        if (hexPiece) {
-          if (hexPiece.color !== this.color)
-            directions.push(new MoveData(this.hex, hex, hex));
-          break;
-        }
-        directions.push(new MoveData(this.hex, hex, hex));
-        hex = hex.neighbor(i);
-      }
-    }
-
-    return directions;
-  }
-
-  // Knight moves
-  private knightMoves(board: PieceData[]): MoveData[] {
-    const knight: MoveData[] = [];
-    for (let i = 0; i < 12; i++) {
-      const hex = this.hex.knightNeighbor(i);
-      const hexPiece = PieceData.pieceOn(hex, board);
-      if (
-        hex.inRadius(this.boardMeta.radius) &&
-        (hexPiece === undefined || hexPiece.color !== this.color)
-      ) {
-        knight.push(new MoveData(this.hex, hex, hex));
-      }
-    }
-
-    return knight;
-  }
-
-  // Pawn moves.
-  private pawnMoves(board: PieceData[]): MoveData[] {
-    const pawn: MoveData[] = [];
-    const captures: MoveData[] = [];
-    const en_passant: MoveData[] = [];
-    let num_spaces = 1;
-    if (this.firstMove == true) num_spaces = 2;
-
-    switch (this.color) {
-      case ColorEnum.WHITE: {
-        let hex: Hex = this.hex;
-        for (let i = 0; i < num_spaces; i++) {
-          hex = hex.neighbor(2);
-          const hexPiece = PieceData.pieceOn(hex, board);
-          if (hexPiece) {
-            break;
-          }
-
-          pawn.push(new MoveData(this.hex, hex, hex));
-        }
-        captures.push(
-          new MoveData(this.hex, this.hex.neighbor(1), this.hex.neighbor(1)),
-          new MoveData(this.hex, this.hex.neighbor(3), this.hex.neighbor(3))
-        );
-
-        // White en-passant
-        if (
-          PieceData.pieceOn(this.hex.neighbor(0), board)?.color != this.color &&
-          PieceData.pieceOn(this.hex.neighbor(0), board)?.enPassantable
-        ) {
-          en_passant.push(
-            new MoveData(this.hex, this.hex.neighbor(1), this.hex.neighbor(0))
-          );
-        }
-        if (
-          PieceData.pieceOn(this.hex.neighbor(4), board)?.color != this.color &&
-          PieceData.pieceOn(this.hex.neighbor(4), board)?.enPassantable
-        ) {
-          en_passant.push(
-            new MoveData(this.hex, this.hex.neighbor(3), this.hex.neighbor(4))
-          );
-        }
-        break;
-      }
-      case ColorEnum.BLACK: {
-        let hex: Hex = this.hex;
-        for (let i = 0; i < num_spaces; i++) {
-          hex = hex.neighbor(5);
-          const hexPiece = PieceData.pieceOn(hex, board);
-          if (hexPiece) {
-            break;
-          }
-
-          pawn.push(new MoveData(this.hex, hex, hex));
-        }
-        captures.push(
-          new MoveData(this.hex, this.hex.neighbor(0), this.hex.neighbor(0)),
-          new MoveData(this.hex, this.hex.neighbor(4), this.hex.neighbor(4))
-        );
-
-        // Black en-passant
-        if (
-          PieceData.pieceOn(this.hex.neighbor(1), board)?.color != this.color &&
-          PieceData.pieceOn(this.hex.neighbor(1), board)?.enPassantable
-        ) {
-          en_passant.push(
-            new MoveData(this.hex, this.hex.neighbor(0), this.hex.neighbor(1))
-          );
-        }
-        if (
-          PieceData.pieceOn(this.hex.neighbor(3), board)?.color != this.color &&
-          PieceData.pieceOn(this.hex.neighbor(3), board)?.enPassantable
-        ) {
-          en_passant.push(
-            new MoveData(this.hex, this.hex.neighbor(4), this.hex.neighbor(3))
-          );
-        }
-
-        break;
-      }
-    }
-
-    // This is stupid
-    return pawn
-      .filter(
-        (e) =>
-          e.to.inRadius(this.boardMeta.radius) &&
-          PieceData.pieceOn(e.to, board) === undefined
-      )
-      .concat(
-        captures.filter(
-          (e) =>
-            e.to.inRadius(this.boardMeta.radius) &&
-            PieceData.pieceOn(e.to, board) != undefined &&
-            PieceData.pieceOn(e.to, board)?.color != this.color
-        )
-      )
-      .concat(en_passant);
-  }
-
-  // Checks if the current piece is promotable based on piece type and coordinates
-  // Returns undefined if not promotable. Returns a queen object with the correct color otherwise.
-  private getPromotion(): PieceData | undefined {
-    if (this.pieceType != PieceTypes.PAWN) return undefined;
-
-    // White promotion
-    if (this.color == ColorEnum.WHITE) {
-      if (this.hex.q + this.hex.r == -5 || this.hex.r == -5)
-        return new PieceData([this.hex.q, this.hex.r], PieceEnum.WHITE_QUEEN);
-    }
-
-    // Black promotion
-    if (this.color == ColorEnum.BLACK) {
-      if (this.hex.q + this.hex.r == 5 || this.hex.r == 5)
-        return new PieceData([this.hex.q, this.hex.r], PieceEnum.BLACK_QUEEN);
-    }
-
-    return undefined;
-  }
+	enumNumber: number;
+	pieceType: number;
+	pieceImage: string;
+
+	hex: Hex;
+
+	private color: number;
+	public enPassantable: boolean;
+	private firstMove: boolean;
+
+	private boardMeta: BoardData = defaultBoard;
+
+	constructor(hexTuple: [number, number], enumNumber: number) {
+		this.enumNumber = enumNumber;
+		this.color = Data[enumNumber][0];
+		this.pieceType = Data[enumNumber][1];
+		this.pieceImage = Data[enumNumber][2];
+
+		this.enPassantable = false;
+		this.firstMove = true;
+
+		this.hex = new Hex(hexTuple[0], hexTuple[1]);
+
+		boardData.subscribe((data) => {
+			this.boardMeta = data;
+		});
+	}
+
+	public static equals(hex1: Hex, hex2: Hex): boolean {
+		if (hex1.q === hex2.q && hex1.r === hex2.r) return true;
+		return false;
+	}
+
+	public static cloneArray(array: PieceData[]): PieceData[] {
+		const returnArray: PieceData[] = [];
+		array.forEach((e) => {
+			returnArray.push(new PieceData([e.hex.q, e.hex.r], e.enumNumber));
+		});
+
+		return returnArray;
+	}
+
+	public static colorToEnum(color: string): number {
+		if (color.toLowerCase() == 'white') return ColorEnum.WHITE;
+
+		return ColorEnum.BLACK;
+	}
+
+	public static enumToColor(color: number): string {
+		if (color == ColorEnum.WHITE) return 'WHITE';
+
+		return 'BLACK';
+	}
+
+	public getEnemyColor(): number {
+		if (this.color == ColorEnum.WHITE) return ColorEnum.BLACK;
+
+		return ColorEnum.WHITE;
+	}
+
+	// Updates the global board state with the new position of the pieces
+	// Returns true on success, false on fail.
+	movePiece(newCoords: Hex): boolean {
+		// Gets a clone of the global board state.
+		let boardState: PieceData[] = [];
+		pieceStore.subscribe((array) => {
+			boardState = array;
+		});
+
+		// let currentPiece: PieceData = boardState
+
+		// If the move is not legal, do nothing.
+		const legalMove: MoveData | undefined = this.getLegalMoves(false, boardState).find((e) =>
+			PieceData.equals(e.to, newCoords)
+		);
+		if (legalMove == undefined) {
+			return false;
+		}
+
+		// console.log(Notation.moveToNotation(legalMove, this, boardState));
+
+		// Remove en-passantable from any existing pawns.
+		boardState = boardState.map((e) => {
+			e.enPassantable = false;
+			return e;
+		});
+
+		// Set pawn to be en-passantable after moving 2 spaces
+		if (this.pieceType == PieceTypes.PAWN && this.hex.distance(legalMove.to) > 1)
+			this.enPassantable = true;
+
+		// Removes the attacked piece from the board.
+		boardState = boardState.filter((e) => !PieceData.equals(e.hex, legalMove.attacking));
+
+		// Update the coordinates of the current piece
+		this.firstMove = false;
+		this.hex = legalMove.to;
+
+		// Handle promotion
+		const promotion = this.getPromotion();
+		if (promotion) {
+			this.pieceImage = promotion.pieceImage;
+			this.pieceType = promotion.pieceType;
+			this.enumNumber = promotion.enumNumber;
+		}
+
+		// Set the main board state to match the modified state.
+		pieceStore.set(boardState);
+
+		const enemyColor = this.getEnemyColor();
+
+		const newState: GameState = new GameState(true, PieceData.enumToColor(enemyColor), false);
+
+		// If the next color has no legal moves, set the game state to be ended.
+		if (PieceData.getAllLegalMoves(enemyColor).length == 0) {
+			newState.running = false;
+
+			// If the enemy is in check, set game state to be checkmate.
+			if (PieceData.inCheck(enemyColor)) {
+				newState.checkmate = [PieceData.enumToColor(this.color), PieceData.enumToColor(enemyColor)];
+			}
+			// Otherwise it must be a stalemate
+			else newState.stalemate = true;
+		}
+
+		gameState.set(newState);
+
+		return true;
+	}
+
+	// Gets all legal moves for the current piece. Considers check
+	// Takes a boolean that is used to set whether the legal moves are being checked for a test
+	getLegalMoves(test: boolean, board?: PieceData[]): MoveData[] {
+		let boardState: PieceData[] = [];
+		if (board) boardState = board;
+		else
+			pieceStore.subscribe((array) => {
+				boardState = array;
+			});
+
+		if (!test) {
+			// Get the current board state.
+			let currentState: GameState = defaultState;
+			gameState.subscribe((data) => (currentState = data));
+
+			if (!currentState.running || this.color != PieceData.colorToEnum(currentState.currentColor))
+				return [];
+		}
+
+		const legalMoves: MoveData[] = [];
+		const moves = this.getMoves(boardState);
+
+		// Repeatedly tests check on different boards to determine the legal moves
+		moves.forEach((e) => {
+			const newBoard: PieceData[] = PieceData.cloneArray(boardState);
+			if (PieceData.testMove(e, newBoard)) legalMoves.push(e);
+		});
+
+		return legalMoves;
+	}
+
+	// Used to test if a move would put the king in check
+	public static testMove(data: MoveData, board: PieceData[]): boolean {
+		const piece: PieceData = board.find((e) => PieceData.equals(e.hex, data.from)) as PieceData;
+
+		// Remove the attacked piece
+		const newBoard: PieceData[] = [];
+		board.forEach((e) => {
+			if (!PieceData.equals(e.hex, data.attacking)) newBoard.push(e);
+		});
+
+		// Update the coordinates of the current piece
+		piece.hex = data.to;
+
+		if (PieceData.inCheck(piece.color, newBoard)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	// Return whether the king of specified color is in check on a specified board
+	public static inCheck(color: number, board?: PieceData[]): boolean {
+		let boardState: PieceData[] = [];
+		if (board) boardState = board;
+		else
+			pieceStore.subscribe((array) => {
+				boardState = array;
+			});
+		let allMoves: MoveData[] = [];
+
+		boardState.forEach((piece) => {
+			if (piece.color != color) allMoves = allMoves.concat(piece.getMoves(boardState));
+		});
+
+		const captures: Hex[] = allMoves.map((e) => e.attacking);
+
+		if (
+			boardState.find(
+				(king) =>
+					king.color == color &&
+					king.pieceType == PieceTypes.KING &&
+					captures.find((e) => PieceData.equals(e, king.hex))
+			)
+		)
+			return true;
+
+		return false;
+	}
+
+	// Gets all the legal moves for a color on a specified board
+	public static getAllLegalMoves(color: number, board?: PieceData[]) {
+		let boardState: PieceData[] = [];
+		if (board) boardState = board;
+		else
+			pieceStore.subscribe((array) => {
+				boardState = array;
+			});
+
+		let legalMoves: MoveData[] = [];
+
+		boardState.forEach((piece) => {
+			if (piece.color === color) legalMoves = legalMoves.concat(piece.getLegalMoves(true));
+		});
+
+		return legalMoves;
+	}
+
+	// Gets any potential moves for the current piece. Does not consider check.
+	getMoves(board: PieceData[]): MoveData[] {
+		let moves: MoveData[] = [];
+		switch (this.pieceType) {
+			case PieceTypes.QUEEN: {
+				moves = moves.concat(
+					this.diagonalMoves(this.boardMeta.radius, board),
+					this.adjacentMoves(board),
+					this.directionalMoves(board)
+				);
+				break;
+			}
+			case PieceTypes.KING: {
+				moves = moves.concat(this.diagonalMoves(1, board), this.adjacentMoves(board));
+				break;
+			}
+			case PieceTypes.BISHOP: {
+				moves = moves.concat(this.diagonalMoves(this.boardMeta.radius, board));
+				break;
+			}
+			case PieceTypes.ROOK: {
+				moves = moves.concat(this.directionalMoves(board));
+				break;
+			}
+			case PieceTypes.KNIGHT: {
+				moves = moves.concat(this.knightMoves(board));
+				break;
+			}
+			case PieceTypes.PAWN: {
+				moves = moves.concat(this.pawnMoves(board));
+				break;
+			}
+		}
+
+		return moves;
+	}
+
+	// Returns piece on a square or undefined if no piece on specified board
+	public static pieceOn(hex: Hex, board?: PieceData[]): PieceData | undefined {
+		let boardState: PieceData[] = [];
+		if (board) boardState = board;
+		else
+			pieceStore.subscribe((array) => {
+				boardState = array;
+			});
+
+		// If there's a piece on the square, return it.
+		return boardState.find((e) => PieceData.equals(e.hex, hex));
+	}
+
+	// All adjacent moves
+	private adjacentMoves(board: PieceData[]): MoveData[] {
+		const adjacent: MoveData[] = [];
+		for (let i = 0; i < 6; i++) {
+			const hex = this.hex.neighbor(i);
+			const hexPiece = PieceData.pieceOn(hex, board);
+			if (
+				hex.inRadius(this.boardMeta.radius) &&
+				(hexPiece === undefined || hexPiece.color !== this.color)
+			) {
+				adjacent.push(new MoveData(this.hex, hex, hex));
+			}
+		}
+
+		return adjacent;
+	}
+
+	// All diagonal moves within a certain range
+	private diagonalMoves(maxDistance: number, board: PieceData[]): MoveData[] {
+		const diagonals: MoveData[] = [];
+		for (let i = 0; i < 6; i++) {
+			let hex = this.hex.diagonalNeighbor(i);
+			for (let j = 0; j < maxDistance && hex.inRadius(this.boardMeta.radius); j++) {
+				const hexPiece = PieceData.pieceOn(hex, board);
+				if (hexPiece) {
+					if (hexPiece.color !== this.color) diagonals.push(new MoveData(this.hex, hex, hex));
+					break;
+				}
+				diagonals.push(new MoveData(this.hex, hex, hex));
+				hex = hex.diagonalNeighbor(i);
+			}
+		}
+
+		return diagonals;
+	}
+
+	// All moves in the 6 hexagonal directions
+	private directionalMoves(board: PieceData[]): MoveData[] {
+		const directions: MoveData[] = [];
+		for (let i = 0; i < 6; i++) {
+			let hex = this.hex.neighbor(i);
+			while (hex.inRadius(this.boardMeta.radius)) {
+				const hexPiece = PieceData.pieceOn(hex, board);
+				if (hexPiece) {
+					if (hexPiece.color !== this.color) directions.push(new MoveData(this.hex, hex, hex));
+					break;
+				}
+				directions.push(new MoveData(this.hex, hex, hex));
+				hex = hex.neighbor(i);
+			}
+		}
+
+		return directions;
+	}
+
+	// Knight moves
+	private knightMoves(board: PieceData[]): MoveData[] {
+		const knight: MoveData[] = [];
+		for (let i = 0; i < 12; i++) {
+			const hex = this.hex.knightNeighbor(i);
+			const hexPiece = PieceData.pieceOn(hex, board);
+			if (
+				hex.inRadius(this.boardMeta.radius) &&
+				(hexPiece === undefined || hexPiece.color !== this.color)
+			) {
+				knight.push(new MoveData(this.hex, hex, hex));
+			}
+		}
+
+		return knight;
+	}
+
+	// Pawn moves.
+	private pawnMoves(board: PieceData[]): MoveData[] {
+		const pawn: MoveData[] = [];
+		const captures: MoveData[] = [];
+		const en_passant: MoveData[] = [];
+		let num_spaces = 1;
+		if (this.firstMove == true) num_spaces = 2;
+
+		switch (this.color) {
+			case ColorEnum.WHITE: {
+				let hex: Hex = this.hex;
+				for (let i = 0; i < num_spaces; i++) {
+					hex = hex.neighbor(2);
+					const hexPiece = PieceData.pieceOn(hex, board);
+					if (hexPiece) {
+						break;
+					}
+
+					pawn.push(new MoveData(this.hex, hex, hex));
+				}
+				captures.push(
+					new MoveData(this.hex, this.hex.neighbor(1), this.hex.neighbor(1)),
+					new MoveData(this.hex, this.hex.neighbor(3), this.hex.neighbor(3))
+				);
+
+				// White en-passant
+				if (
+					PieceData.pieceOn(this.hex.neighbor(0), board)?.color != this.color &&
+					PieceData.pieceOn(this.hex.neighbor(0), board)?.enPassantable
+				) {
+					en_passant.push(new MoveData(this.hex, this.hex.neighbor(1), this.hex.neighbor(0)));
+				}
+				if (
+					PieceData.pieceOn(this.hex.neighbor(4), board)?.color != this.color &&
+					PieceData.pieceOn(this.hex.neighbor(4), board)?.enPassantable
+				) {
+					en_passant.push(new MoveData(this.hex, this.hex.neighbor(3), this.hex.neighbor(4)));
+				}
+				break;
+			}
+			case ColorEnum.BLACK: {
+				let hex: Hex = this.hex;
+				for (let i = 0; i < num_spaces; i++) {
+					hex = hex.neighbor(5);
+					const hexPiece = PieceData.pieceOn(hex, board);
+					if (hexPiece) {
+						break;
+					}
+
+					pawn.push(new MoveData(this.hex, hex, hex));
+				}
+				captures.push(
+					new MoveData(this.hex, this.hex.neighbor(0), this.hex.neighbor(0)),
+					new MoveData(this.hex, this.hex.neighbor(4), this.hex.neighbor(4))
+				);
+
+				// Black en-passant
+				if (
+					PieceData.pieceOn(this.hex.neighbor(1), board)?.color != this.color &&
+					PieceData.pieceOn(this.hex.neighbor(1), board)?.enPassantable
+				) {
+					en_passant.push(new MoveData(this.hex, this.hex.neighbor(0), this.hex.neighbor(1)));
+				}
+				if (
+					PieceData.pieceOn(this.hex.neighbor(3), board)?.color != this.color &&
+					PieceData.pieceOn(this.hex.neighbor(3), board)?.enPassantable
+				) {
+					en_passant.push(new MoveData(this.hex, this.hex.neighbor(4), this.hex.neighbor(3)));
+				}
+
+				break;
+			}
+		}
+
+		// This is stupid
+		return pawn
+			.filter(
+				(e) => e.to.inRadius(this.boardMeta.radius) && PieceData.pieceOn(e.to, board) === undefined
+			)
+			.concat(
+				captures.filter(
+					(e) =>
+						e.to.inRadius(this.boardMeta.radius) &&
+						PieceData.pieceOn(e.to, board) != undefined &&
+						PieceData.pieceOn(e.to, board)?.color != this.color
+				)
+			)
+			.concat(en_passant);
+	}
+
+	// Checks if the current piece is promotable based on piece type and coordinates
+	// Returns undefined if not promotable. Returns a queen object with the correct color otherwise.
+	private getPromotion(): PieceData | undefined {
+		if (this.pieceType != PieceTypes.PAWN) return undefined;
+
+		// White promotion
+		if (this.color == ColorEnum.WHITE) {
+			if (this.hex.q + this.hex.r == -5 || this.hex.r == -5)
+				return new PieceData([this.hex.q, this.hex.r], PieceEnum.WHITE_QUEEN);
+		}
+
+		// Black promotion
+		if (this.color == ColorEnum.BLACK) {
+			if (this.hex.q + this.hex.r == 5 || this.hex.r == 5)
+				return new PieceData([this.hex.q, this.hex.r], PieceEnum.BLACK_QUEEN);
+		}
+
+		return undefined;
+	}
 }
 
 export class MoveData {
-  from: Hex;
-  to: Hex;
-  attacking: Hex;
+	from: Hex;
+	to: Hex;
+	attacking: Hex;
 
-  constructor(from: Hex, to: Hex, attacking: Hex) {
-    this.from = from;
-    this.to = to;
-    this.attacking = attacking;
-  }
+	constructor(from: Hex, to: Hex, attacking: Hex) {
+		this.from = from;
+		this.to = to;
+		this.attacking = attacking;
+	}
 }
